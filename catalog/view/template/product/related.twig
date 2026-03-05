@@ -1,0 +1,30 @@
+<div class="related-products">
+    {% if products %}
+        <h3>{{ text_related }}</h3>
+        <div id="owl-carousel-product" class="owl-carousel owl-theme product-carousel">
+            {% for product in products %}
+                <div class="item">
+                    {{ product }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    $('#owl-carousel-product').owlCarousel({
+        loop: true,
+        margin: 20,
+        nav: true,
+        dots: false,
+        navText: ['<i class="fa fa-chevron-left"></i>','<i class="fa fa-chevron-right"></i>'],
+        autoplay: true,
+        autoplayTimeout: 3000,
+        responsive: {
+            0: { items: 1 },
+            576: { items: 2 },
+            768: { items: 3 },
+            992: { items: 4 }
+            }
+        });
+</script>

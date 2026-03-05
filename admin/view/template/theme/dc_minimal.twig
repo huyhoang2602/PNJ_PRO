@@ -1,0 +1,389 @@
+{{ header }}
+{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="float-end">
+				<button type="submit" form="form-theme" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fas fa-save"></i></button>
+				<a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fas fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ol class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ol>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-header"><i class="fas fa-pencil-alt"></i> {{ text_edit }}</div>
+			<div class="card-body">
+				<form id="form-theme" action="{{ save }}" method="post" data-oc-toggle="ajax">
+
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" />
+                    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+
+
+                    <ul class="nav nav-tabs" id="themeTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active"
+                                id="tab-general-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#tab-general"
+                                type="button"
+                                role="tab"
+                                aria-controls="tab-general"
+                                aria-selected="true">
+                                {{ text_edit }}
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                id="tab-modules-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#tab-modules"
+                                type="button"
+                                role="tab"
+                                aria-controls="tab-modules"
+                                aria-selected="false">
+                                {{ tx_modules }}
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                id="tab-translation-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#tab-translation"
+                                type="button"
+                                role="tab"
+                                aria-controls="tab-translation"
+                                aria-selected="false">
+                                {{ tx_translation }}
+                            </button>
+                        </li>
+                    </ul>
+
+
+                    <div class="tab-content" style="margin-top: 20px;">
+                        <div class="tab-pane active" id="tab-general">
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-phone">{{ tx_phone }}</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-phone"></i></span>
+                                        <input type="text" name="theme_dc_minimal_phone" value="{{ theme_dc_minimal_phone }}" placeholder="{{ tx_phone }}" id="input-phone" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-email">{{ tx_email }}</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                        <input type="email" name="theme_dc_minimal_email" value="{{ theme_dc_minimal_email }}" placeholder="{{ tx_email }}" id="input-email" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-banner">{{ tx_baner }}</label>
+                                <div class="col-sm-10">
+                                    <div id="banner-image" class="border rounded d-block" style="max-width: 300px;">
+                                        <img src="{{ banner_thumb }}" alt="" title="" id="thumb-banner-image" data-oc-placeholder="{{ placeholder }}" class="img-fluid"/>
+                                        <input type="hidden" name="theme_dc_minimal_banner" value="{{ theme_dc_minimal_banner }}" id="input-banner-image"/>
+                                        <div class="d-grid">
+                                            <button type="button"
+                                                    data-oc-toggle="image"
+                                                    data-oc-target="#input-banner-image"
+                                                    data-oc-thumb="#thumb-banner-image"
+                                                    class="btn btn-primary rounded-0">
+                                                <i class="fa-solid fa-pencil"></i> {{ button_edit }}
+                                            </button>
+                                            <button type="button"
+                                                    data-oc-toggle="clear"
+                                                    data-oc-target="#input-banner-image"
+                                                    data-oc-thumb="#thumb-banner-image"
+                                                    class="btn btn-warning rounded-0">
+                                                <i class="fa-regular fa-trash-can"></i> {{ button_clear }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-header-bg">{{ tx_header_bg }}</label>
+                                <div class="col-sm-10">
+                                    <input type="color"
+                                        class="form-control form-control-color"
+                                        name="theme_dc_minimal_header_bg"
+                                        id="input-header-bg"
+                                        value="{{ theme_dc_minimal_header_bg|default('#1d252f') }}">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-header-color">{{ tx_header_color }}</label>
+                                <div class="col-sm-10">
+                                    <input type="color"
+                                        class="form-control form-control-color"
+                                        name="theme_dc_minimal_header_color"
+                                        id="input-header-color"
+                                        value="{{ theme_dc_minimal_header_color|default('#ffffff') }}">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-title-color">{{ tx_title_color }}</label>
+                                <div class="col-sm-10">
+                                    <input type="color"
+                                        class="form-control form-control-color"
+                                        name="theme_dc_minimal_title_color"
+                                        id="input-title-color"
+                                        value="{{ theme_dc_minimal_title_color|default('#ffffff') }}">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-primary-bg">{{ tx_primary_bg }}</label>
+                                <div class="col-sm-10">
+                                    <input type="color"
+                                        class="form-control form-control-color"
+                                        name="theme_dc_minimal_primary_bg"
+                                        id="input-primary-bg"
+                                        value="{{ theme_dc_minimal_primary_bg|default('#1d252f') }}">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-primary">{{ tx_primary_color }}</label>
+                                <div class="col-sm-10">
+                                    <input type="color"
+                                        class="form-control form-control-color"
+                                        name="theme_dc_minimal_primary"
+                                        id="input-primary"
+                                        value="{{ theme_dc_minimal_primary|default('#ffffff') }}">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-secondary-bg">{{ tx_secondary_bg }}</label>
+                                <div class="col-sm-10">
+                                    <input type="color"
+                                        class="form-control form-control-color"
+                                        name="theme_dc_minimal_secondary_bg"
+                                        id="input-secondary-bg"
+                                        value="{{ theme_dc_minimal_secondary_bg|default('#d7c785') }}">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label" for="input-secondary">{{ tx_secondary_color }}</label>
+                                <div class="col-sm-10">
+                                    <input type="color"
+                                        class="form-control form-control-color"
+                                        name="theme_dc_minimal_secondary"
+                                        id="input-secondary"
+                                        value="{{ theme_dc_minimal_secondary|default('#ffffff') }}">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="input-status" class="col-sm-2 col-form-label">{{ tx_status }}</label>
+                                <div class="col-sm-10">
+                                    <div class="form-check form-switch form-switch-lg">
+                                        <input type="hidden" name="theme_dc_minimal_status" value="0"/>
+                                        <input type="checkbox" name="theme_dc_minimal_status" value="1" id="input-status" class="form-check-input"{% if theme_dc_minimal_status %} checked{% endif %}/>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="tab-pane fade" id="tab-modules" role="tabpanel" aria-labelledby="tab-modules-tab">
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_module_mode_featured }}</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" name="theme_dc_minimal_featured">
+                                        <option value="carousel" {% if theme_dc_minimal_featured and theme_dc_minimal_featured == 'carousel' %}selected{% endif %}>{{ tx_carousel }}</option>
+                                        <option value="grid" {% if theme_dc_minimal_featured and theme_dc_minimal_featured == 'grid' %}selected{% endif %}>{{ tx_grid }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_module_mode_latest }}</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" name="theme_dc_minimal_latest">
+                                        <option value="carousel" {% if theme_dc_minimal_latest and theme_dc_minimal_latest == 'carousel' %}selected{% endif %}>{{ tx_carousel }}</option>
+                                        <option value="grid" {% if theme_dc_minimal_latest and theme_dc_minimal_latest == 'grid' %}selected{% endif %}>{{ tx_grid }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_module_mode_special }}</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" name="theme_dc_minimal_special">
+                                        <option value="carousel" {% if theme_dc_minimal_special and theme_dc_minimal_special == 'carousel' %}selected{% endif %}>{{ tx_carousel }}</option>
+                                        <option value="grid" {% if theme_dc_minimal_special and theme_dc_minimal_special == 'grid' %}selected{% endif %}>{{ tx_grid }}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_module_mode_bestseller }}</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" name="theme_dc_minimal_bestseller">
+                                        <option value="carousel" {% if theme_dc_minimal_bestseller and theme_dc_minimal_bestseller == 'carousel' %}selected{% endif %}>{{ tx_carousel }}</option>
+                                        <option value="grid" {% if theme_dc_minimal_bestseller and theme_dc_minimal_bestseller == 'grid' %}selected{% endif %}>{{ tx_grid }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab-translation">
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_phone_lab }}</label>
+                                <div class="col-sm-10">
+                                    {% for language in languages %}
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text">
+                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                        </span>
+                                        <input type="text"
+                                            name="theme_dc_minimal_phone_label[{{ language.language_id }}]"
+                                            value="{{ theme_dc_minimal_phone_label[language.language_id] }}"
+                                            class="form-control"
+                                            placeholder="{{ tx_phone_lab }} ({{ language.name }})" />
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_email_lab }}</label>
+                                <div class="col-sm-10">
+                                    {% for language in languages %}
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text">
+                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                        </span>
+                                        <input type="text"
+                                            name="theme_dc_minimal_email_label[{{ language.language_id }}]"
+                                            value="{{ theme_dc_minimal_email_label[language.language_id] }}"
+                                            class="form-control"
+                                            placeholder="{{ tx_email_lab }} ({{ language.name }})" />
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_cart_lab }}</label>
+                                <div class="col-sm-10">
+                                    {% for language in languages %}
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text">
+                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                        </span>
+                                        <input type="text"
+                                            name="theme_dc_minimal_cart_label[{{ language.language_id }}]"
+                                            value="{{ theme_dc_minimal_cart_label[language.language_id] }}"
+                                            class="form-control"
+                                            placeholder="{{ tx_cart_lab }} ({{ language.name }})" />
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_search_lab }}</label>
+                                <div class="col-sm-10">
+                                    {% for language in languages %}
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text">
+                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                        </span>
+                                        <input type="text"
+                                            name="theme_dc_minimal_search_label[{{ language.language_id }}]"
+                                            value="{{ theme_dc_minimal_search_label[language.language_id] }}"
+                                            class="form-control"
+                                            placeholder="{{ tx_search_lab }} ({{ language.name }})" />
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_free_shipping }}</label>
+                                <div class="col-sm-10">
+                                    {% for language in languages %}
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text">
+                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                        </span>
+                                        <input type="text"
+                                            name="theme_dc_minimal_free_shipping[{{ language.language_id }}]"
+                                            value="{{ theme_dc_minimal_free_shipping[language.language_id] }}"
+                                            class="form-control"
+                                            placeholder="{{ tx_free_shipping }} ({{ language.name }})" />
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_title }}</label>
+                                <div class="col-sm-10">
+                                    {% for language in languages %}
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text">
+                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                        </span>
+                                        <input type="text"
+                                            name="theme_dc_minimal_header_title[{{ language.language_id }}]"
+                                            value="{{ theme_dc_minimal_header_title[language.language_id] }}"
+                                            class="form-control"
+                                            placeholder="{{ tx_title }} ({{ language.name }})" />
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">{{ tx_subtitle }}</label>
+                                <div class="col-sm-10">
+                                    {% for language in languages %}
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text">
+                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                        </span>
+                                        <input type="text"
+                                            name="theme_dc_minimal_header_subtitle[{{ language.language_id }}]"
+                                            value="{{ theme_dc_minimal_header_subtitle[language.language_id] }}"
+                                            class="form-control"
+                                            placeholder="{{ tx_subtitle }} ({{ language.name }})" />
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+   
+
+</script>
+
+
+{{ footer }}

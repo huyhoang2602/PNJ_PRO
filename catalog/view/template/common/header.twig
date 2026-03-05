@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html dir="{{ direction }}" lang="{{ lang }}">
+    <head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>{{ title }}</title>
+		<base href="{{ base }}" />
+
+		{% if description %}
+			<meta name="description" content="{{ description }}" />
+		{% endif %}
+
+		{% if keywords %}
+			<meta name="keywords" content="{{ keywords }}" />
+		{% endif %}
+
+        <style>
+            :root {
+                --header-bg: {{ _context[0].theme_dc_minimal_header_bg | default('#000000') }};
+                --header-bg-solid: {{ _context[0].theme_dc_minimal_header_bg | default('#000000') }};
+                --header-color: {{ _context[0].theme_dc_minimal_header_color | default('#ffffff') }};
+                --title-color: {{ _context[0].theme_dc_minimal_title_color | default('#ffffff') }};
+                --primary-bg: {{ _context[0].theme_dc_minimal_primary_bg | default('#000000') }};
+                --primary-color: {{ _context[0].theme_dc_minimal_primary | default('#ffffff') }};
+                --secondary-bg: {{ _context[0].theme_dc_minimal_secondary_bg | default('#dac884') }};
+                --secondary-color: {{ _context[0].theme_dc_minimal_secondary | default('#ffffff') }};
+            }
+
+
+            {% set banner = _context[0].theme_dc_minimal_banner is defined and _context[0].theme_dc_minimal_banner ? 'image/' ~ _context[0].theme_dc_minimal_banner : 'extension/dc_minimal/catalog/view/image/baner.webp' %}
+            {% set language_id = _context[0].language_id %}
+
+            {% if _context[0].home_page %}
+                body {
+                    background-image: url('{{ banner }}');
+                    background-repeat: no-repeat;
+                    background-size: 100% auto;
+                    background-position: top center;
+                }
+
+                @media screen and (max-width: 850px) {
+                    body {
+                        background:none;
+                    }
+                    header .header-container{
+                        background: var(--header-bg-solid) !important;
+                    }
+                    .header-page-title{
+                        background-image: url('{{ banner }}');
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        background-position: top center;
+                    }
+                }
+            {% else %}
+                header {
+                    background-image: url('{{ banner }}');
+                    background-repeat: no-repeat;
+                    background-size: 100% auto;
+                    background-position: top center;
+                }
+            {% endif %}
+        </style>
+    
+		<script src="extension/dc_minimal/catalog/view/javascript/jquery.js"></script>
+		<link href="extension/dc_minimal/catalog/view/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+        <script src="extension/dc_minimal/catalog/view/bootstrap/js/popper.js" type="text/javascript"></script>
+		<script src="extension/dc_minimal/catalog/view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="extension/dc_minimal/catalog/view/javascript/theme.js" type="text/javascript"></script>
+        
+		<link href="extension/dc_minimal/catalog/view/fontawesome/css/all.min.css" rel="stylesheet" type="text/css" />
+		<link href="extension/dc_minimal/catalog/view/stylesheet/stylesheet.css" rel="stylesheet">
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" type="text/javascript"></script>
+
+		{% for style in styles %}
+            {% if style is not iterable %}
+			    <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+            {% endif %}
+		{% endfor %}
+
+		{% for script in scripts %}
+            {% if script is not iterable %}
+			    <script src="{{ script }}" type="text/javascript"></script>
+            {% endif %}
+		{% endfor %}
+
+		{% for link in links %}
+			<link href="{{ link.href }}" rel="{{ link.rel }}" />
+		{% endfor %}
+
+		{% for analytic in analytics %}
+			{{ analytic }}
+		{% endfor %}
+
+	</head>
+
+	<body>
+        <div id="cart-panel" class="cart-panel">
+            <div class="cart-panel-header d-flex align-items-center justify-content-between">
+                <h5 class="cart-panel-title mb-0">{{ _context[0].theme_dc_minimal_cart_label[language_id] }}</h5>
+                <button type="button" class="btn-close" onclick="closeCart();"></button>
+            </div>
+            <div class="cart-panel-content">
+                {{ cart }}
+            </div>
+        </div>
+
+        <div id="search-panel" class="search-panel">
+            <button type="button" class="btn-close" onclick="closeSearch();"></button>
+            <div class="search-panel-header">
+                <h5 class="search-panel-title mb-0">{{ _context[0].theme_dc_minimal_search_label[language_id] }}</h5>
+            </div>
+            <div class="search-panel-content">
+                {{ search }}
+            </div>
+        </div>
+
+		<header>
+            <div class="header-top">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="me-auto d-flex align-items-center gap-2">
+                        <div class="dropdown header-contact-mobile">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-phone"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="header-contact-content">
+                                    <div class="header-contact-label">
+                                        {{ _context[0].theme_dc_minimal_phone_label[language_id] }}
+                                    </div>
+                                    <div class="header-contact-value">
+                                        <a href="tel:{{ _context[0].theme_dc_minimal_phone }}">{{ _context[0].theme_dc_minimal_phone }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown header-contact-mobile">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-envelope"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <div class="header-contact-content">
+                                    <div class="header-contact-label">
+                                        {{ _context[0].theme_dc_minimal_email_label[language_id] }}
+                                    </div>
+                                    <div class="header-contact-value">
+                                        <a href="mailto:{{ _context[0].theme_dc_minimal_email }}">{{ _context[0].theme_dc_minimal_email }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="position-absolute start-50 translate-middle-x">
+                        {% if _context[0].theme_dc_minimal_free_shipping[language_id] %}
+                            <div class="header-shipping-info d-flex align-items-center">
+                               <i class="fa fa-truck"></i>  {{ _context[0].theme_dc_minimal_free_shipping[language_id] }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+  
+                    <div class="ms-auto">
+                        {{ currency }} 
+                        {{ language }}
+                    </div>
+                </div>
+            </div>
+            <div class="header-container">
+                <div class="container">
+                    <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="header-logo">
+                                {% if logo %}<a href="{{ home }}">
+                                    <img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" class="img-responsive" /></a>
+                                {% else %}
+                                    <h1><a href="{{ home }}">{{ name }}</a></h1>
+                                {% endif %}
+                            </div>
+
+                            <div class="header-contact header-contact-phone d-flex align-items-center">
+                                <div class="header-contact-icon">
+                                    <img src="extension/dc_minimal/catalog/view/image/phone.png" alt="phone icon" />
+                                </div>
+                                <div class="header-contact-content">
+                                    <div class="header-contact-label">
+                                        {{ _context[0].theme_dc_minimal_phone_label[language_id] }}
+                                    </div>
+                                    <div class="header-contact-value">
+                                        <a href="tel:{{ _context[0].theme_dc_minimal_phone }}">{{ _context[0].theme_dc_minimal_phone }}</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="header-contact header-contact-email d-flex align-items-center">
+                                <div class="header-contact-icon">
+                                    <img src="extension/dc_minimal/catalog/view/image/email.png" alt="email icon" />
+                                </div>
+                                <div class="header-contact-content">
+                                    <div class="header-contact-label">
+                                        {{ _context[0].theme_dc_minimal_email_label[language_id] }}
+                                    </div>
+                                    <div class="header-contact-value">
+                                        <a href="mailto:{{ _context[0].theme_dc_minimal_email }}">{{ _context[0].theme_dc_minimal_email }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="header-interface d-flex align-items-center gap-3 ms-0 ms-md-auto justify-content-center justify-content-md-end">
+                            <ul class="header-interface-list d-flex align-items-center">
+                                <li><button type="button" class="btn-header" onclick="openSearch();"><i class="fa fa-search"></i></a></li>
+                                <li class="nav-item dropdown">
+                                    <a class="btn-header dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-user"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                                        {% if logged %}
+                                            <li><a class="dropdown-item" href="{{ account }}">{{ text_account }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ order }}">{{ text_order }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ transaction }}">{{ text_transaction }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ download }}">{{ text_download }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ logout }}">{{ text_logout }}</a></li>
+                                        {% else %}
+                                            <li><a class="dropdown-item" href="{{ register }}">{{ text_register }}</a></li>
+                                            <li><a class="dropdown-item" href="{{ login }}">{{ text_login }}</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </li>
+                                <li><a href="{{ wishlist }}" class="btn-header" title="{{ text_wishlist }}"><i class="fa fa-heart"></i></a></li>
+                                <li class="cart-count-badge-container">
+                                    <button type="button" class="btn-header" onclick="openCart();"><i class="fa fa-shopping-cart "></i></button>
+                                    <span class="cart-count-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {{ menu }}
+
+                </div>
+            </div>
+		</header>
+
+        {% if _context[0].home_page %}
+            <div class="header-page-title">
+                {% if _context[0].theme_dc_minimal_header_title[language_id] %}
+                    <h1>{{ _context[0].theme_dc_minimal_header_title[language_id] }}</h1>
+                {% endif %}
+
+                {% if _context[0].theme_dc_minimal_header_title[language_id] %}
+                    <div class="subtitle">{{ _context[0].theme_dc_minimal_header_subtitle[language_id] }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
+        
+        <div class="modal fade" id="message-modal" tabindex="-1" aria-labelledby="message-modal-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-center border-0" id="message-modal-header" style="min-height: 90px;">
+                        <span id="message-modal-icon" class="mx-auto"></span>
+                        <button type="button" class="btn-close position-absolute end-0 top-0 m-3" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+                    </div>
+                    <div class="modal-body text-center" id="message-modal-body"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="alert"></div>

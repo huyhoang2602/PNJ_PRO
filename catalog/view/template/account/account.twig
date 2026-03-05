@@ -1,0 +1,201 @@
+{{ header }}
+{{ content_top }}
+
+<div id="account-account" class="container">
+	<div class="page-header">
+		<div class="page-title">
+			<h1>{{ heading_title }}</h1>
+		</div>
+		<div class="page-breadcrumb">
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>	
+		</div>
+		<div class="row"></div>
+	</div>
+  
+    {% if success %}
+		<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+	{% endif %}
+	
+	<div class="row">
+		{{ column_left }}
+		
+		{% if column_left and column_right %}
+			{% set class = 'col-sm-6' %}
+		{% elseif column_left or column_right %}
+			{% set class = 'col-sm-9' %}
+		{% else %}
+			{% set class = 'col-sm-12' %}
+		{% endif %}
+		
+		<div id="content" class="{{ class }}">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>{{ text_my_account }}</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ edit }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-account_information.png" alt="icon {{ text_edit }}" /><br/>
+                                {{ text_edit }}
+                            </a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ password }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-password.png" alt="icon {{ text_password }}" /><br/>
+                                {{ text_password }}
+                            </a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ address }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-address_book.png" alt="icon {{ text_address }}" /><br/>
+                                {{ text_address }}
+                            </a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ wishlist }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-wish_list.png" alt="icon {{ text_wishlist }}" /><br/>
+                                {{ text_wishlist }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if credit_cards %}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <strong>{{ text_credit_card }}</strong>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled account-icons">
+                            {% for credit_card in credit_cards %}
+                                <li><a href="{{ credit_card.href }}">{{ credit_card.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>{{ text_my_orders }}</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ order }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-order_history.png" alt="icon {{ text_order }}" /><br/>
+                                {{ text_order }}
+                            </a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ download }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-download.png" alt="icon {{ text_download }}" /><br/>
+                                {{ text_download }}
+                            </a>
+                        </div>
+
+                        {% if reward %}
+                            <div class="col-sm-6 col-md-3 text-center account-col">
+                                <a href="{{ reward }}">
+                                    <img src="extension/dc_minimal/catalog/view/image/account/icons-reward.png" alt="icon {{ text_reward }}" /><br/>
+                                    {{ text_reward }}
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ return }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-returns.png" alt="icon {{ text_return }}" /><br/>
+                                {{ text_return }}
+                            </a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ transaction }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-transactions.png" alt="icon {{ text_transaction }}" /><br/>
+                                {{ text_transaction }}
+                            </a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ recurring }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-recurring.png" alt="icon {{ text_transaction }}" /><br/>
+                                {{ text_recurring }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>{{ text_my_affiliate }}</strong>
+                </div>
+                <div class="card-body">
+                    {% if not tracking %}
+                        <a href="{{ affiliate }}">{{ text_affiliate_add }}</a>
+                    {% else %}
+                        <div class="row">
+                            <div class="col-sm-6 col-md-3 text-center account-col">
+                                <a href="{{ affiliate }}">
+                                    <img src="extension/dc_minimal/catalog/view/image/account/icons-affiliate_add.png" alt="icon {{ text_affiliate_edit }}" /><br/>
+                                    {{ text_affiliate_add }}
+                                </a>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 text-center account-col">
+                                <a href="{{ affiliate }}">
+                                    <img src="extension/dc_minimal/catalog/view/image/account/icons-account_information.png" alt="icon {{ text_affiliate_edit }}" /><br/>
+                                    {{ text_affiliate_edit }}
+                                </a>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 text-center account-col">
+                                <a href="{{ tracking }}">
+                                    <img src="extension/dc_minimal/catalog/view/image/account/icons-account_tracking.png" alt="icon {{ text_affiliate_edit }}" /><br/>
+                                    {{ text_tracking }}
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <strong>{{ text_my_newsletter }}</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-3 text-center account-col">
+                            <a href="{{ newsletter }}">
+                                <img src="extension/dc_minimal/catalog/view/image/account/icons-newsletter.png" alt="icon {{ text_newsletter }}" /><br/>
+                                {{ text_newsletter }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+		</div>
+		{{ column_right }}
+	</div>
+</div>
+	
+<div id="super_bottom">
+	{{ super_bottom }}
+</div>
+	
+{{ content_bottom }}
+{{ footer }}

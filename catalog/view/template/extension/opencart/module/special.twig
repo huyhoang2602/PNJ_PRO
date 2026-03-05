@@ -1,0 +1,46 @@
+{% set module = random(1000000) %}
+
+<div class="module-products">
+    <h3>{{ heading_title }}</h3>
+
+    {% if _context[0].theme_dc_minimal_special == 'grid' %}
+        <div class="row">
+            {% for product in products %}
+                <div class="product-layout col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    {{ product }}
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <div id="owl-carousel-{{ module }}" class="owl-carousel owl-theme product-carousel">
+            {% for product in products %}
+                <div class="item">
+                    {{ product }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <script>
+            $('#owl-carousel-{{ module }}').owlCarousel({
+                loop: true,
+                margin: 20,
+                nav: true,
+                dots: false,
+                navText: [
+                    '<span class="fa-solid fa-chevron-left"></span>',
+                    '<span class="fa-solid fa-chevron-right"></span>'
+                    ],
+                autoplay: true,
+                autoplayTimeout: 3000,
+                responsive: {
+                    0: { items: 1 },
+                    576: { items: 2 },
+                    768: { items: 3 },
+                    992: { items: 4 }
+                }
+            });
+        </script>
+
+    {% endif %}
+</div>

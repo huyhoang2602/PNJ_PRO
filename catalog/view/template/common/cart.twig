@@ -1,0 +1,82 @@
+<div id="cart">
+    <!--
+	<button type="button" data-toggle="dropdown" data-loading-text="{{ text_loading }}" class="btn"><i class="fa fa-shopping-cart"></i> <span id="cart-total">{{ text_items }}</span></button>
+	-->
+    <div class="cart-loader"><i class="fa fa-spinner fa-spin"></i></div>
+
+    {% if products or vouchers %}
+
+        {% for product in products %}
+            <div class="row row-cart">
+                <div class="col-3">
+                    {% if product.thumb %} <a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail" /></a> {% endif %}
+                </div>
+                <div class="col-9">
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="{{ product.href }}">{{ product.name }}</a> 
+                            {% if product.option %}
+                                {% for option in product.option %} <br />
+                                    - <small>{{ option.name }} {{ option.value }}</small> 
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if product.recurring %} <br />
+                                - <small>{{ text_recurring }} {{ product.recurring }}</small> 
+                            {% endif %}
+                        </div>
+                        <div class="col-4">
+                            {{ product.total }}
+                        </div>
+                        <div class="col-2">
+                            <button type="button" title="{{ button_remove }}" class="btn btn-remove" data-cart-id="{{ product.cart_id }}"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="cart-quantity">
+                        <div class="quantity-group input-group input-group-sm" data-cart-id="{{ product.cart_id }}">
+                            <button class="btn btn-outline-secondary btn-qty" data-type="minus" type="button">-</button>
+                            <input type="text" class="form-control qty-input" value="{{ product.quantity }}" />
+                            <button class="btn btn-outline-secondary btn-qty" data-type="plus" type="button">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% for voucher in vouchers %}
+            <div class="row row-cart">
+                <div class="row">
+                    <div class="col-6">
+                        <td class="text-left">{{ voucher.description }}</td>
+                    </div>
+                    <div class="col-4">
+                        x&nbsp;1 {{ voucher.amount }}
+                    </div>
+                    <div class="col-2">
+                        <button type="button" title="{{ button_remove }}" class="btn btn-remove"><i class="fa fa-trash"></i></button>
+                    </div>
+                </div> 
+            </div>
+        {% endfor %}
+
+        
+        <div>
+            <table class="table table-bordered">
+                {% for total in totals %}
+                    <tr>
+                        <td class="text-right"><strong>{{ total.title }}</strong></td>
+                        <td class="text-right">{{ total.text }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <p class="text-right">
+                <a href="{{ cart }}" class="btn btn-primary"><strong><i class="fa fa-shopping-cart"></i> {{ text_cart }}</strong></a>
+                <a href="{{ checkout }}" class="btn btn-secondary"><strong><i class="fa fa-share"></i> {{ text_checkout }}</strong></a>
+            </p>
+        </div>
+    {% else %}
+        <p class="text-center">{{ text_empty }}</p>
+    {% endif %}
+
+</div>

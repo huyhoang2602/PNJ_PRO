@@ -1,0 +1,39 @@
+<div class="carousel-module">    
+    <div class="owl-carousel owl-theme" id="carousel-{{ module }}">
+        {% for banner in banners %}
+            <div class="item text-center">
+                {% if banner.link %}
+                    <a href="{{ banner.link }}">
+                        <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
+                    </a>
+                {% else %}
+                    <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        $('#carousel-{{ module }}').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            dots: true,
+            autoplay: true,
+            autoplayTimeout: 2500,
+            responsive: {
+                0: { items: 2 },
+                768: { items: 4 },
+                992: { items: 5 },
+                1200: { items: 7 }
+            },
+            navText: [
+                '<span class="owl-prev-icon fa fa-chevron-left"></span>',
+                '<span class="owl-next-icon fa fa-chevron-right"></span>'
+            ]
+        });
+    });
+</script>

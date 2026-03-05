@@ -1,0 +1,38 @@
+<div class="banner owl-carousel owl-theme" id="banner{{ module }}">
+	{% for banner in banners %}
+		<div class="item text-center">
+			{% if banner.link %}
+				<a href="{{ banner.link }}">
+					<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-fluid" />
+				</a>
+			{% else %}
+				<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-fluid" />
+			{% endif %}
+		</div>
+	{% endfor %}
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('#banner{{ module }}').owlCarousel({
+            items: {{ items|escape('js') }},
+            loop: {{ banners|length > items ? 'true' : 'false' }},
+            autoplay: {{ interval ? 'true' : 'false' }},
+            autoplayTimeout: {{ interval|default(5000)|escape('js') }},
+            autoplayHoverPause: true,
+            nav: {{ controls ? 'true' : 'false' }},
+            dots: {{ indicators ? 'true' : 'false' }},
+            responsive: {
+            0: { items: 1 },
+                576: { items: Math.min({{ items|escape('js') }},2) },
+                768: { items: Math.min({{ items|escape('js') }},3) },
+                992: { items: {{ items|escape('js') }} }
+            },
+            navText: [
+            '<span class="fa-solid fa-chevron-left"></span>',
+            '<span class="fa-solid fa-chevron-right"></span>'
+            ]
+        });
+    });
+</script>
