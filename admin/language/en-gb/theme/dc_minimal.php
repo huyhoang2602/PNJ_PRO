@@ -38,3 +38,5 @@ $_['tx_grid']                  = 'Grid';
 $_['tx_carousel']              = 'Carousel';
 $_['tx_title']                 = 'Title';
 $_['tx_subtitle']              = 'Subtitle';
+
+//

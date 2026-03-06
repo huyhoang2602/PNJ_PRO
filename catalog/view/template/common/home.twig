@@ -1,0 +1,16 @@
+{{ header }}
+  {{ content_top }}
+  {% include 'extension/dc_minimal/catalog/view/template/component/hero.twig' %}
+  {% include 'extension/dc_minimal/catalog/view/template/component/ship.twig' %}
+  {# {% include 'extension/dc_minimal/catalog/view/template/component/category.twig' %} #}
+{{ category | raw }}
+<div id="common-home" class="container">
+{{ featured | raw }}aaaa1
+    {{ latest | raw }}aaa2
+    {{ bestseller | raw }}aaa3
+    {{ brand | raw }}aaa4
+    {{ recently_viewed | raw }}aaaaa5
+  {{ content_bottom }}
+</div>
+
+{{ footer }}

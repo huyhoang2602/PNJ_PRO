@@ -1,0 +1,16 @@
+{% if products %}
+<section class="dc-recently-viewed">
+    <div class="dc-container">
+        <h2>Sản phẩm đã xem</h2>
+        <div class="dc-product-grid">
+            {% for product in products %}
+            <a href="{{ product.href }}" class="dc-product-item">
+                <img src="{{ product.image }}" alt="{{ product.name }}">
+                <p>{{ product.name }}</p>
+                <span>{{ product.price }}</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}

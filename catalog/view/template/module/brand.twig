@@ -1,0 +1,13 @@
+<div class="brand-carousel">
+  <h3>{{ heading_title }}</h3>
+  <div class="row">
+    {% for manufacturer in manufacturers %}
+      <div class="col-sm-2 text-center">
+        <a href="{{ manufacturer.href }}">
+          <img src="{{ manufacturer.image }}" alt="{{ manufacturer.name }}" title="{{ manufacturer.name }}" class="img-fluid" />
+          <p>{{ manufacturer.name }}</p>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>

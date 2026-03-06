@@ -1,0 +1,96 @@
+/* ===== HERO SLIDER ===== */
+
+.slideshow {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.slideshow .item {
+    position: relative;
+}
+
+.slideshow .item img {
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+    display: block;
+}
+
+/* ===== NAV BUTTON ===== */
+
+.slideshow .owl-nav button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.4) !important;
+    border: none;
+    transition: 0.3s ease;
+}
+
+.slideshow .owl-nav button:hover {
+    background: rgba(0,0,0,0.7) !important;
+}
+
+.slideshow .owl-nav .owl-prev {
+    left: 30px;
+}
+
+.slideshow .owl-nav .owl-next {
+    right: 30px;
+}
+
+.slideshow .owl-nav i {
+    color: #fff;
+    font-size: 18px;
+}
+
+/* ===== DOTS ===== */
+
+.slideshow .owl-dots {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.slideshow .owl-dot span {
+    width: 10px;
+    height: 10px;
+    background: rgba(255,255,255,0.5);
+    display: block;
+    border-radius: 50%;
+    margin: 5px;
+}
+
+.slideshow .owl-dot.active span {
+    background: #fff;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 1200px) {
+    .slideshow .item img {
+        height: 500px;
+    }
+}
+
+@media (max-width: 992px) {
+    .slideshow .item img {
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .slideshow .item img {
+        height: 300px;
+    }
+
+    .slideshow .owl-nav button {
+        width: 40px;
+        height: 40px;
+    }
+}

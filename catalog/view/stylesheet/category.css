@@ -1,0 +1,127 @@
+/* ====== SECTION BACKGROUND ====== */
+.dc-category {
+    padding: 70px 0;
+    position: relative;
+}
+
+.dc-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ====== TITLE ====== */
+.dc-section-title {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 60px;   /* auto sẽ đẩy ra giữa */
+    padding: 18px 60px;
+    font-size: 28px;
+    font-weight: 600;
+    color: #f5d27a;
+    text-align: center;
+    background: linear-gradient(180deg, #b30000, #8b0000);
+    border: 3px solid #e6c067;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.dc-title-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.dc-title-img {
+    display: block;
+    margin: 0 auto;
+    max-width: 430px;
+    width: 100%;
+    height: auto;
+}
+
+.dc-section-title::before,
+.dc-section-title::after {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, #f5d27a 30%, transparent 31%);
+    top: -20px;
+}
+
+.dc-section-title::before { left: -20px; }
+.dc-section-title::after { right: -20px; }
+
+/* ====== GRID ====== */
+.dc-category-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 35px;
+}
+
+/* ====== CARD ====== */
+.dc-category-item {
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.dc-category-thumb {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 22px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+}
+
+.dc-category-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* ===== TEXT ===== */
+.dc-category-item p {
+    margin-top: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* ===== HOVER EFFECT ===== */
+.dc-category-item:hover .dc-category-thumb {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+.dc-category-item:hover img {
+    transform: scale(1.08);
+}
+
+.dc-category-item:hover p {
+    color: #b30000;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+    .dc-category-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .dc-category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dc-section-title {
+        font-size: 20px;
+        padding: 14px 30px;
+    }
+}

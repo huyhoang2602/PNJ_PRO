@@ -1,0 +1,94 @@
+.dc-hero {
+    background: linear-gradient(90deg,#f7efe2,#fff5e6);
+    padding: 80px 0;
+    position: relative;
+}
+
+.dc-hero-content {
+    max-width: 600px;
+    margin-left: 120px;
+}
+
+.dc-hero-content h5 {
+    color: #8b5e3c;
+    font-size: 18px;
+}
+
+.dc-hero-content h1 {
+    font-size: 48px;
+    font-weight: 700;
+    color: #7a1f1f;
+    line-height: 1.2;
+}
+
+.dc-hero-content h1 span {
+    color: #b30000;
+}
+
+.dc-hero-discount {
+    margin: 20px 0;
+    font-size: 20px;
+}
+
+.dc-hero-discount .percent {
+    font-size: 48px;
+    color: #d10000;
+    font-weight: bold;
+}
+
+.dc-btn-primary {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #c49a3a;
+    color: #fff;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.dc-btn-primary:hover {
+    background: #a67c00;
+}
+.dc-services {
+    margin-top: 40px;
+}
+
+.dc-service-box {
+    background: #fff5d9;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,.1);
+}
+
+.dc-service-box i {
+    font-size: 28px;
+    color: #b88a00;
+}
+.dc-title-center {
+    text-align: center;
+    background: #b30000;
+    color: #fff;
+    padding: 10px 30px;
+    display: inline-block;
+    border-radius: 8px;
+    margin: 60px auto 40px;
+}
+
+.dc-category-card {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.dc-category-card img {
+    width: 100%;
+    border-radius: 12px;
+}
+
+.dc-category-card p {
+    margin-top: 10px;
+    font-weight: 600;
+}
