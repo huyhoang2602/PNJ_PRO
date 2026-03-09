@@ -1,0 +1,172 @@
+/* Container chính của module */
+.recently-viewed-container {
+   padding: 30px 0;
+   text-align: center;
+    
+}
+.list-product{
+    background: linear-gradient(90deg,#cbd9e6,#7fa5c8);
+    border-radius: 15px;
+    padding: 35px;
+    position: relative;
+}
+.recently-viewed-container h3{
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #003468; /* Màu xanh đậm PNJ */
+    padding-bottom: 2.5rem;
+}
+.col{
+    margin: 0;
+}
+/* Cấu trúc Card sản phẩm */
+.product-thumb.card {
+    border-radius: 12px;
+    background: #ffffff;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Hiệu ứng Hover: Đổ bóng sâu hơn và nhích nhẹ lên trên */
+.product-thumb.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+#recently-viewed-carousel .owl-item{
+    padding: 10px;
+}
+/* Phần hình ảnh */
+.product-thumb .image {
+    padding: 15px;
+    background: #fff;
+}
+
+.product-thumb .image img {
+    transition: transform 0.5s ease;
+}
+
+.product-thumb.card:hover .image img {
+    transform: scale(1.05); /* Phóng nhẹ ảnh khi hover */
+}
+
+/* Phần nội dung thông tin */
+.product-thumb .content {
+    padding: 0 15px 15px 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Đảm bảo nội dung chiếm hết không gian còn lại */
+}
+
+/* Tên sản phẩm: Giới hạn 2 dòng để layout luôn đều */
+.product-thumb .card-title {
+    margin-bottom: 10px;
+    min-height: 2.8rem; /* Giữ chỗ cho 2 dòng tên */
+}
+
+.product-thumb .card-title a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.product-thumb .card-title a:hover {
+    color: #c48c31; /* Đổi màu khi di chuột vào tên */
+}
+
+/* Giá cả */
+.product-thumb .price {
+    margin-bottom: 15px;
+    margin-top: auto; /* Đẩy giá xuống cuối card-body */
+}
+
+.product-thumb .price .price-new {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #c48c31; /* Màu vàng kim loại đặc trưng */
+}
+
+/* Phần nhãn phụ dưới cùng (0% trả góp, đã bán) */
+.product-thumb .promo-footer {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-thumb .sales-count {
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.product-thumb .installment {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #003468;
+}
+
+.product-thumb .installment small {
+    font-weight: 400;
+    color: #666;
+}
+/* Triệt tiêu chiều cao của container chứa nút điều hướng */
+.owl-nav {
+    height: 0;
+    margin: 0 !important;
+}
+
+/* Đảm bảo nút không bị mất khi ra khỏi khung hình */
+.list-product {
+    position: relative;
+    overflow: visible !important; /* Quan trọng để nút nav hiện ra ngoài lề */
+}
+
+/* Căn chỉnh lại vị trí nút để không bị dính sát mép */
+.owl-prev {
+    left: -20px !important;
+}
+.owl-next {
+    right: -20px !important;
+}
+#recently-viewed-carousel .owl-nav{
+    position:absolute;
+    top:50%;
+    left:0;
+    width:100%;
+    transform:translateY(-50%);
+    display:flex;
+    justify-content:space-between;
+    pointer-events:none;
+}
+
+#recently-viewed-carousel .owl-nav button{
+    pointer-events:auto;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#fff !important;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+#recently-viewed-carousel .owl-prev{
+    position:absolute;
+    left:-22px;
+}
+
+#recently-viewed-carousel .owl-next{
+    position:absolute;
+    right:-22px;
+}

@@ -1,0 +1,122 @@
+.viewed-products{
+    padding:50px 0;
+}
+
+.section-title{
+    text-align:center;
+    font-weight:700;
+    color:#0c3c63;
+    margin-bottom:30px;
+}
+
+.product-carousel .item{
+    padding:10px;
+    transition: transform 0.55s ease;
+}
+.product-carousel .item:hover{
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+}
+.product-thumb .image{
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.product-thumb .image img{
+    width: 100%;
+    transition: transform 0.55s ease;
+}
+
+.product-thumb:hover .image img{
+    transform: scale(1.08);
+}
+/* card sản phẩm */
+.product-thumb{
+    border-radius:12px;
+    background:#fff;
+    padding:15px;
+}
+
+/* arrow */
+.carousel-arrow{
+    width:38px;
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    border-radius:50%;
+    box-shadow:0 3px 8px rgba(0,0,0,0.2);
+}
+
+.owl-nav{
+    position:absolute;
+    top:45%;
+    width:100%;
+}
+
+.owl-nav .owl-prev{
+    position:absolute;
+    left:-18px;
+}
+
+.owl-nav .owl-next{
+    position:absolute;
+    right:-18px;
+}
+.viewed-wrapper{
+    background: linear-gradient(90deg,#cbd9e6,#7fa5c8);
+    padding:30px;
+    border-radius:12px;
+    position:relative;
+}
+
+/* NAV container */
+.product-carousel .owl-nav{
+    position:absolute;
+    top:50%;
+    left:0;
+    width:100%;
+    transform:translateY(-50%);
+    display:flex;
+    justify-content:space-between;
+    pointer-events:none;
+}
+
+/* button */
+.product-carousel .owl-nav button{
+    pointer-events:auto;
+}
+
+/* prev */
+.product-carousel .owl-prev{
+    position:absolute;
+    left:-20px;
+}
+
+/* next */
+.product-carousel .owl-next{
+    position:absolute;
+    right:-20px;
+}
+
+/* style nút */
+.carousel-arrow{
+    width:40px;
+    height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    border-radius:50%;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+.product-thumb .caption h4,
+.product-thumb .caption a{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;   /* giới hạn 2 dòng */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 48px;        /* giữ chiều cao card đồng đều */
+}

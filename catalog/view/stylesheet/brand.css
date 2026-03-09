@@ -1,0 +1,43 @@
+.brand-title h3{
+    font-weight:700;
+    color:#003468;
+    margin-bottom:40px;
+}
+
+.brand-card{
+    position:relative;
+    border-radius:16px;
+    overflow:visible;
+}
+
+.brand-image{
+    height:360px;
+    border-radius:16px;
+    overflow:hidden;
+}
+
+.brand-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.brand-logo{
+    position:absolute;
+    bottom:-18px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#fff;
+    padding:10px 18px;
+    border-radius:8px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.brand-logo img{
+    height:32px;
+    width:auto;
+}
+
+.brand-item{
+    padding:10px;
+}

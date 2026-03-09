@@ -1,26 +1,60 @@
-<div id="module-recently-viewed" class="recently-viewed-container mt-4 mb-4">
-  {% if products %}
-    <h3 class="module-title">{{ heading_title }}</h3>
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
-      {% for product in products %}
-        <div class="col">
-          <div class="product-thumb h-100 card shadow-sm">
-            <div class="image text-center p-2">
-              <a href="{{ product.href }}">
-                <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-fluid" />
-              </a>
+<div id="module-recently-viewed" class="recently-viewed-container my-5">
+    {% if products %}
+        <h3 class="text-center mb-4 fw-bold" style="color: #003468;">Sản phẩm đã xem</h3>
+        
+        <div class="list-product p-4" style="background-color: #4face2; border-radius: 15px;">
+            <div id="recently-viewed-carousel" class="owl-carousel owl-theme">
+                {% for product in products %}
+                    <div class="item">
+                        <div class="product-thumb h-100 card shadow-sm border-0 rounded-3 p-3 bg-white mx-1">
+                            
+                            <div class="image text-center mb-3">
+                                <a href="{{ product.href }}">
+                                    <img src="{{ product.thumb }}" alt="{{ product.name }}" class="img-fluid" style="height: 180px; object-fit: contain;" />
+                                </a>
+                            </div>
+
+                            <div class="content d-flex flex-column text-center">       
+                                <h5 class="card-title mb-2" style="font-size: 0.9rem; min-height: 2.5rem;">
+                                    <a href="{{ product.href }}" class="text-decoration-none text-dark">{{ product.name }}</a>
+                                </h5>
+
+                                <div class="price mb-2">
+                                    <span class="fw-bold" style="color: #c48c31 !important;">{{ product.price }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                                    <span class="text-muted" style="font-size: 0.7rem;">1400+ đã bán</span>
+                                    <div class="fw-bold" style="font-size: 0.8rem; color: #003468 !important;">
+                                        0% <small class="fw-normal text-muted">Trả góp</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-            <div class="content card-body d-flex flex-column justify-content-between text-center">
-              <h5 class="card-title mb-2">
-                <a href="{{ product.href }}" class="text-decoration-none text-dark">{{ product.name }}</a>
-              </h5>
-              <div class="price">
-                <span class="fw-bold text-danger">{{ product.price }}</span>
-              </div>
-            </div>
-          </div>
         </div>
-      {% endfor %}
-    </div>
-  {% endif %}
+    {% endif %}
 </div>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#recently-viewed-carousel').owlCarousel({
+    loop:false,
+    margin:25,
+    nav:true,
+    dots:false,
+    navText:[
+        '<i class="fa-solid fa-chevron-left"></i>',
+        '<i class="fa-solid fa-chevron-right"></i>'
+    ],
+    responsive:{
+        0:{items:1},
+        576:{items:2},
+        768:{items:3},
+        1200:{items:4}
+    }
+});
+    });
+</script>
