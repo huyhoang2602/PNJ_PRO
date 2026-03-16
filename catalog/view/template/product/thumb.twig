@@ -1,39 +1,32 @@
-<div class="product-thumb transition text-center">
-    <div class="image">
-        <a href="{{ href }}"><img src="{{ thumb }}" alt="{{ name }}" title="{{ name }}" class="img-responsive" /></a>
+<div class="dc-product-card">
+  <div class="dc-product-image">
+    <a href="{{ href }}">
+      <img src="{{ thumb }}" alt="{{ name }}" title="{{ name }}" class="img-fluid" loading="lazy" />
+    </a>
+    <div class="dc-product-actions">
+      <button type="button" data-bs-toggle="tooltip" title="{{ button_wishlist }}" onclick="list.add('wishlist', '{{ product_id }}');" class="dc-btn-action"><i class="fa-regular fa-heart"></i></button>
+      <button type="button" data-bs-toggle="tooltip" title="{{ button_compare }}" onclick="list.add('compare', '{{ product_id }}');" class="dc-btn-action"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
     </div>
+    {% if special %}
+    <span class="dc-badge dc-badge-sale">Sale</span>
+    {% endif %}
+  </div>
 
-    <div class="caption">
-        <h4><a href="{{ href }}">{{ name }}</a></h4>
-        {% if rating %}
-            <div class="rating">
-                {% for i in 1..5 %}
-                    {% if rating < i %}
-                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
-                    {% else %}
-                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
-                    {% endif %}
-                {% endfor %}
-            </div>
+  <div class="dc-product-info">
+    <h4 class="dc-product-name"><a href="{{ href }}">{{ name }}</a></h4>
+    {% if price %}
+      <div class="dc-product-price">
+        {% if not special %}
+          <span class="dc-price-regular">{{ price }}</span>
+        {% else %}
+          <span class="dc-price-new">{{ special }}</span>
+          <span class="dc-price-old">{{ price }}</span>
         {% endif %}
+      </div>
+    {% endif %}
 
-        {% if price %}
-            <p class="price">
-                {% if not special %}
-                    {{ price }}
-                {% else %}
-                    <span class="price-new">{{ special }}</span> <span class="price-old">{{ price }}</span>
-                {% endif %}
-            </p>
-        {% endif %}
+    <div class="dc-product-cart">
+      <button type="button" onclick="list.add('cart', '{{ product_id }}');" class="dc-btn-cart"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
     </div>
-    <form method="post" data-oc-toggle="ajax" data-oc-load="{{ cart }}" data-oc-target="#cart">
-        <div class="button-group">
-            <button type="submit" formaction="{{ cart_add }}" class="btn-listing"><i class="fa fa-shopping-cart"></i></button>
-            <button type="submit" formaction="{{ wishlist_add }}" class="btn-listing"><i class="fa fa-heart"></i></button>
-            <button type="submit" formaction="{{ compare_add }}" class="btn-listing"><i class="fa fa-exchange"></i></button>
-        </div>
-
-        <input type="hidden" name="product_id" value="{{ product_id }}"/> <input type="hidden" name="quantity" value="{{ minimum }}"/>
-    </form>
+  </div>
 </div>

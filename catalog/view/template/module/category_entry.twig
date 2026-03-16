@@ -1,20 +1,20 @@
-{% if categories %}
-<section class="dc-category-entry my-4">
-  <div class="container">
-    <div class="row text-center justify-content-center">
-      {% for category in categories %}
-        <div class="col-4 col-md-2 mb-3 px-2">
-          <div class="dc-category-item">
-            <a href="{{ category.link }}" class="text-decoration-none">
-              <div class="dc-category-img-wrap rounded-circle overflow-hidden mb-2 mx-auto shadow-sm" style="width: 80px; height: 80px; border: 2px solid #eee;">
-                <img src="{{ category.image }}" alt="{{ category.title }}" class="img-fluid w-100 h-100" style="object-fit: cover;" loading="lazy">
-              </div>
-              <span class="dc-category-title text-dark fw-bold" style="font-size: 0.85rem;">{{ category.title }}</span>
-            </a>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  </div>
+<section class="dc-category">
+	<div class="dc-container">
+		<div class="dc-title-wrapper">
+			<h2 class="dc-title">Bạn đang tìm gì hôm nay?</h2>         
+		</div>
+
+		<div class="dc-category-grid">
+			{% if categories is not empty %}
+				{% for category in categories|slice(0, 12) %}
+					<a href="{{ category.href }}" class="dc-category-item">
+						<div class="dc-category-thumb">
+							<img src="{{ category.thumb }}" alt="{{ category.title }}" loading="lazy">
+						</div>
+						<p>{{ category.title }}</p>
+					</a>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
 </section>
-{% endif %}

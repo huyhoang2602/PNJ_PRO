@@ -4,6 +4,7 @@ namespace Opencart\Admin\Controller\Extension\DcMinimal\Module;
 class CategoryEntry extends \Opencart\System\Engine\Controller {
 	public function index(): void {
 		$this->load->language('extension/dc_minimal/module/category_entry');
+
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$data['breadcrumbs'] = [];
@@ -49,34 +50,56 @@ class CategoryEntry extends \Opencart\System\Engine\Controller {
 			$data['name'] = '';
 		}
 
-		if (isset($module_info['categories'])) {
-			$data['categories'] = $module_info['categories'];
-		} else {
-			$data['categories'] = [];
-		}
-
 		if (isset($module_info['status'])) {
 			$data['status'] = $module_info['status'];
 		} else {
 			$data['status'] = '';
 		}
 
+		$this->load->model('catalog/category');
 		$this->load->model('tool/image');
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
-		foreach ($data['categories'] as &$category) {
-			if (is_file(DIR_IMAGE . html_entity_decode($category['image'], ENT_QUOTES, 'UTF-8'))) {
-				$category['thumb'] = $this->model_tool_image->resize(html_entity_decode($category['image'], ENT_QUOTES, 'UTF-8'), 100, 100);
-			} else {
-				$category['thumb'] = $data['placeholder'];
+		$data['category_items'] = [];
+
+		if (!empty($module_info['category_items'])) {
+			foreach ($module_info['category_items'] as $category_item) {
+				$category_info = $this->model_catalog_category->getCategory($category_item['category_id']);
+
+				if ($category_info) {
+					if (is_file(DIR_IMAGE . html_entity_decode($category_item['custom_image'], ENT_QUOTES, 'UTF-8'))) {
+						$image = $category_item['custom_image'];
+						$thumb = $category_item['custom_image'];
+					} else {
+						$image = '';
+						$thumb = 'no_image.png';
+					}
+
+					$data['category_items'][] = [
+						'category_id'  => $category_item['category_id'],
+						'name'         => strip_tags(html_entity_decode($category_info['name'], ENT_QUOTES, 'UTF-8')),
+						'custom_title' => $category_item['custom_title'],
+						'custom_image' => $image,
+						'thumb'        => $this->model_tool_image->resize($thumb, 100, 100),
+						'sort_order'   => $category_item['sort_order']
+					];
+				}
 			}
 		}
 
+		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+
+		// Thêm một số biến helper cho form builder JS
 		$data['user_token'] = $this->session->data['user_token'];
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
+
+		if (isset($this->request->get['module_id'])) {
+			$data['module_id'] = (int)$this->request->get['module_id'];
+		} else {
+			$data['module_id'] = 0;
+		}
 
 		$this->response->setOutput($this->load->view('extension/dc_minimal/module/category_entry', $data));
 	}
@@ -105,6 +128,42 @@ class CategoryEntry extends \Opencart\System\Engine\Controller {
 
 			$json['success'] = $this->language->get('text_success');
 		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
+
+	public function autocomplete(): void {
+		$json = [];
+
+		if (isset($this->request->get['filter_name'])) {
+			$this->load->model('catalog/category');
+
+			$filter_data = [
+				'filter_name' => '%' . $this->request->get['filter_name'] . '%',
+				'sort'        => 'name',
+				'order'       => 'ASC',
+				'start'       => 0,
+				'limit'       => 20
+			];
+
+			$results = $this->model_catalog_category->getCategories($filter_data);
+
+			foreach ($results as $result) {
+				$json[] = [
+					'category_id' => $result['category_id'],
+					'name'        => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'))
+				];
+			}
+		}
+
+		$sort_order = [];
+
+		foreach ($json as $key => $value) {
+			$sort_order[$key] = $value['name'];
+		}
+
+		array_multisort($sort_order, SORT_ASC, $json);
 
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));

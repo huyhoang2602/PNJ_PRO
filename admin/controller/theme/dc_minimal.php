@@ -30,7 +30,7 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 			'href' => $this->url->link('extension/dc_minimal/theme/dc_minimal', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store_id)
 		];
 
-		$data['save'] = $this->url->link('extension/dc_minimal/theme/dc_minimal|save', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store_id);
+		$data['save'] = $this->url->link('extension/dc_minimal/theme/dc_minimal.save', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store_id);
 		$data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=theme');
 
 		$fields = [

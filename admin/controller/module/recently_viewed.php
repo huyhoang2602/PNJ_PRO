@@ -17,7 +17,7 @@ class RecentlyViewed extends \Opencart\System\Engine\Controller {
         ];
         
         // Đường dẫn action cho form save
-        $data['save'] = $this->url->link('extension/dc_minimal/module/recently_viewed|save', 'user_token=' . $this->session->data['user_token']);
+        $data['save'] = $this->url->link('extension/dc_minimal/module/recently_viewed.save', 'user_token=' . $this->session->data['user_token']);
         $data['back'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module');
 
         // Lấy giá trị status từ cấu hình hệ thống
