@@ -10,6 +10,7 @@
 @import "brand.css";
 @import "latest.css";
 @import "featured.css";
+@import "dc_minimal/service_hightlight.css";
 html{
 	margin:0px;
 	padding: 0px;

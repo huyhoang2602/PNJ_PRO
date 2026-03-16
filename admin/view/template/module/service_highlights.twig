@@ -42,6 +42,7 @@
                 <tr>
                   <td class="text-start">{{ entry_title }}</td>
                   <td class="text-start">{{ entry_description }}</td>
+                  <td class="text-start">{{ entry_tooltip }}</td>
                   <td class="text-center">{{ entry_image }}</td>
                   <td></td>
                 </tr>
@@ -55,6 +56,9 @@
                     </td>
                     <td class="text-start">
                       <input type="text" name="services[{{ service_row }}][description]" value="{{ service.description }}" placeholder="{{ entry_description }}" class="form-control" />
+                    </td>
+                    <td class="text-start">
+                      <textarea name="services[{{ service_row }}][tooltip]" rows="3" placeholder="{{ entry_tooltip }}" class="form-control">{{ service.tooltip }}</textarea>
                     </td>
                     <td class="text-center">
                     <div class="card image">
@@ -72,7 +76,7 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan="3"></td>
+                  <td colspan="4"></td>
                   <td class="text-end"><button type="button" onclick="addservice();" data-bs-toggle="tooltip" title="{{ button_service_add }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button></td>
                 </tr>
               </tfoot>
@@ -87,21 +91,22 @@
 var service_row = {{ service_row }};
 
 function addservice() {
-	html  = '<tr id="service-row-' + service_row + '">';
+	var html  = '<tr id="service-row-' + service_row + '">';
     html += '  <td class="text-start">';
-    html += '    <input type="text" name="services[' + service_row + '][title]" value="" placeholder="{{ entry_title }}" class="form-control" />';
+    html += '    <input type="text" name="services[' + service_row + '][title]" value="" placeholder="{{ entry_title|escape('js') }}" class="form-control" />';
     html += '  </td>';
-	html += '  <td class="text-start"><input type="text" name="services[' + service_row + '][description]" value="" placeholder="{{ entry_description }}" class="form-control" /></td>';
+	html += '  <td class="text-start"><input type="text" name="services[' + service_row + '][description]" value="" placeholder="{{ entry_description|escape('js') }}" class="form-control" /></td>';
+    html += '  <td class="text-start"><textarea name="services[' + service_row + '][tooltip]" rows="3" placeholder="{{ entry_tooltip|escape('js') }}" class="form-control"></textarea></td>';
 	html += '  <td class="text-center">';
     html += '  <div class="card image">';
     html += '    <img src="{{ placeholder }}" alt="" title="" id="thumb-image-' + service_row + '" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/> <input type="hidden" name="services[' + service_row + '][image]" value="" id="input-image-' + service_row + '"/>';
     html += '    <div class="card-body">';
-    html += '      <button type="button" data-oc-toggle="image" data-oc-target="#input-image-' + service_row + '" data-oc-thumb="#thumb-image-' + service_row + '" class="btn btn-primary btn-sm btn-block"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>';
-    html += '      <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-' + service_row + '" data-oc-thumb="#thumb-image-' + service_row + '" class="btn btn-warning btn-sm btn-block"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>';
+    html += '      <button type="button" data-oc-toggle="image" data-oc-target="#input-image-' + service_row + '" data-oc-thumb="#thumb-image-' + service_row + '" class="btn btn-primary btn-sm btn-block"><i class="fa-solid fa-pencil"></i> {{ button_edit|escape('js') }}</button>';
+    html += '      <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-' + service_row + '" data-oc-thumb="#thumb-image-' + service_row + '" class="btn btn-warning btn-sm btn-block"><i class="fa-regular fa-trash-can"></i> {{ button_clear|escape('js') }}</button>';
     html += '    </div>';
     html += '  </div>';
     html += '  </td>';
-	html += '  <td class="text-end"><button type="button" onclick="$(\'#service-row-' + service_row  + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
+	html += '  <td class="text-end"><button type="button" onclick="$(\'#service-row-' + service_row  + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove|escape('js') }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
 	html += '</tr>';
 
 	$('#service tbody').append(html);

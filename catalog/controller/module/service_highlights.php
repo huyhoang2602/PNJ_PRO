@@ -19,6 +19,7 @@ class ServiceHighlights extends \Opencart\System\Engine\Controller {
                 $data['services'][] = [
                     'title'       => $service['title'],
                     'description' => $service['description'],
+                    'tooltip'     => isset($service['tooltip']) ? html_entity_decode($service['tooltip'], ENT_QUOTES, 'UTF-8') : '',
                     'thumb'       => $image
                 ];
             }

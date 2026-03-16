@@ -1,0 +1,99 @@
+/* Bỏ nền section */
+.dc-service-highlights {
+  background: transparent;
+}
+
+/* Căn giữa toàn bộ service */
+.dc-service-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.dc-service-col {
+  position: relative;
+}
+
+/* card */
+.dc-service-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #f3f3f3; /* nền nhẹ giống PNJ */
+  border-radius: 10px;
+  padding: 14px 22px;
+  min-height: 80px;
+  transition: all 0.2s ease;
+}
+
+.dc-service-card:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* icon */
+.dc-service-icon img {
+  max-width: 54px;
+  max-height: 54px;
+  object-fit: contain;
+}
+
+/* text */
+.dc-service-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0c3c70;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.dc-service-desc {
+  font-size: 16px;
+  color: #1f3f6b;
+}
+
+/* tooltip căn giữa */
+.dc-service-tooltip {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  width: 340px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .25s ease;
+  z-index: 20;
+}
+
+.dc-service-col:hover .dc-service-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* tooltip box */
+.dc-service-tooltip-inner {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 12px 35px rgba(0,0,0,.08);
+  font-size: 14px;
+  line-height: 1.6;
+  position: relative;
+}
+
+/* arrow */
+.dc-service-tooltip-inner::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-left: 1px solid #e6e6e6;
+  border-top: 1px solid #e6e6e6;
+}

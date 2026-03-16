@@ -12,6 +12,7 @@ $_['entry_name']       = 'Module Name';
 $_['entry_status']     = 'Status';
 $_['entry_title']      = 'Title';
 $_['entry_description']= 'Description';
+$_['entry_tooltip']    = 'Tooltip Content';
 $_['entry_image']      = 'Icon/Image';
 
 // Error

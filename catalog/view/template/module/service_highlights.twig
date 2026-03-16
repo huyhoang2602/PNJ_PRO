@@ -1,18 +1,33 @@
 {% if services %}
-<section class="dc-service-highlights py-4">
+<section class="dc-service-highlights py-3">
   <div class="container">
-    <div class="row text-center">
+    <div class="dc-service-row">
+
       {% for service in services %}
-        <div class="col-6 col-md-3 mb-3 mb-md-0">
-          <div class="dc-service-item d-flex flex-column align-items-center">
-            <div class="dc-service-icon mb-2">
-              <img src="{{ service.thumb }}" alt="{{ service.title }}" class="img-fluid" loading="lazy">
-            </div>
-            <h4 class="dc-service-title fw-bold" style="font-size: 0.9rem;">{{ service.title }}</h4>
-            <p class="dc-service-desc text-muted mb-0" style="font-size: 0.8rem;">{{ service.description }}</p>
+      <div class="dc-service-col">
+
+        <div class="dc-service-card">
+          <div class="dc-service-icon">
+            <img src="{{ service.thumb }}" alt="{{ service.title }}">
+          </div>
+
+          <div class="dc-service-content">
+            <div class="dc-service-title">{{ service.title }}</div>
+            <div class="dc-service-desc">{{ service.description }}</div>
           </div>
         </div>
+
+        {% if service.tooltip %}
+        <div class="dc-service-tooltip">
+          <div class="dc-service-tooltip-inner">
+            {{ service.tooltip|raw }}
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
       {% endfor %}
+
     </div>
   </div>
 </section>
