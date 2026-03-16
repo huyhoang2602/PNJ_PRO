@@ -1,0 +1,12 @@
+<section class="dc-featured-products my-4">
+  <div class="container">
+    {{ include('extension/dc_minimal/catalog/view/template/component/section_title.twig', {'title': heading_title}) }}
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+      {% for product in products %}
+        <div class="col">
+          {{ include('extension/dc_minimal/catalog/view/template/component/product_card.twig') }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,31 @@
+{% if banners %}
+<section class="dc-hero-banner mb-4">
+  <div id="hero-carousel" class="owl-carousel owl-theme">
+    {% for banner in banners %}
+      <div class="item">
+        {% if banner.link %}
+          <a href="{{ banner.link }}">
+            <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-fluid w-100" />
+          </a>
+        {% else %}
+          <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-fluid w-100" />
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#hero-carousel').owlCarousel({
+        items: 1,
+        loop: true,
+        margin: 0,
+        autoplay: true,
+        autoplayTimeout: 5000,
+        autoplayHoverPause: true,
+        nav: false,
+        dots: true
+    });
+});
+</script>
+{% endif %}

@@ -1,0 +1,17 @@
+{% if brands %}
+<section class="dc-brand-showcase-module">
+  {{ include('extension/dc_minimal/catalog/view/template/component/section_title.twig', {title: heading_title}) }}
+  <div class="dc-brand-slider">
+      <div class="dc-brand-track">
+        {% for brand in brands %}
+            <div class="dc-brand-slide">
+                <a href="{{ brand.link }}">
+                    <img src="{{ brand.thumb }}" alt="{{ brand.name }}" loading="lazy">
+                    <div class="dc-brand-name">{{ brand.name }}</div>
+                </a>
+            </div>
+        {% endfor %}
+      </div>
+  </div>
+</section>
+{% endif %}

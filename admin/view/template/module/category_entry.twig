@@ -1,0 +1,112 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <div class="row mb-3">
+            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              <div id="error-name" class="invalid-feedback"></div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-status" class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="status" id="input-status" class="form-select">
+                <option value="1"{% if status %} selected="selected"{% endif %}>{{ text_enabled }}</option>
+                <option value="0"{% if not status %} selected="selected"{% endif %}>{{ text_disabled }}</option>
+              </select>
+            </div>
+          </div>
+
+          <fieldset>
+            <legend>Categories Config</legend>
+            <table id="category" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td class="text-start">{{ entry_title }}</td>
+                  <td class="text-start">{{ entry_link }}</td>
+                  <td class="text-center">{{ entry_image }}</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {% set category_row = 0 %}
+                {% for category in categories %}
+                  <tr id="category-row-{{ category_row }}">
+                    <td class="text-start">
+                      <input type="text" name="categories[{{ category_row }}][title]" value="{{ category.title }}" placeholder="{{ entry_title }}" class="form-control" />
+                    </td>
+                    <td class="text-start">
+                      <input type="text" name="categories[{{ category_row }}][link]" value="{{ category.link }}" placeholder="{{ entry_link }}" class="form-control" />
+                    </td>
+                    <td class="text-center">
+                    <div class="card image">
+                      <img src="{{ category.thumb }}" alt="" title="" id="thumb-image-{{ category_row }}" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/> <input type="hidden" name="categories[{{ category_row }}][image]" value="{{ category.image }}" id="input-image-{{ category_row }}"/>
+                      <div class="card-body">
+                        <button type="button" data-oc-toggle="image" data-oc-target="#input-image-{{ category_row }}" data-oc-thumb="#thumb-image-{{ category_row }}" class="btn btn-primary btn-sm btn-block"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
+                        <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-{{ category_row }}" data-oc-thumb="#thumb-image-{{ category_row }}" class="btn btn-warning btn-sm btn-block"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>
+                      </div>
+                    </div>
+                    </td>
+                    <td class="text-end"><button type="button" onclick="$('#category-row-{{ category_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>
+                  </tr>
+                  {% set category_row = category_row + 1 %}
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3"></td>
+                  <td class="text-end"><button type="button" onclick="addcategory();" data-bs-toggle="tooltip" title="{{ button_category_add }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button></td>
+                </tr>
+              </tfoot>
+            </table>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+var category_row = {{ category_row }};
+
+function addcategory() {
+	html  = '<tr id="category-row-' + category_row + '">';
+    html += '  <td class="text-start">';
+    html += '    <input type="text" name="categories[' + category_row + '][title]" value="" placeholder="{{ entry_title }}" class="form-control" />';
+    html += '  </td>';
+	html += '  <td class="text-start"><input type="text" name="categories[' + category_row + '][link]" value="" placeholder="{{ entry_link }}" class="form-control" /></td>';
+	html += '  <td class="text-center">';
+    html += '  <div class="card image">';
+    html += '    <img src="{{ placeholder }}" alt="" title="" id="thumb-image-' + category_row + '" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/> <input type="hidden" name="categories[' + category_row + '][image]" value="" id="input-image-' + category_row + '"/>';
+    html += '    <div class="card-body">';
+    html += '      <button type="button" data-oc-toggle="image" data-oc-target="#input-image-' + category_row + '" data-oc-thumb="#thumb-image-' + category_row + '" class="btn btn-primary btn-sm btn-block"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>';
+    html += '      <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-' + category_row + '" data-oc-thumb="#thumb-image-' + category_row + '" class="btn btn-warning btn-sm btn-block"><i class="fa-regular fa-trash-can"></i> {{ button_clear }}</button>';
+    html += '    </div>';
+    html += '  </div>';
+    html += '  </td>';
+	html += '  <td class="text-end"><button type="button" onclick="$(\'#category-row-' + category_row  + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
+	html += '</tr>';
+
+	$('#category tbody').append(html);
+
+	category_row++;
+}
+//--></script>
+{{ footer }}

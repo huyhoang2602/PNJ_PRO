@@ -1,0 +1,52 @@
+<section class="dc-flash-sale my-4 bg-light py-4 rounded shadow-sm">
+  <div class="container">
+    <div class="row align-items-center mb-3">
+        <div class="col-auto">
+            <h2 class="m-0 fw-bold text-danger"><i class="fa-solid fa-bolt"></i> {{ heading_title }}</h2>
+        </div>
+        <div class="col text-end">
+            <div id="flash-countdown" class="d-inline-flex gap-2 fw-bold text-white">
+                <div class="bg-dark px-2 rounded" id="timer-days">00</div>:
+                <div class="bg-dark px-2 rounded" id="timer-hours">00</div>:
+                <div class="bg-dark px-2 rounded" id="timer-mins">00</div>:
+                <div class="bg-dark px-2 rounded" id="timer-secs">00</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+      {% for product in products %}
+        <div class="col">
+          {{ include('extension/dc_minimal/catalog/view/template/component/product_card.twig') }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var endTime = new Date('{{ end_time }}').getTime();
+    
+    var x = setInterval(function() {
+        var now = new Date().getTime();
+        var distance = endTime - now;
+        
+        if (distance < 0) {
+            clearInterval(x);
+            $("#flash-countdown").html("EXPIRED");
+            return;
+        }
+        
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        $("#timer-days").text(days < 10 ? "0" + days : days);
+        $("#timer-hours").text(hours < 10 ? "0" + hours : hours);
+        $("#timer-mins").text(minutes < 10 ? "0" + minutes : minutes);
+        $("#timer-secs").text(seconds < 10 ? "0" + seconds : seconds);
+    }, 1000);
+});
+</script>

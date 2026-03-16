@@ -1,0 +1,36 @@
+<div class="dc-product-card">
+  <div class="image">
+    <a href="{{ product.href }}">
+      <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-fluid" loading="lazy" />
+    </a>
+    
+    {% if product.dc_discount_percent %}
+      {{ include('extension/dc_minimal/catalog/view/template/component/badge.twig', { type: 'sale', text: product.dc_discount_percent }) }}
+    {% endif %}
+  </div>
+  <div class="content">
+    <div class="brand">
+        {% if product.manufacturer %}
+            <a href="{{ product.manufacturer_href }}">{{ product.manufacturer }}</a>
+        {% endif %}
+    </div>
+    <div class="name">
+      <a href="{{ product.href }}">{{ product.name }}</a>
+    </div>
+
+    {% if product.rating %}
+      {{ include('extension/dc_minimal/catalog/view/template/component/rating.twig', { rating: product.rating }) }}
+    {% endif %}
+
+    <div class="price">
+      {% if product.price %}
+        {% if not product.special %}
+          <span class="price-normal">{{ product.price }}</span>
+        {% else %}
+          <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span>
+        {% endif %}
+      {% endif %}
+    </div>
+    
+  </div>
+</div>

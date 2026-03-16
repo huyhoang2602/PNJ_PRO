@@ -1,0 +1,20 @@
+{% if categories %}
+<section class="dc-category-entry my-4">
+  <div class="container">
+    <div class="row text-center justify-content-center">
+      {% for category in categories %}
+        <div class="col-4 col-md-2 mb-3 px-2">
+          <div class="dc-category-item">
+            <a href="{{ category.link }}" class="text-decoration-none">
+              <div class="dc-category-img-wrap rounded-circle overflow-hidden mb-2 mx-auto shadow-sm" style="width: 80px; height: 80px; border: 2px solid #eee;">
+                <img src="{{ category.image }}" alt="{{ category.title }}" class="img-fluid w-100 h-100" style="object-fit: cover;" loading="lazy">
+              </div>
+              <span class="dc-category-title text-dark fw-bold" style="font-size: 0.85rem;">{{ category.title }}</span>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}

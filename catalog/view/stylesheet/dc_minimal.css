@@ -1,0 +1,136 @@
+/* DC Minimal Theme Core Overrides */
+
+:root {
+  --dc-primary-bg: #fff;
+  --dc-secondary-bg: #f9f9f9;
+  --dc-primary-color: #003468;
+  --dc-secondary-color: #c48c31;
+  --dc-text-color: #333;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--dc-text-color);
+  background-color: var(--dc-primary-bg);
+}
+
+/* Common Components */
+.dc-section-title {
+  padding: 2rem 0 1rem;
+  border-bottom: 2px solid var(--dc-secondary-bg);
+  margin-bottom: 2rem;
+}
+
+.dc-section-title h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dc-primary-color);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.dc-section-title .view-all {
+  font-size: 0.9rem;
+  color: var(--dc-secondary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Product Card */
+.dc-product-card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: #fff;
+  height: 100%;
+}
+
+.dc-product-card:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
+}
+
+.dc-product-card .image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+.dc-product-card .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1rem;
+}
+
+.dc-product-card .content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.dc-product-card .brand a {
+  font-size: 0.8rem;
+  color: #999;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.dc-product-card .name a {
+  font-size: 1rem;
+  color: var(--dc-text-color);
+  text-decoration: none;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.dc-product-card .price {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.dc-product-card .price-normal,
+.dc-product-card .price-new {
+  color: var(--dc-secondary-color);
+}
+
+.dc-product-card .price-old {
+  color: #999;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-left: 0.5rem;
+}
+
+/* Badges */
+.dc-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.dc-badge-sale {
+  background-color: #e74c3c;
+}
+
+.dc-badge-new {
+  background-color: #2ecc71;
+}
+
+/* Ratings */
+.dc-rating {
+  margin-bottom: 1rem;
+  color: #f1c40f;
+  font-size: 0.85rem;
+}
