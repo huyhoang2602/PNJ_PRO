@@ -1,12 +1,38 @@
-<section class="dc-featured-products my-4">
+{% set module = random(1000000) %}
+
+<section class="dc-featured-products my-5">
   <div class="container">
-    {{ include('extension/dc_minimal/catalog/view/template/component/section_title.twig', {'title': heading_title}) }}
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+   <div class="text-center brand-title">
+        <h3 class="mb-4">{{ heading_title }}</h3>
+    </div>
+    <div id="featured-carousel-{{ module }}" class="owl-carousel product-carousel">
       {% for product in products %}
-        <div class="col">
+        <div class="item">
           {{ include('extension/dc_minimal/catalog/view/template/component/product_card.twig') }}
         </div>
       {% endfor %}
     </div>
   </div>
 </section>
+
+<script type="text/javascript">
+$('#featured-carousel-{{ module }}').owlCarousel({
+    loop: true,
+    margin: 20,
+    nav: true,
+    dots: false,
+    navText: [
+        '<span class="carousel-nav-btn prev"><i class="fa-solid fa-chevron-left"></i></span>',
+        '<span class="carousel-nav-btn next"><i class="fa-solid fa-chevron-right"></i></span>'
+    ],
+    autoplay: true,
+    autoplayTimeout: 5000,
+    autoplayHoverPause: true,
+    responsive: {
+        0: { items: 2, margin: 10 },
+        576: { items: 2 },
+        768: { items: 3 },
+        1200: { items: 4 }
+    }
+});
+</script>

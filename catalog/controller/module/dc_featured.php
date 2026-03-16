@@ -46,16 +46,18 @@ class DcFeatured extends \Opencart\System\Engine\Controller {
 					}
 
 					$product_data = [
-						'product_id'  => $product_info['product_id'],
-						'thumb'       => $image,
-						'name'        => $product_info['name'],
-						'description' => utf8_substr(strip_tags(html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8')), 0, $this->config->get('config_product_description_length')) . '..',
-						'price'       => $price,
-						'special'     => $special,
-						'tax'         => $tax,
-						'minimum'     => $product_info['minimum'] > 0 ? $product_info['minimum'] : 1,
-						'rating'      => $product_info['rating'],
-						'href'        => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product_info['product_id'])
+						'product_id'        => $product_info['product_id'],
+						'thumb'             => $image,
+						'name'              => $product_info['name'],
+                        'manufacturer'      => $product_info['manufacturer'] ?? '',
+                        'manufacturer_href' => $this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . '&manufacturer_id=' . ($product_info['manufacturer_id'] ?? 0)),
+						'description'       => \mb_substr(strip_tags(html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8')), 0, $this->config->get('config_product_description_length')) . '..',
+						'price'             => $price,
+						'special'           => $special,
+						'tax'               => $tax,
+						'minimum'           => $product_info['minimum'] > 0 ? $product_info['minimum'] : 1,
+						'rating'            => $product_info['rating'],
+						'href'              => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product_info['product_id'])
 					];
 
                     // Event custom discount from modifiers

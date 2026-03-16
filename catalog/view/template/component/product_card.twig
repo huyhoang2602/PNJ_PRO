@@ -1,36 +1,46 @@
 <div class="dc-product-card">
-  <div class="image">
+  <div class="dc-product-image">
     <a href="{{ product.href }}">
       <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-fluid" loading="lazy" />
     </a>
     
     {% if product.dc_discount_percent %}
-      {{ include('extension/dc_minimal/catalog/view/template/component/badge.twig', { type: 'sale', text: product.dc_discount_percent }) }}
+      <div class="dc-badge dc-badge-sale">{{ product.dc_discount_percent }}</div>
     {% endif %}
+
+    <div class="dc-product-actions">
+      <button type="button" onclick="wishlist.add('{{ product.product_id }}');" class="dc-btn-action" title="{{ button_wishlist }}"><i class="fa-regular fa-heart"></i></button>
+      <button type="button" onclick="compare.add('{{ product.product_id }}');" class="dc-btn-action" title="{{ button_compare }}"><i class="fa-solid fa-arrows-rotate"></i></button>
+    </div>
   </div>
-  <div class="content">
-    <div class="brand">
+
+  <div class="dc-product-info">
+    <div class="dc-product-brand">
         {% if product.manufacturer %}
             <a href="{{ product.manufacturer_href }}">{{ product.manufacturer }}</a>
+        {% else %}
+            &nbsp;
         {% endif %}
     </div>
-    <div class="name">
+    
+    <h4 class="dc-product-name">
       <a href="{{ product.href }}">{{ product.name }}</a>
-    </div>
+    </h4>
 
-    {% if product.rating %}
-      {{ include('extension/dc_minimal/catalog/view/template/component/rating.twig', { rating: product.rating }) }}
-    {% endif %}
-
-    <div class="price">
+    <div class="dc-product-price">
       {% if product.price %}
         {% if not product.special %}
           <span class="price-normal">{{ product.price }}</span>
         {% else %}
-          <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span>
+          <span class="price-new">{{ product.special }}</span> <span class="dc-price-old">{{ product.price }}</span>
         {% endif %}
       {% endif %}
     </div>
-    
+
+    <div class="dc-product-cart">
+        <button type="button" onclick="cart.add('{{ product.product_id }}');" class="dc-btn-cart">
+            <i class="fa-solid fa-cart-shopping me-2"></i> {{ button_cart }}
+        </button>
+    </div>
   </div>
 </div>

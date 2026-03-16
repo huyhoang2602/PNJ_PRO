@@ -2,7 +2,11 @@
 namespace Opencart\Catalog\Controller\Extension\DcMinimal\Module;
 
 class Brand extends \Opencart\System\Engine\Controller {
-    public function index(): string {
+    public function index(array $setting = []): string {
+        if (!$setting) {
+            return '';
+        }
+
         $this->load->language('extension/dc_minimal/module/brand');
         $this->load->model('tool/image');
         $this->load->model('catalog/manufacturer');
