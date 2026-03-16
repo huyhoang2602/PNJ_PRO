@@ -1,7 +1,8 @@
+{% if manufacturers %}
 <div class="brand-section container my-5">
 
     <div class="text-center brand-title">
-        <h3>{{ heading_title }}Thương hiệu nổi bật</h3>
+        <h3 class="mb-4">{{ heading_title }}</h3>
     </div>
 
     <div id="brand-owl-carousel" class="owl-carousel">
@@ -13,11 +14,11 @@
                 <div class="brand-card">
 
                     <div class="brand-image">
-                        <img src="{{ manufacturer.image }}" alt="{{ manufacturer.name }}">
+                        <img src="{{ manufacturer.image }}" alt="">
                     </div>
 
                     <div class="brand-logo">
-                        <img src="{{ manufacturer.image }}" alt="{{ manufacturer.name }}">
+                        <img src="{{ manufacturer.logo }}" alt="">
                     </div>
 
                 </div>
@@ -50,3 +51,4 @@
         });
     });
 </script>
+{% endif %}

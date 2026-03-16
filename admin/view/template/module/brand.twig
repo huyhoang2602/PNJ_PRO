@@ -20,7 +20,7 @@
       <div class="card-body">
         <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
           <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="input-status">{{ entry_status }}</label>
+            <label for="input-status" class="col-sm-2 col-form-label">{{ entry_status }}</label>
             <div class="col-sm-10">
               <select name="module_brand_status" id="input-status" class="form-select">
                 <option value="1"{% if module_brand_status %} selected{% endif %}>{{ text_enabled }}</option>
@@ -28,9 +28,105 @@
               </select>
             </div>
           </div>
+
+          <fieldset>
+            <legend>Brands Slider Items</legend>
+            <div class="alert alert-info"><i class="fa fa-info-circle"></i> Backdrop images and links are automatically synced from the selected Manufacturers. Use this module to add the luxurious small logo overlay.</div>
+            <table id="brand-table" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td class="text-start">{{ entry_manufacturer }}</td>
+                  <td class="text-center">{{ entry_logo }}</td>
+                  <td class="text-end">{{ entry_sort_order }}</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {% set brand_row = 0 %}
+                {% for brand in brands %}
+                  <tr id="brand-row-{{ brand_row }}">
+                    <td class="text-start">
+                      <select name="module_brand_brands[{{ brand_row }}][manufacturer_id]" class="form-select">
+                        <option value="0">--- None ---</option>
+                        {% for manufacturer in manufacturers %}
+                          <option value="{{ manufacturer.manufacturer_id }}"{% if manufacturer.manufacturer_id == brand.manufacturer_id %} selected{% endif %}>{{ manufacturer.name }}</option>
+                        {% endfor %}
+                      </select>
+                    </td>
+                    <td class="text-center">
+                      <div class="card image" style="width: 150px; margin: 0 auto;">
+                        <img src="{{ brand.logo_thumb }}" alt="" title="" id="thumb-logo-{{ brand_row }}" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/>
+                        <input type="hidden" name="module_brand_brands[{{ brand_row }}][logo]" value="{{ brand.logo }}" id="input-logo-{{ brand_row }}"/>
+                        <div class="card-body p-2">
+                          <div class="btn-group w-100">
+                            <button type="button" data-oc-toggle="image" data-oc-target="#input-logo-{{ brand_row }}" data-oc-thumb="#thumb-logo-{{ brand_row }}" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i></button>
+                            <button type="button" data-oc-toggle="clear" data-oc-target="#input-logo-{{ brand_row }}" data-oc-thumb="#thumb-logo-{{ brand_row }}" class="btn btn-warning btn-sm"><i class="fa-regular fa-trash-can"></i></button>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-end">
+                      <input type="text" name="module_brand_brands[{{ brand_row }}][sort_order]" value="{{ brand.sort_order }}" placeholder="{{ entry_sort_order }}" class="form-control" style="width: 80px;"/>
+                    </td>
+                    <td class="text-end">
+                      <button type="button" onclick="$('#brand-row-{{ brand_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button>
+                    </td>
+                  </tr>
+                  {% set brand_row = brand_row + 1 %}
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3"></td>
+                  <td class="text-end">
+                    <button type="button" onclick="addBrand();" data-bs-toggle="tooltip" title="{{ button_brand_add }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </fieldset>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+<script type="text/javascript"><!--
+var brand_row = {{ brand_row }};
+
+function addBrand() {
+	var html  = '<tr id="brand-row-' + brand_row + '">';
+    // Manufacturer
+    html += '  <td class="text-start">';
+    html += '    <select name="module_brand_brands[' + brand_row + '][manufacturer_id]" class="form-select">';
+    html += '      <option value="0">--- None ---</option>';
+    {% for manufacturer in manufacturers %}
+    html += '      <option value="{{ manufacturer.manufacturer_id }}">{{ manufacturer.name|escape('js') }}</option>';
+    {% endfor %}
+    html += '    </select>';
+    html += '  </td>';
+    // Logo
+    html += '  <td class="text-center">';
+    html += '    <div class="card image" style="width: 150px; margin: 0 auto;">';
+    html += '      <img src="{{ placeholder }}" alt="" title="" id="thumb-logo-' + brand_row + '" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/>';
+    html += '      <input type="hidden" name="module_brand_brands[' + brand_row + '][logo]" value="" id="input-logo-' + brand_row + '"/>';
+    html += '      <div class="card-body p-2">';
+    html += '        <div class="btn-group w-100">';
+    html += '          <button type="button" data-oc-toggle="image" data-oc-target="#input-logo-' + brand_row + '" data-oc-thumb="#thumb-logo-' + brand_row + '" class="btn btn-primary btn-sm"><i class="fa-solid fa-pencil"></i></button>';
+    html += '          <button type="button" data-oc-toggle="clear" data-oc-target="#input-logo-' + brand_row + '" data-oc-thumb="#thumb-logo-' + brand_row + '" class="btn btn-warning btn-sm"><i class="fa-regular fa-trash-can"></i></button>';
+    html += '        </div>';
+    html += '      </div>';
+    html += '    </div>';
+    html += '  </td>';
+    // Sort Order
+    html += '  <td class="text-end"><input type="text" name="module_brand_brands[' + brand_row + '][sort_order]" value="" placeholder="{{ entry_sort_order|escape('js') }}" class="form-control" style="width: 80px;" /></td>';
+    // Remove button
+	html += '  <td class="text-end"><button type="button" onclick="$(\'#brand-row-' + brand_row  + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove|escape('js') }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
+	html += '</tr>';
+
+	$('#brand-table tbody').append(html);
+
+	brand_row++;
+}
+//--></script>
 {{ footer }}
