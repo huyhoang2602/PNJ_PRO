@@ -7,13 +7,47 @@ $(document).ready(function() {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
 
-    // 2. Add to cart animation (optional - if you want a flying cart effect)
-    $(document).on('click', '.btn-cart', function(e) {
-        e.preventDefault();
-        // Custom animation logic going to cart icon can go here
+    // 2. Prevent card click when clicking action buttons
+    $(document).on('click', '.dc-btn-action', function(e) {
+        e.stopPropagation();
     });
 
-    // 3. Handle mobile menu toggles if header.twig has specific dc- classes
+    // 3. Define global wishlist/compare objects
+    window.wishlist = {
+        add: function(product_id) {
+            $.ajax({
+                url: 'index.php?route=account/wishlist.add',
+                type: 'post',
+                data: 'product_id=' + product_id,
+                dataType: 'json',
+                success: function(json) {
+                    $('.alert-dismissible').remove();
+                    if (json['success']) {
+                        showModalMessage('success', json['success']);
+                    }
+                }
+            });
+        }
+    };
+
+    window.compare = {
+        add: function(product_id) {
+            $.ajax({
+                url: 'index.php?route=product/compare.add',
+                type: 'post',
+                data: 'product_id=' + product_id,
+                dataType: 'json',
+                success: function(json) {
+                    $('.alert-dismissible').remove();
+                    if (json['success']) {
+                        showModalMessage('success', json['success']);
+                    }
+                }
+            });
+        }
+    };
+
+    // 4. Handle mobile menu toggles if header.twig has specific dc- classes
     $('.dc-mobile-menu-toggle').on('click', function() {
         $('.dc-mobile-menu').toggleClass('active');
     });

@@ -457,8 +457,8 @@ h6{
 
 .swiper-container{
 	padding-top: 15px;
-	padding-left: 40px;
-	padding-right: 40px;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 .product-carousel .owl-stage{
@@ -468,8 +468,8 @@ h6{
 .product-carousel,
 .carousel-module .owl-carousel.owl-theme{
 	position: relative;
-	padding-left: 50px;
-	padding-right: 50px;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 .owl-stage-outer{
@@ -698,7 +698,7 @@ ul.breadcrumb li:last-child a {
   border-color: var(--primary-color);
 }
 .owl-carousel .item {
-  padding: 0 4px;
+  padding: 0 0px;
 }
 
 .thumbnail-container{

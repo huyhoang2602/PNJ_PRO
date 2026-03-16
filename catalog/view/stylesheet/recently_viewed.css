@@ -5,9 +5,9 @@
     
 }
 .list-product{
-    background: linear-gradient(90deg,#cbd9e6,#7fa5c8);
+    background: linear-gradient(108deg, #e3f2ff 40%, #ffffff 60%, #e3f2ff 100%);
     border-radius: 15px;
-    padding: 35px;
+    padding: 40px 20px;
     position: relative;
 }
 .recently-viewed-container h3{

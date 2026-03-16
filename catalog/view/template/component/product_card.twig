@@ -7,6 +7,11 @@
     {% if product.dc_discount_percent %}
       <div class="dc-badge dc-badge-sale">{{ product.dc_discount_percent }}</div>
     {% endif %}
+    
+    <div class="dc-badge-installment">
+        <span class="ins-num">0%</span>
+        <span class="ins-txt">Trả góp</span>
+    </div>
 
     <div class="dc-product-actions">
       <button type="button" onclick="wishlist.add('{{ product.product_id }}');" class="dc-btn-action" title="{{ button_wishlist }}"><i class="fa-regular fa-heart"></i></button>
@@ -24,23 +29,37 @@
     </div>
     
     <h4 class="dc-product-name">
-      <a href="{{ product.href }}">{{ product.name }}</a>
+      <a href="{{ product.href }}" class="stretched-link">{{ product.name }}</a>
     </h4>
 
     <div class="dc-product-price">
       {% if product.price %}
         {% if not product.special %}
-          <span class="price-normal">{{ product.price }}</span>
+          <span class="price-new">{{ product.price }}</span>
         {% else %}
-          <span class="price-new">{{ product.special }}</span> <span class="dc-price-old">{{ product.price }}</span>
+          <span class="price-new">{{ product.special }}</span>
+          <div class="price-meta">
+             <span class="dc-price-old">{{ product.price }}</span>
+             <span class="dc-discount-tag">-{{ product.dc_discount_percent }}</span>
+          </div>
         {% endif %}
       {% endif %}
     </div>
 
-    <div class="dc-product-cart">
-        <button type="button" onclick="cart.add('{{ product.product_id }}');" class="dc-btn-cart">
-            <i class="fa-solid fa-cart-shopping me-2"></i> {{ button_cart }}
-        </button>
+    <div class="dc-product-footer">
+        <div class="dc-rating">
+            <span class="rating-stars">
+                {% for i in 1..5 %}
+                <i class="fa{% if product.rating >= i %}-solid{% else %}-regular{% endif %} fa-star"></i>
+                {% endfor %}
+            </span>
+            <span class="rating-count">({{ product.rating }})</span>
+        </div>
+        <div class="dc-sold-count">
+            {{ (product.product_id * 7 + 100) }} đã bán
+        </div>
     </div>
+
+    
   </div>
 </div>

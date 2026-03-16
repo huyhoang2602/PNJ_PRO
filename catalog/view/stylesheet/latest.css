@@ -9,14 +9,6 @@
     margin-bottom:30px;
 }
 
-.product-carousel .item{
-    padding:10px;
-    transition: transform 0.55s ease;
-}
-.product-carousel .item:hover{
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
-}
 .product-thumb .image{
     overflow: hidden;
     border-radius: 12px;
@@ -66,8 +58,8 @@
 }
 .viewed-wrapper{
     background: linear-gradient(90deg,#cbd9e6,#7fa5c8);
-    padding:30px;
-    border-radius:12px;
+    padding: 40px 20px;
+    border-radius: 12px;
     position:relative;
 }
 

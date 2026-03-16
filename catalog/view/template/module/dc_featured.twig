@@ -5,12 +5,14 @@
    <div class="text-center brand-title">
         <h3 class="mb-4">{{ heading_title }}</h3>
     </div>
-    <div id="featured-carousel-{{ module }}" class="owl-carousel product-carousel">
-      {% for product in products %}
-        <div class="item">
-          {{ include('extension/dc_minimal/catalog/view/template/component/product_card.twig') }}
-        </div>
-      {% endfor %}
+    <div class="dc-featured-wrapper">
+      <div id="featured-carousel-{{ module }}" class="owl-carousel product-carousel">
+        {% for product in products %}
+          <div class="item">
+            {{ include('extension/dc_minimal/catalog/view/template/component/product_card.twig') }}
+          </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </section>
