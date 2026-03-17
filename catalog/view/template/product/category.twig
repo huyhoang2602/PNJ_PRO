@@ -1,4 +1,5 @@
 {{ header }}
+<link href="extension/dc_minimal/catalog/view/stylesheet/category.css" rel="stylesheet">
 <div id="product-category" class="container">
 	<ul class="breadcrumb">
 		{% for breadcrumb in breadcrumbs %}
@@ -6,77 +7,48 @@
 		{% endfor %}
 	</ul>
 	<div class="row">
-		{# {{ column_left }} #}
 		<div id="content" class="col">
 			{{ content_top }}
-			<h1>{{ heading_title }}</h1>
-			{% if image or description %}
-				<div class="row">
-					{% if image %}
-						<div class="col-3"><img src="{{ image }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="img-thumbnail"/></div>
-					{% endif %}
-					{% if description %}
-						<div class="col-9">{{ description }}</div>
-					{% endif %}
-				</div>
-				<hr/>
-			{% endif %}
+			
+            <div class="category-banner-pnj">
+                <div class="banner-content">
+                    <div class="banner-image">
+                        {% if image %}
+                            <img src="{{ image }}" alt="{{ heading_title }}" class="img-fluid">
+                        {% endif %}
+                    </div>
+                    <div class="banner-text">
+                        <h1 class="pnj-title">{{ heading_title }}</h1>
+                        {% if description %}
+                            <div class="category-description">{{ description }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
 			{% if categories %}
-				<h3>{{ text_refine }}</h3>
-				{% if categories|length <= 5 %}
-					<div class="row">
-						<div class="col-sm-3">
-							<ul>
-								{% for category in categories %}
-									<li><a href="{{ category.href }}">{{ category.name }}</a></li>
-								{% endfor %}
-							</ul>
-						</div>
-					</div>
-				{% else %}
-					<div class="row row-cols-sm-2 row-cols-lg-4">
-						{% set total = 0 %}
-						{# Calculate total number of child categories if 'categories' is a list of parent categories each having 'children' #}
-						{# Assuming 'categories' is a flat list for this |batch filter context based on the loop structure #}
-						{# If 'categories' itself are the items to be batched (not their children), then 'total' calculation here is conceptual for batch size #}
-						{# The original code had `{% set total = category.children|length %}` which seems misplaced before the loop that defines `category` #}
-						{# For the purpose of batching `categories` directly: #}
-						{% set total = categories|length %}
-
-						{% if total > 20 %}
-							{% set batch = (total / 4)|round(0, 'ceil') %}
-						{% else %}
-							{% set batch = 5 %}
-						{% endif %}
-						{% for category_batch in categories|batch(batch) %}
-							<div class="col">
-								<ul>
-									{% for category_item in category_batch %}
-										<li><a href="{{ category_item.href }}">{{ category_item.name }}</a></li>
-									{% endfor %}
-								</ul>
-							</div>
-						{% endfor %}
-					</div>
-					<br/>
-				{% endif %}
+                <div class="refine-search">
+				    <h3>{{ text_refine }}</h3>
+                    <ul class="category-pills">
+                        {% for category in categories %}
+                            <li><a href="{{ category.href }}">{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
 			{% endif %}
 
 			{% if products %}
-				<div class="listing-inerface">
+				<div class="listing-interface">
                     <div id="display-control" class="row align-items-center">
-                        <div class="col-md-4 col-sm-6">
-                            <a href="{{ compare }}" id="compare-total" class="btn btn-primary d-block"><i class="fa-solid fa-arrow-right-arrow-left"></i> <span class="d-inline d-md-none d-lg-inline">{{ text_compare }}</span></a>
+                        <div class="col-md-3 col-sm-6 mb-2 mb-md-0 d-flex align-items-center gap-3">
+                             <button class="btn btn-filter-pnj" type="button" data-bs-toggle="modal" data-bs-target="#modalFilters">
+                                <i class="fa-solid fa-sliders"></i> Bộ lọc
+                             </button>
+                             <span class="text-muted fw-500">{{ results }}</span>
                         </div>
-                        <div class="col-md-1 d-none" style="display:none;">
-                            <div class="btn-group">
-                                <button type="button" id="button-list" class="btn btn-light" data-bs-toggle="tooltip" title="{{ button_list }}"><i class="fa-solid fa-table-list"></i></button>
-                                <button type="button" id="button-grid" class="btn btn-light" data-bs-toggle="tooltip" title="{{ button_grid }}"><i class="fa-solid fa-table-cells"></i></button>
-                            </div>
-                        </div>
-                        <div class="col-md-4 offset-md-2 col-6">
-                            <div class="input-group">
+                        
+                        <div class="col-md-4 offset-md-3 col-6">
+                            <div class="input-group input-group-sm">
                                 <label for="input-sort" class="input-group-text">{{ text_sort }}</label>
                                 <select id="input-sort" class="form-select" onchange="location = this.value;">
                                     {% for sorts in sorts %}
@@ -85,8 +57,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2  col-6">
-                            <div class="input-group">
+                        <div class="col-md-2 col-6">
+                            <div class="input-group input-group-sm">
                                 <label for="input-limit" class="input-group-text">{{ text_limit }}</label>
                                 <select id="input-limit" class="form-select" onchange="location = this.value;">
                                     {% for limits in limits %}
@@ -98,24 +70,229 @@
                     </div>
                 </div>
 
-				<div id="product-list" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4">
+				<div id="product-list" class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4">
 					{% for product in products %}
-						<div class="col mb-3">{{ product }}</div>
+						<div class="col">{{ product }}</div>
 					{% endfor %}
 				</div>
 
-				<div class="row">
-					<div class="col-sm-6 text-start">{{ pagination }}</div>
-					<div class="col-sm-6 text-end">{{ results }}</div>
+				<div id="pagination-wrapper" class="pagination-container">
+					{{ pagination }}
 				</div>
 			{% endif %}
 			{% if not categories and not products %}
-				<p>{{ text_no_results }}</p>
-				<div class="text-end"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+				<div class="text-center py-5">
+                    <p class="mb-4">{{ text_no_results }}</p>
+				    <a href="{{ continue }}" class="btn btn-primary px-4">{{ button_continue }}</a>
+                </div>
 			{% endif %}
 			{{ content_bottom }}
 		</div>
-		{{ column_right }}
+		{# {{ column_right }} #}
 	</div>
 </div>
+
+<!-- PNJ Filter Modal -->
+<div class="modal fade pnj-modal" id="modalFilters" tabindex="-1" aria-labelledby="modalFiltersLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title text-uppercase fw-700 w-100 text-center" id="modalFiltersLabel">Bộ lọc sản phẩm</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-4 pt-4">
+        <div id="filter-wrapper">
+            {# 0. Price Range #}
+            <div class="filter-group mb-4">
+                <h6 class="filter-title text-uppercase fw-700 mb-3">Khoảng giá</h6>
+                <div class="d-flex align-items-center gap-3">
+                    <input type="number" class="form-control form-control-sm" name="price_min" placeholder="Từ" value="{{ price_min ? price_min : '' }}">
+                    <span class="text-muted">-</span>
+                    <input type="number" class="form-control form-control-sm" name="price_max" placeholder="Đến" value="{{ price_max ? price_max : '' }}">
+                </div>
+            </div>
+
+            {% if dynamic_filters %}
+                {# 1. Manufacturers #}
+                {% if dynamic_filters.manufacturers %}
+                    <div class="filter-group mb-4">
+                        <h6 class="filter-title text-uppercase fw-700 mb-3">Thương hiệu</h6>
+                        <div class="filter-options d-flex flex-wrap gap-2">
+                            {% for manufacturer in dynamic_filters.manufacturers %}
+                                <div class="form-check custom-check">
+                                    <input type="checkbox" class="form-check-input" name="manufacturer_id[]" value="{{ manufacturer.id }}" id="m-{{ manufacturer.id }}">
+                                    <label class="form-check-label" for="m-{{ manufacturer.id }}">{{ manufacturer.name }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# 2. Attributes (Jewelry Materials, Stones, etc.) #}
+                {% if dynamic_filters.attributes %}
+                    {% for attr_id, attribute in dynamic_filters.attributes %}
+                        <div class="filter-group mb-4">
+                            <h6 class="filter-title text-uppercase fw-700 mb-3">{{ attribute.name }}</h6>
+                            <div class="filter-options d-flex flex-wrap gap-2">
+                                {% for val in attribute.values %}
+                                    <div class="form-check custom-check">
+                                        <input type="checkbox" class="form-check-input" name="attr[{{ attr_id }}][]" value="{{ val }}" id="attr-{{ attr_id }}-{{ loop.index }}">
+                                        <label class="form-check-label" for="attr-{{ attr_id }}-{{ loop.index }}">{{ val }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {# 3. Options (Ring Size, etc.) #}
+                {% if dynamic_filters.options %}
+                    {% for opt_id, option in dynamic_filters.options %}
+                        <div class="filter-group mb-4">
+                            <h6 class="filter-title text-uppercase fw-700 mb-3">{{ option.name }}</h6>
+                            <div class="filter-options d-flex flex-wrap gap-2">
+                                {% for val in option.values %}
+                                    <div class="form-check custom-check">
+                                        <input type="checkbox" class="form-check-input" name="opt[]" value="{{ val.id }}" id="opt-{{ val.id }}">
+                                        <label class="form-check-label" for="opt-{{ val.id }}">{{ val.name }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                {# 4. Original Manual Filters as fallback #}
+                <div class="manual-filters-section mt-4 pt-3 border-top">
+                    {{ column_left }}
+                </div>
+            {% else %}
+                {{ column_left }}
+            {% endif %}
+        </div>
+      </div>
+      <div class="modal-footer border-0 pt-0 pb-4 justify-content-center gap-2">
+        <button type="button" class="btn btn-outline-secondary px-5 py-2 rounded-pill text-uppercase fw-600" id="button-clear-filters">Thiết lập lại</button>
+        <button type="button" class="btn btn-primary px-5 py-2 rounded-pill text-uppercase fw-600" id="button-filter">Xem kết quả</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+	let url = '{{ action|raw }}';
+    
+    function addParam(param, value) {
+        url += (url.indexOf('?') !== -1 ? '&' : '?') + param + '=' + value;
+    }
+
+    // 1. Manual Filters
+    let filters = [];
+	$('#modalFilters input[name^=\'filter\']:checked').each(function() {
+		filters.push(this.value);
+	});
+    if (filters.length > 0) addParam('filter', filters.join(','));
+
+    // 2. Manufacturers
+    let manufacturers = [];
+    $('#modalFilters input[name^=\'manufacturer_id\']:checked').each(function() {
+        manufacturers.push(this.value);
+    });
+    if (manufacturers.length > 0) addParam('manufacturer_id', manufacturers.join(','));
+
+    // 3. Attributes
+    $('#modalFilters input[name^=\'attr\']:checked').each(function() {
+        addParam($(this).attr('name'), encodeURIComponent(this.value));
+    });
+
+    // 4. Options
+    let options = [];
+    $('#modalFilters input[name^=\'opt\']:checked').each(function() {
+        options.push(this.value);
+    });
+    if (options.length > 0) addParam('opt', options.join(','));
+
+    // 5. Price Range
+    let price_min = $('#modalFilters input[name=\'price_min\']').val();
+    let price_max = $('#modalFilters input[name=\'price_max\']').val();
+    if (price_min) addParam('price_min', price_min);
+    if (price_max) addParam('price_max', price_max);
+
+    // AJAX Request
+    let ajaxUrl = url + (url.indexOf('?') !== -1 ? '&' : '?') + 'ajax=1';
+    
+    $.ajax({
+        url: ajaxUrl,
+        type: 'get',
+        beforeSend: function() {
+            $('#button-filter').prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Đang lọc...');
+            $('#product-list').css('opacity', 0.5);
+        },
+        success: function(html) {
+            let response = $('<div>').append($.parseHTML(html));
+            
+            // Re-find target elements robustly
+            let newProductList = response.find('#product-list');
+            if (newProductList.length) {
+                $('#product-list').html(newProductList.html());
+            } else {
+                // If it's the whole page or something went wrong, try searching differently
+                $('#product-list').html($(html).find('#product-list').html());
+            }
+            
+            $('#product-list').css('opacity', 1);
+            $('.listing-interface').html(response.find('.listing-interface').html() || $(html).find('.listing-interface').html());
+            $('#pagination-wrapper').html(response.find('#pagination-wrapper').html() || $(html).find('#pagination-wrapper').html());
+            
+            // Update URL for bookmarking
+            window.history.pushState({}, '', url);
+            
+            // Close modal robustly
+            let filterModal = document.getElementById('modalFilters');
+            let modalInstance = bootstrap.Modal.getInstance(filterModal);
+            if (!modalInstance) {
+                modalInstance = new bootstrap.Modal(filterModal);
+            }
+            modalInstance.hide();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            $('#product-list').css('opacity', 1);
+        },
+        complete: function() {
+            $('#button-filter').prop('disabled', false).text('Xem kết quả');
+        }
+    });
+});
+
+// AJAX Pagination
+$(document).on('click', '#pagination-wrapper a', function(e) {
+    e.preventDefault();
+    let url = $(this).attr('href');
+    let ajaxUrl = url + (url.indexOf('?') !== -1 ? '&' : '?') + 'ajax=1';
+    
+    $.ajax({
+        url: ajaxUrl,
+        type: 'get',
+        beforeSend: function() {
+            $('#product-list').css('opacity', 0.5);
+            $('html, body').animate({ scrollTop: $('#product-list').offset().top - 100 }, 'slow');
+        },
+        success: function(html) {
+            let response = $('<div>').append($.parseHTML(html));
+            $('#product-list').html(response.find('#product-list').html()).css('opacity', 1);
+            $('.listing-interface').html(response.find('.listing-interface').html());
+            $('#pagination-wrapper').html(response.find('#pagination-wrapper').html());
+            window.history.pushState({}, '', url);
+        }
+    });
+});
+$('#button-clear-filters').on('click', function() {
+    $('#modalFilters input[type=\'checkbox\']').prop('checked', false);
+    $('#modalFilters input[type=\'text\'], #modalFilters input[type=\'number\']').val('');
+    $('#button-filter').trigger('click');
+});
+//--></script>
+
 {{ footer }}

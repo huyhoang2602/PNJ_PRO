@@ -1,131 +1,335 @@
-/* ====== SECTION BACKGROUND ====== */
-.dc-category {
-    padding: 70px 0;
-    position: relative;
+/* Category Page Styles - PNJ Premium Aesthetic */
+
+#product-category {
+    padding-bottom: 60px;
+    background-color: #fcfcfc;
 }
 
-.dc-container {
-    max-width: 1320px;
-    margin: 0 auto;
-    padding: 0 20px;
+/* 1. Integrated Category Banner (PNJ Style) */
+.category-banner-pnj {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    border: 1px solid #f0f0f0;
 }
 
-/* ====== TITLE ====== */
-.dc-section-title {
-    display: block;
-    width: fit-content;
-    margin: 0 auto 60px;   /* auto sẽ đẩy ra giữa */
-    padding: 18px 60px;
-    font-size: 28px;
-    font-weight: 600;
-    color: #f5d27a;
-    text-align: center;
-    background: linear-gradient(180deg, #b30000, #8b0000);
-    border: 3px solid #e6c067;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+.banner-content {
+    display: flex;
+    align-items: center;
+    min-height: 220px;
 }
-.dc-title-wrapper .dc-title{
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #003468; /* Màu xanh đậm PNJ */
-    padding-bottom: 2.5rem;
-}
-.dc-title-wrapper {
+
+.banner-image {
+    flex: 0 0 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    padding: 20px;
 }
 
-.dc-title-img {
-    display: block;
-    margin: 0 auto;
-    max-width: 430px;
-    width: 100%;
-    height: auto;
+.banner-image img {
+    max-height: 180px;
+    width: auto;
+    object-fit: contain;
 }
 
-.dc-section-title::before,
-.dc-section-title::after {
-    content: "";
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: radial-gradient(circle, #f5d27a 30%, transparent 31%);
-    top: -20px;
+.banner-text {
+    flex: 0 0 50%;
+    padding: 30px 40px;
+    text-align: left;
 }
 
-.dc-section-title::before { left: -20px; }
-.dc-section-title::after { right: -20px; }
-
-/* ====== GRID ====== */
-.dc-category-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 35px;
+.pnj-title {
+    color: #003468;
+    font-weight: 700;
+    font-size: 32px;
+    margin: 0 0 10px;
+    text-transform: capitalize;
+    font-family: 'Outfit', sans-serif;
 }
 
-/* ====== CARD ====== */
-.dc-category-item {
-    text-align: center;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.dc-category-thumb {
-    width: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 22px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
-}
-
-.dc-category-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-/* ===== TEXT ===== */
-.dc-category-item p {
-    margin-top: 14px;
-    font-size: 16px;
-    font-weight: 600;
+.category-description {
     color: #555;
-}
-
-/* ===== HOVER EFFECT ===== */
-.dc-category-item:hover .dc-category-thumb {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
-}
-
-.dc-category-item:hover img {
-    transform: scale(1.08);
-}
-
-.dc-category-item:hover p {
-    color: #b30000;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1200px) {
-    .dc-category-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 400px;
 }
 
 @media (max-width: 768px) {
-    .dc-category-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .banner-content {
+        flex-direction: column;
+        padding: 20px;
     }
+    .banner-image, .banner-text {
+        flex: 0 0 100%;
+        text-align: center;
+        padding: 10px;
+    }
+    .banner-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .category-description {
+        margin: 0 auto;
+    }
+}
 
-    .dc-section-title {
-        font-size: 20px;
-        padding: 14px 30px;
+/* 2. Category Pills (Subcategories) */
+.refine-search {
+    margin-bottom: 30px;
+}
+
+.refine-search h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    list-style: none;
+    justify-content: center;
+}
+
+.category-pills li a {
+    display: inline-block;
+    padding: 6px 18px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 50px;
+    color: #444;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.category-pills li a:hover {
+    border-color: #c48c46;
+    color: #c48c46;
+    background: #fffafa;
+}
+
+/* 3. Filter/Sorting Interface (Minimal) */
+.listing-interface {
+    background: #fff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border: 1px solid #f0f0f0;
+}
+
+.btn-filter-pnj {
+    background: #fff;
+    border: 1px solid #003468;
+    color: #003468;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 20px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-filter-pnj:hover {
+    background: #003468;
+    color: #fff;
+}
+
+.listing-interface .form-select {
+    border-radius: 4px;
+    border-color: #eee;
+    font-size: 12px;
+    cursor: pointer;
+    background-color: #fff;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+/* Modal Styling */
+.pnj-modal .modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+}
+
+.pnj-modal .modal-header .modal-title {
+    color: #003468;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+/* OpenCart Filter Module Overrides in Modal */
+#filter-wrapper #column-left {
+    padding: 0;
+}
+
+#filter-wrapper .card {
+    border: none;
+    margin-bottom: 25px;
+}
+
+#filter-wrapper .card-header {
+    background: none;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: #333;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+/* Dynamic Filter Groups Styling */
+.filter-group {
+    border-bottom: 1px solid #f8f9fa;
+    padding-bottom: 20px;
+}
+
+.filter-group:last-child {
+    border-bottom: none;
+}
+
+.filter-title {
+    font-size: 13px;
+    color: #003468;
+    margin-bottom: 12px;
+}
+
+.custom-check {
+    padding-left: 0;
+}
+
+.custom-check .form-check-input {
+    margin-left: 0;
+    margin-right: 8px;
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.custom-check .form-check-label {
+    font-size: 13px;
+    color: #444;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.custom-check .form-check-label:hover {
+    color: #c48c46;
+}
+
+.manual-filters-section .card-header {
+    font-size: 13px;
+    color: #003468;
+}
+
+.listing-interface .input-group-text {
+    background: none;
+    border: none;
+    font-weight: 600;
+    color: #777;
+    font-size: 12px;
+    padding-left: 0;
+}
+
+.listing-interface .text-muted {
+    font-size: 12px;
+    color: #999 !important;
+}
+
+/* 4. Product Grid (Strict 4-Column on XL) */
+#product-list {
+    margin: 0 -6px;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+}
+
+#product-list .col {
+    padding: 6px;
+    width: 100% !important;
+}
+
+#product-list .dc-product-card {
+    padding: 8px;
+    height: 100%;
+}
+
+#product-list .dc-product-image {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#product-list .price-new {
+    color: #c48c46;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+#product-list .dc-product-name {
+    font-size: 13px;
+    height: 38px;
+    margin-bottom: 5px;
+}
+
+/* 5. Pagination PNJ Style */
+.pagination-container {
+    margin-top: 40px;
+    padding-top: 25px;
+}
+
+.pagination {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    padding: 0;
+}
+
+.pagination li a, 
+.pagination li span {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+    border: 1px solid #eee;
+    background: #fff;
+    border-radius: 50%;
+    color: #777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.pagination li.active span {
+    background: #003468 !important;
+    color: #fff !important;
+    border-color: #003468;
+}
+
+/* Grid Breakpoints Override */
+@media (min-width: 768px) {
+    #product-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    #product-list {
+        grid-template-columns: repeat(4, 1fr);
     }
 }

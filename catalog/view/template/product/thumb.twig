@@ -3,30 +3,60 @@
     <a href="{{ href }}">
       <img src="{{ thumb }}" alt="{{ name }}" title="{{ name }}" class="img-fluid" loading="lazy" />
     </a>
-    <div class="dc-product-actions">
-      <button type="button" data-bs-toggle="tooltip" title="{{ button_wishlist }}" onclick="list.add('wishlist', '{{ product_id }}');" class="dc-btn-action"><i class="fa-regular fa-heart"></i></button>
-      <button type="button" data-bs-toggle="tooltip" title="{{ button_compare }}" onclick="list.add('compare', '{{ product_id }}');" class="dc-btn-action"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
-    </div>
+    
     {% if special %}
-    <span class="dc-badge dc-badge-sale">Sale</span>
+      <div class="dc-badge dc-badge-sale">Sale</div>
     {% endif %}
+    
+    <div class="dc-badge-installment">
+        <span class="ins-num">0%</span>
+        <span class="ins-txt">Trả góp</span>
+    </div>
+
+    <div class="dc-product-actions">
+      <button type="button" onclick="wishlist.add('{{ product_id }}');" class="dc-btn-action" title="{{ button_wishlist }}"><i class="fa-regular fa-heart"></i></button>
+      <button type="button" onclick="compare.add('{{ product_id }}');" class="dc-btn-action" title="{{ button_compare }}"><i class="fa-solid fa-arrows-rotate"></i></button>
+    </div>
   </div>
 
   <div class="dc-product-info">
-    <h4 class="dc-product-name"><a href="{{ href }}">{{ name }}</a></h4>
-    {% if price %}
-      <div class="dc-product-price">
-        {% if not special %}
-          <span class="dc-price-regular">{{ price }}</span>
+    <div class="dc-product-brand">
+        {% if manufacturer %}
+            <a href="#">{{ manufacturer }}</a>
         {% else %}
-          <span class="dc-price-new">{{ special }}</span>
-          <span class="dc-price-old">{{ price }}</span>
+            &nbsp;
         {% endif %}
-      </div>
-    {% endif %}
+    </div>
+    
+    <h4 class="dc-product-name">
+      <a href="{{ href }}" class="stretched-link">{{ name }}</a>
+    </h4>
 
-    <div class="dc-product-cart">
-      <button type="button" onclick="list.add('cart', '{{ product_id }}');" class="dc-btn-cart"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+    <div class="dc-product-price">
+      {% if price %}
+        {% if not special %}
+          <span class="price-new">{{ price }}</span>
+        {% else %}
+          <span class="price-new">{{ special }}</span>
+          <div class="price-meta">
+             <span class="dc-price-old">{{ price }}</span>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="dc-product-footer">
+        <div class="dc-rating">
+            <span class="rating-stars">
+                {% for i in 1..5 %}
+                <i class="fa{% if rating >= i %}-solid{% else %}-regular{% endif %} fa-star"></i>
+                {% endfor %}
+            </span>
+            <span class="rating-count">({{ rating }})</span>
+        </div>
+        <div class="dc-sold-count">
+            {{ (product_id * 7 + 100) }} đã bán
+        </div>
     </div>
   </div>
 </div>
