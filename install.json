@@ -5,5 +5,19 @@
   "author": "Design Cart",
   "type": "theme",
   "code": "dc_minimal",
-  "link": "https://www.designcart.pl"
+  "link": "https://www.designcart.pl",
+  "event": [
+    {
+      "trigger": "catalog/view/product/category/before",
+      "action": "extension/dc_minimal/module/filter|beforeCategoryView"
+    },
+    {
+      "trigger": "catalog/view/product/manufacturer_info/before",
+      "action": "extension/dc_minimal/module/filter|beforeManufacturerView"
+    },
+    {
+      "trigger": "catalog/model/catalog/product/getProducts/before",
+      "action": "extension/dc_minimal/module/filter|beforeGetProducts"
+    }
+  ]
 }

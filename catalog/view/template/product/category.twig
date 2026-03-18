@@ -102,59 +102,53 @@
       </div>
       <div class="modal-body px-4 pt-4">
         <div id="filter-wrapper">
-            {# 0. Price Range #}
-            <div class="filter-group mb-4">
-                <h6 class="filter-title text-uppercase fw-700 mb-3">Khoảng giá</h6>
-                <div class="d-flex align-items-center gap-3">
-                    <input type="number" class="form-control form-control-sm" name="price_min" placeholder="Từ" value="{{ price_min ? price_min : '' }}">
-                    <span class="text-muted">-</span>
-                    <input type="number" class="form-control form-control-sm" name="price_max" placeholder="Đến" value="{{ price_max ? price_max : '' }}">
-                </div>
-            </div>
-
+            {# Dynamic Filters #}
             {% if dynamic_filters %}
                 {# 1. Manufacturers #}
-                {% if dynamic_filters.manufacturers %}
-                    <div class="filter-group mb-4">
-                        <h6 class="filter-title text-uppercase fw-700 mb-3">Thương hiệu</h6>
-                        <div class="filter-options d-flex flex-wrap gap-2">
-                            {% for manufacturer in dynamic_filters.manufacturers %}
-                                <div class="form-check custom-check">
-                                    <input type="checkbox" class="form-check-input" name="manufacturer_id[]" value="{{ manufacturer.id }}" id="m-{{ manufacturer.id }}">
-                                    <label class="form-check-label" for="m-{{ manufacturer.id }}">{{ manufacturer.name }}</label>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-
-                {# 2. Attributes (Jewelry Materials, Stones, etc.) #}
-                {% if dynamic_filters.attributes %}
-                    {% for attr_id, attribute in dynamic_filters.attributes %}
+                {% if dynamic_filters %}
+                    {% for group in dynamic_filters %}
                         <div class="filter-group mb-4">
-                            <h6 class="filter-title text-uppercase fw-700 mb-3">{{ attribute.name }}</h6>
+                            <h6 class="filter-title text-uppercase fw-700 mb-3">{{ group.label }}</h6>
                             <div class="filter-options d-flex flex-wrap gap-2">
-                                {% for val in attribute.values %}
+                                {% for val in group.values %}
                                     <div class="form-check custom-check">
-                                        <input type="checkbox" class="form-check-input" name="attr[{{ attr_id }}][]" value="{{ val }}" id="attr-{{ attr_id }}-{{ loop.index }}">
-                                        <label class="form-check-label" for="attr-{{ attr_id }}-{{ loop.index }}">{{ val }}</label>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
-                {# 3. Options (Ring Size, etc.) #}
-                {% if dynamic_filters.options %}
-                    {% for opt_id, option in dynamic_filters.options %}
-                        <div class="filter-group mb-4">
-                            <h6 class="filter-title text-uppercase fw-700 mb-3">{{ option.name }}</h6>
-                            <div class="filter-options d-flex flex-wrap gap-2">
-                                {% for val in option.values %}
-                                    <div class="form-check custom-check">
-                                        <input type="checkbox" class="form-check-input" name="opt[]" value="{{ val.id }}" id="opt-{{ val.id }}">
-                                        <label class="form-check-label" for="opt-{{ val.id }}">{{ val.name }}</label>
+                                        {% if group.type == 'price' %}
+                                            <div class="d-flex align-items-center gap-3 w-100">
+                                                <input type="number" class="form-control form-control-sm" name="price_min" placeholder="Từ" value="{{ price_min ? price_min : '' }}">
+                                                <span class="text-muted">-</span>
+                                                <input type="number" class="form-control form-control-sm" name="price_max" placeholder="Đến" value="{{ price_max ? price_max : '' }}">
+                                            </div>
+                                        {% elseif group.type == 'manufacturer' %}
+                                            <input type="checkbox" class="form-check-input" name="manufacturer_id[]" value="{{ val.id }}" id="filter-m-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-m-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'category' %}
+                                            <input type="checkbox" class="form-check-input" name="sub_cat[]" value="{{ val.id }}" id="filter-c-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-c-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'attribute' %}
+                                            <input type="checkbox" class="form-check-input" name="attr[{{ group.source_id }}][]" value="{{ val.id }}" id="filter-a-{{ group.source_id }}-{{ loop.index }}">
+                                            <label class="form-check-label" for="filter-a-{{ group.source_id }}-{{ loop.index }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'option' %}
+                                            <input type="checkbox" class="form-check-input" name="opt[]" value="{{ val.id }}" id="filter-o-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-o-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'filter' %}
+                                            <input type="checkbox" class="form-check-input" name="filter[]" value="{{ val.id }}" id="filter-f-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-f-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'stock' %}
+                                            <input type="radio" class="form-check-input" name="stock" value="{{ val.id }}" id="filter-s-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-s-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% endif %}
                                     </div>
                                 {% endfor %}
                             </div>
@@ -163,9 +157,11 @@
                 {% endif %}
                 
                 {# 4. Original Manual Filters as fallback #}
+                {% if column_left %}
                 <div class="manual-filters-section mt-4 pt-3 border-top">
                     {{ column_left }}
                 </div>
+                {% endif %}
             {% else %}
                 {{ column_left }}
             {% endif %}
@@ -201,23 +197,34 @@ $('#button-filter').on('click', function() {
     });
     if (manufacturers.length > 0) addParam('manufacturer_id', manufacturers.join(','));
 
-    // 3. Attributes
+    // 3. Sub Categories
+    let subcats = [];
+    $('#modalFilters input[name^=\'sub_cat\']:checked').each(function() {
+        subcats.push(this.value);
+    });
+    if (subcats.length > 0) addParam('sub_cat', subcats.join(','));
+
+    // 4. Attributes
     $('#modalFilters input[name^=\'attr\']:checked').each(function() {
         addParam($(this).attr('name'), encodeURIComponent(this.value));
     });
 
-    // 4. Options
+    // 5. Options
     let options = [];
     $('#modalFilters input[name^=\'opt\']:checked').each(function() {
         options.push(this.value);
     });
     if (options.length > 0) addParam('opt', options.join(','));
 
-    // 5. Price Range
+    // 6. Price Range
     let price_min = $('#modalFilters input[name=\'price_min\']').val();
     let price_max = $('#modalFilters input[name=\'price_max\']').val();
     if (price_min) addParam('price_min', price_min);
     if (price_max) addParam('price_max', price_max);
+
+    // 7. Stock
+    let stock = $('#modalFilters input[name=\'stock\']:checked').val();
+    if (stock) addParam('stock', stock);
 
     // AJAX Request
     let ajaxUrl = url + (url.indexOf('?') !== -1 ? '&' : '?') + 'ajax=1';
@@ -232,15 +239,7 @@ $('#button-filter').on('click', function() {
         success: function(html) {
             let response = $('<div>').append($.parseHTML(html));
             
-            // Re-find target elements robustly
-            let newProductList = response.find('#product-list');
-            if (newProductList.length) {
-                $('#product-list').html(newProductList.html());
-            } else {
-                // If it's the whole page or something went wrong, try searching differently
-                $('#product-list').html($(html).find('#product-list').html());
-            }
-            
+            $('#product-list').html(response.find('#product-list').html() || $(html).find('#product-list').html());
             $('#product-list').css('opacity', 1);
             $('.listing-interface').html(response.find('.listing-interface').html() || $(html).find('.listing-interface').html());
             $('#pagination-wrapper').html(response.find('#pagination-wrapper').html() || $(html).find('#pagination-wrapper').html());
@@ -251,10 +250,9 @@ $('#button-filter').on('click', function() {
             // Close modal robustly
             let filterModal = document.getElementById('modalFilters');
             let modalInstance = bootstrap.Modal.getInstance(filterModal);
-            if (!modalInstance) {
-                modalInstance = new bootstrap.Modal(filterModal);
+            if (modalInstance) {
+                modalInstance.hide();
             }
-            modalInstance.hide();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -289,7 +287,7 @@ $(document).on('click', '#pagination-wrapper a', function(e) {
     });
 });
 $('#button-clear-filters').on('click', function() {
-    $('#modalFilters input[type=\'checkbox\']').prop('checked', false);
+    $('#modalFilters input[type=\'checkbox\'], #modalFilters input[type=\'radio\']').prop('checked', false);
     $('#modalFilters input[type=\'text\'], #modalFilters input[type=\'number\']').val('');
     $('#button-filter').trigger('click');
 });

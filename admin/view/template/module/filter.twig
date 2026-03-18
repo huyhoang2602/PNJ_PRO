@@ -1,0 +1,198 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="float-end">
+				<button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+				<a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ol class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ol>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+			<div class="card-body">
+				<form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+					<div class="row mb-3">
+						<label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<div class="form-check form-switch form-switch-lg">
+								<input type="checkbox" name="status" value="1" id="input-status" class="form-check-input" {% if status %}checked{% endif %}>
+							</div>
+						</div>
+					</div>
+
+					<hr>
+					
+					<div class="table-responsive">
+						<table id="filter-groups" class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<td class="text-center" style="width: 1px;">#</td>
+									<td class="text-start">{{ column_label }}</td>
+									<td class="text-start">{{ column_type }}</td>
+									<td class="text-start">{{ column_source }}</td>
+									<td class="text-start">{{ column_display }}</td>
+                                    <td class="text-start">{{ column_route }}</td>
+									<td class="text-center">{{ column_count }}</td>
+									<td class="text-center">{{ column_enabled }}</td>
+									<td></td>
+								</tr>
+							</thead>
+							<tbody class="sortable">
+								{% set group_row = 0 %}
+								{% for group in filter_groups %}
+									<tr id="group-row-{{ group_row }}" class="align-middle">
+										<td class="text-center handle" style="cursor: move;"><i class="fa-solid fa-bars"></i></td>
+										<td class="text-start">
+											<input type="text" name="filter_groups[{{ group_row }}][label]" value="{{ group.label }}" class="form-control">
+										</td>
+										<td class="text-start">
+											<select name="filter_groups[{{ group_row }}][type]" class="form-select select-filter-type">
+												<option value="price" {% if group.type == 'price' %}selected{% endif %}>Khoảng giá</option>
+												<option value="manufacturer" {% if group.type == 'manufacturer' %}selected{% endif %}>Thương hiệu (Brand)</option>
+												<option value="category" {% if group.type == 'category' %}selected{% endif %}>Danh mục (Sub-Category)</option>
+												<option value="attribute" {% if group.type == 'attribute' %}selected{% endif %}>Thuộc tính (Attribute)</option>
+												<option value="option" {% if group.type == 'option' %}selected{% endif %}>Tùy chọn (Option)</option>
+												<option value="filter" {% if group.type == 'filter' %}selected{% endif %}>OpenCart Filter Group</option>
+												<option value="stock" {% if group.type == 'stock' %}selected{% endif %}>Trạng thái kho</option>
+											</select>
+										</td>
+										<td class="text-start">
+											<div class="source-selection source-attribute {% if group.type != 'attribute' %}d-none{% endif %}">
+												<select name="filter_groups[{{ group_row }}][source_id]" class="form-select" {% if group.type != 'attribute' %}disabled{% endif %}>
+													{% for attr in attributes %}
+														<option value="{{ attr.attribute_id }}" {% if group.source_id == attr.attribute_id %}selected{% endif %}>{{ attr.group }} > {{ attr.name }}</option>
+													{% endfor %}
+												</select>
+											</div>
+											<div class="source-selection source-option {% if group.type != 'option' %}d-none{% endif %}">
+												<select name="filter_groups[{{ group_row }}][source_id]" class="form-select" {% if group.type != 'option' %}disabled{% endif %}>
+													{% for opt in options %}
+														<option value="{{ opt.option_id }}" {% if group.source_id == opt.option_id %}selected{% endif %}>{{ opt.name }}</option>
+													{% endfor %}
+												</select>
+											</div>
+                                            <div class="source-selection source-filter {% if group.type != 'filter' %}d-none{% endif %}">
+												<select name="filter_groups[{{ group_row }}][source_id]" class="form-select" {% if group.type != 'filter' %}disabled{% endif %}>
+													{% for fg in filter_groups_oc %}
+														<option value="{{ fg.filter_group_id }}" {% if group.source_id == fg.filter_group_id %}selected{% endif %}>{{ fg.name }}</option>
+													{% endfor %}
+												</select>
+											</div>
+										</td>
+										<td class="text-start">
+											<select name="filter_groups[{{ group_row }}][display_type]" class="form-select">
+												<option value="checkbox" {% if group.display_type == 'checkbox' %}selected{% endif %}>Checkbox</option>
+												<option value="radio" {% if group.display_type == 'radio' %}selected{% endif %}>Radio</option>
+												<option value="select" {% if group.display_type == 'select' %}selected{% endif %}>Select</option>
+												<option value="range" {% if group.display_type == 'range' %}selected{% endif %}>Range Slider</option>
+											</select>
+										</td>
+                                        <td class="text-start">
+                                            <div class="form-check">
+                                                <input type="checkbox" name="filter_groups[{{ group_row }}][routes][]" value="category" id="route-cat-{{ group_row }}" class="form-check-input" {% if 'category' in group.routes %}checked{% endif %}>
+                                                <label class="form-check-label" for="route-cat-{{ group_row }}">Category</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" name="filter_groups[{{ group_row }}][routes][]" value="manufacturer" id="route-man-{{ group_row }}" class="form-check-input" {% if 'manufacturer' in group.routes %}checked{% endif %}>
+                                                <label class="form-check-label" for="route-man-{{ group_row }}">Brand</label>
+                                            </div>
+                                        </td>
+										<td class="text-center">
+											<input type="checkbox" name="filter_groups[{{ group_row }}][show_count]" value="1" class="form-check-input" {% if group.show_count %}checked{% endif %}>
+										</td>
+										<td class="text-center">
+											<input type="checkbox" name="filter_groups[{{ group_row }}][enabled]" value="1" class="form-check-input" {% if group.enabled %}checked{% endif %}>
+										</td>
+										<td class="text-end">
+											<button type="button" onclick="$('#group-row-{{ group_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button>
+											<input type="hidden" name="filter_groups[{{ group_row }}][sort_order]" value="{{ group.sort_order }}" class="sort-order-input">
+										</td>
+									</tr>
+									{% set group_row = group_row + 1 %}
+								{% endfor %}
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="8"></td>
+									<td class="text-end">
+										<button type="button" onclick="addGroup();" data-bs-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script type="text/javascript">
+var group_row = {{ group_row }};
+
+function addGroup() {
+	var html = '<tr id="group-row-' + group_row + '" class="align-middle">';
+	html += '<td class="text-center handle" style="cursor: move;"><i class="fa-solid fa-bars"></i></td>';
+	html += '<td class="text-start"><input type="text" name="filter_groups[' + group_row + '][label]" value="" placeholder="Nhãn hiển thị" class="form-control"></td>';
+	html += '<td class="text-start"><select name="filter_groups[' + group_row + '][type]" class="form-select select-filter-type">';
+	html += '  <option value="price">Khoảng giá</option><option value="manufacturer">Thương hiệu</option><option value="category">Danh mục con</option><option value="attribute">Thuộc tính</option><option value="option">Tùy chọn</option><option value="filter">OC Filter</option><option value="stock">Tồn kho</option></select></td>';
+	html += '<td class="text-start">';
+	html += '  <div class="source-selection source-attribute d-none"><select name="filter_groups[' + group_row + '][source_id]" class="form-select" disabled>{% for attr in attributes %}<option value="{{ attr.attribute_id }}">{{ attr.group }} > {{ attr.name }}</option>{% endfor %}</select></div>';
+	html += '  <div class="source-selection source-option d-none"><select name="filter_groups[' + group_row + '][source_id]" class="form-select" disabled>{% for opt in options %}<option value="{{ opt.option_id }}">{{ opt.name }}</option>{% endfor %}</select></div>';
+	html += '  <div class="source-selection source-filter d-none"><select name="filter_groups[' + group_row + '][source_id]" class="form-select" disabled>{% for fg in filter_groups_oc %}<option value="{{ fg.filter_group_id }}">{{ fg.name }}</option>{% endfor %}</select></div>';
+	html += '</td>';
+	html += '<td class="text-start"><select name="filter_groups[' + group_row + '][display_type]" class="form-select"><option value="checkbox">Checkbox</option><option value="radio">Radio</option><option value="select">Select</option><option value="range">Range</option></select></td>';
+    html += '<td class="text-start"><div class="form-check"><input type="checkbox" name="filter_groups[' + group_row + '][routes][]" value="category" checked class="form-check-input"> Category</div>';
+    html += '  <div class="form-check"><input type="checkbox" name="filter_groups[' + group_row + '][routes][]" value="manufacturer" checked class="form-check-input"> Brand</div></td>';
+	html += '<td class="text-center"><input type="checkbox" name="filter_groups[' + group_row + '][show_count]" value="1" checked class="form-check-input"></td>';
+	html += '<td class="text-center"><input type="checkbox" name="filter_groups[' + group_row + '][enabled]" value="1" checked class="form-check-input"></td>';
+	html += '<td class="text-end"><button type="button" onclick="$(\'#group-row-' + group_row + '\').remove();" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button>';
+	html += '  <input type="hidden" name="filter_groups[' + group_row + '][sort_order]" value="' + group_row + '" class="sort-order-input"></td>';
+	html += '</tr>';
+
+	$('#filter-groups tbody').append(html);
+	group_row++;
+}
+
+$(document).on('change', '.select-filter-type', function() {
+	var row = $(this).closest('tr');
+	var type = $(this).val();
+	row.find('.source-selection').addClass('d-none');
+    row.find('.source-selection select').prop('disabled', true);
+    
+	if (type === 'attribute') {
+        row.find('.source-attribute').removeClass('d-none');
+        row.find('.source-attribute select').prop('disabled', false);
+    }
+	if (type === 'option') {
+        row.find('.source-option').removeClass('d-none');
+        row.find('.source-option select').prop('disabled', false);
+    }
+	if (type === 'filter') {
+        row.find('.source-filter').removeClass('d-none');
+        row.find('.source-filter select').prop('disabled', false);
+    }
+});
+
+if (document.querySelector('.sortable')) {
+    new Sortable(document.querySelector('.sortable'), {
+        handle: '.handle',
+        animation: 150,
+        onEnd: function() {
+            $('.sortable tr').each(function(index) {
+                $(this).find('.sort-order-input').val(index);
+            });
+        }
+    });
+}
+</script>
+{{ footer }}

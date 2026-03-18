@@ -11,10 +11,13 @@
 			{{ content_top }}
 			<h1>{{ heading_title }}</h1>
 			{% if products %}
-				<div class="listing-inerface">
+				<div class="listing-interface">
                     <div id="display-control" class="row align-items-center">
-                        <div class="col-md-4 col-sm-6">
-                            <a href="{{ compare }}" id="compare-total" class="btn btn-primary d-block"><i class="fa-solid fa-arrow-right-arrow-left"></i> <span class="d-inline d-md-none d-lg-inline">{{ text_compare }}</span></a>
+                        <div class="col-md-4 col-sm-6 d-flex align-items-center gap-3">
+                             <button class="btn btn-filter-pnj" type="button" data-bs-toggle="modal" data-bs-target="#modalFilters">
+                                <i class="fa-solid fa-sliders"></i> Bộ lọc
+                             </button>
+                             <span class="text-muted fw-500">{{ results }}</span>
                         </div>
                         <div class="col-md-1 d-none" style="display:none;">
                             <div class="btn-group">
@@ -49,7 +52,7 @@
 						<div class="col mb-3">{{ product }}</div>
 					{% endfor %}
 				</div>
-				<div class="row">
+				<div id="pagination-wrapper" class="row">
 					<div class="col-sm-6 text-start">{{ pagination }}</div>
 					<div class="col-sm-6 text-end">{{ results }}</div>
 				</div>
@@ -62,4 +65,184 @@
 		{{ column_right }}
 	</div>
 </div>
+
+<!-- PNJ Filter Modal -->
+<div class="modal fade pnj-modal" id="modalFilters" tabindex="-1" aria-labelledby="modalFiltersLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title text-uppercase fw-700 w-100 text-center" id="modalFiltersLabel">Bộ lọc sản phẩm</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-4 pt-4">
+        <div id="filter-wrapper">
+            {# Dynamic Filters #}
+            {% if dynamic_filters %}
+                    {% for group in dynamic_filters %}
+                        <div class="filter-group mb-4">
+                            <h6 class="filter-title text-uppercase fw-700 mb-3">{{ group.label }}</h6>
+                            <div class="filter-options d-flex flex-wrap gap-2">
+                                {% for val in group.values %}
+                                    <div class="form-check custom-check">
+                                        {% if group.type == 'price' %}
+                                            <div class="d-flex align-items-center gap-3 w-100">
+                                                <input type="number" class="form-control form-control-sm" name="price_min" placeholder="Từ" value="{{ price_min ? price_min : '' }}">
+                                                <span class="text-muted">-</span>
+                                                <input type="number" class="form-control form-control-sm" name="price_max" placeholder="Đến" value="{{ price_max ? price_max : '' }}">
+                                            </div>
+                                        {% elseif group.type == 'manufacturer' %}
+                                            <input type="checkbox" class="form-check-input" name="manufacturer_id[]" value="{{ val.id }}" id="filter-m-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-m-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'category' %}
+                                            <input type="checkbox" class="form-check-input" name="sub_cat[]" value="{{ val.id }}" id="filter-c-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-c-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'attribute' %}
+                                            <input type="checkbox" class="form-check-input" name="attr[{{ group.source_id }}][]" value="{{ val.id }}" id="filter-a-{{ group.source_id }}-{{ loop.index }}">
+                                            <label class="form-check-label" for="filter-a-{{ group.source_id }}-{{ loop.index }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'option' %}
+                                            <input type="checkbox" class="form-check-input" name="opt[]" value="{{ val.id }}" id="filter-o-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-o-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'filter' %}
+                                            <input type="checkbox" class="form-check-input" name="filter[]" value="{{ val.id }}" id="filter-f-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-f-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% elseif group.type == 'stock' %}
+                                            <input type="radio" class="form-check-input" name="stock" value="{{ val.id }}" id="filter-s-{{ val.id }}">
+                                            <label class="form-check-label" for="filter-s-{{ val.id }}">
+                                                {{ val.name }} {% if val.count is defined %}<span class="text-muted">({{ val.count }})</span>{% endif %}
+                                            </label>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+            {% endif %}
+        </div>
+      </div>
+      <div class="modal-footer border-0 pt-0 pb-4 justify-content-center gap-2">
+        <button type="button" class="btn btn-outline-secondary px-5 py-2 rounded-pill text-uppercase fw-600" id="button-clear-filters">Thiết lập lại</button>
+        <button type="button" class="btn btn-primary px-5 py-2 rounded-pill text-uppercase fw-600" id="button-filter">Xem kết quả</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+	let url = '{{ action|raw }}';
+    
+    function addParam(param, value) {
+        url += (url.indexOf('?') !== -1 ? '&' : '?') + param + '=' + value;
+    }
+
+    // 1. Manual Filters
+    let filters = [];
+	$('#modalFilters input[name^=\'filter\']:checked').each(function() {
+		filters.push(this.value);
+	});
+    if (filters.length > 0) addParam('filter', filters.join(','));
+
+    // 2. Manufacturers
+    let manufacturers = [];
+    $('#modalFilters input[name^=\'manufacturer_id\']:checked').each(function() {
+        manufacturers.push(this.value);
+    });
+    if (manufacturers.length > 0) addParam('manufacturer_id', manufacturers.join(','));
+
+    // 3. Sub Categories
+    let subcats = [];
+    $('#modalFilters input[name^=\'sub_cat\']:checked').each(function() {
+        subcats.push(this.value);
+    });
+    if (subcats.length > 0) addParam('sub_cat', subcats.join(','));
+
+    // 4. Attributes
+    $('#modalFilters input[name^=\'attr\']:checked').each(function() {
+        addParam($(this).attr('name'), encodeURIComponent(this.value));
+    });
+
+    // 5. Options
+    let options = [];
+    $('#modalFilters input[name^=\'opt\']:checked').each(function() {
+        options.push(this.value);
+    });
+    if (options.length > 0) addParam('opt', options.join(','));
+
+    // 6. Price Range
+    let price_min = $('#modalFilters input[name=\'price_min\']').val();
+    let price_max = $('#modalFilters input[name=\'price_max\']').val();
+    if (price_min) addParam('price_min', price_min);
+    if (price_max) addParam('price_max', price_max);
+
+    // 7. Stock
+    let stock = $('#modalFilters input[name=\'stock\']:checked').val();
+    if (stock) addParam('stock', stock);
+
+    // AJAX Request
+    let ajaxUrl = url + (url.indexOf('?') !== -1 ? '&' : '?') + 'ajax=1';
+    
+    $.ajax({
+        url: ajaxUrl,
+        type: 'get',
+        beforeSend: function() {
+            $('#button-filter').prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Đang lọc...');
+            $('#product-list').css('opacity', 0.5);
+        },
+        success: function(html) {
+            let response = $('<div>').append($.parseHTML(html));
+            $('#product-list').html(response.find('#product-list').html() || $(html).find('#product-list').html());
+            $('#product-list').css('opacity', 1);
+            $('.listing-interface').html(response.find('.listing-interface').html() || $(html).find('.listing-interface').html());
+            $('#pagination-wrapper').html(response.find('#pagination-wrapper').html() || $(html).find('#pagination-wrapper').html());
+            window.history.pushState({}, '', url);
+            
+            let modalEl = document.getElementById('modalFilters');
+            let modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (modalInstance) modalInstance.hide();
+        },
+        complete: function() {
+            $('#button-filter').prop('disabled', false).text('Xem kết quả');
+        }
+    });
+});
+
+$('#button-clear-filters').on('click', function() {
+    $('#modalFilters input[type=\'checkbox\'], #modalFilters input[type=\'radio\']').prop('checked', false);
+    $('#modalFilters input[type=\'number\']').val('');
+    $('#button-filter').trigger('click');
+});
+
+// AJAX Pagination for Manufacturer
+$(document).on('click', '#pagination-wrapper a', function(e) {
+    e.preventDefault();
+    let url = $(this).attr('href');
+    let ajaxUrl = url + (url.indexOf('?') !== -1 ? '&' : '?') + 'ajax=1';
+    
+    $.ajax({
+        url: ajaxUrl,
+        type: 'get',
+        beforeSend: function() {
+            $('#product-list').css('opacity', 0.5);
+            $('html, body').animate({ scrollTop: $('#product-list').offset().top - 100 }, 'slow');
+        },
+        success: function(html) {
+            let response = $('<div>').append($.parseHTML(html));
+            $('#product-list').html(response.find('#product-list').html()).css('opacity', 1);
+            $('.listing-interface').html(response.find('.listing-interface').html());
+            $('#pagination-wrapper').html(response.find('#pagination-wrapper').html());
+            window.history.pushState({}, '', url);
+        }
+    });
+});
+//--></script>
 {{ footer }}
