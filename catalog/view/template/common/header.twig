@@ -183,6 +183,98 @@
     </div>
 </header>
 
+<!-- PREMIUM CRYSTAL SEARCH MODAL -->
+<div id="pnj-search-modal" class="pnj-search-modal">
+    <div class="pnj-search-modal-overlay"></div>
+    <div class="pnj-search-modal-content">
+        <div class="pnj-search-modal-header">
+            <div class="pnj-search-modal-input-wrapper">
+                <i class="fa fa-search"></i>
+                <input type="text" placeholder="Tìm kiếm nhanh" id="pnj-search-modal-input">
+                <i class="fa fa-times pnj-close-search"></i>
+            </div>
+        </div>
+        
+        <div class="pnj-search-modal-body" id="pnj-search-modal-body">
+            <div class="search-discovery-content">
+                <!-- 1. OFFERS -->
+                <div class="search-section search-promotions">
+                    <div class="section-title"><i class="fa fa-gift"></i> Ưu đãi online tháng 3 <span class="badge-discount">Ưu đãi đến 20%</span></div>
+                </div>
+
+                <!-- 2. TRENDS -->
+                <div class="search-section">
+                    <div class="section-title"><i class="fa fa-line-chart"></i> Top tìm kiếm</div>
+                    <div class="tag-list">
+                        {% if search_categories %}
+                            {% for cat in search_categories %}
+                                <a href="{{ cat.href }}" class="search-tag">{{ cat.name }}</a>
+                            {% endfor %}
+                        {% else %}
+                            <a href="#" class="search-tag">Nhẫn cưới</a>
+                            <a href="#" class="search-tag">Hàng mới</a>
+                            <a href="#" class="search-tag">Trang sức Kim cương</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="search-section">
+                    <div class="section-title"><i class="fa fa-bolt"></i> Dịch vụ hot</div>
+                    <div class="tag-list">
+                        <span class="search-tag">Trả góp 0%</span>
+                        <span class="search-tag">Giao hàng 3h</span>
+                        <span class="search-tag">Ưu đãi thêm 800k</span>
+                    </div>
+                </div>
+
+                <!-- 3. BRANDS -->
+                <div class="search-section">
+                    <div class="section-title"><i class="fa fa-star"></i> Thương hiệu nổi bật</div>
+                    <div class="brand-grid">
+                        {% for brand in brands %}
+                            {% set brand_name_up = brand.name|upper %}
+                            {% if 'PNJ' in brand_name_up or 'MANCODE' in brand_name_up or 'STYLE' in brand_name_up or 'DISNEY' in brand_name_up %}
+                                <a href="{{ brand.href }}" class="search-brand-item">{{ brand.name }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        <!-- If some are specifically needed and not in catalog yet, add as interactive but with warning if # -->
+                        {# <a href="#" class="search-brand-item">PNJ</a> #}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. POPULAR PRODUCTS / SEARCH RESULTS -->
+            <div class="search-section" id="pnj-search-results-section">
+                <div class="section-title" id="pnj-search-results-title"><i class="fa fa-search"></i> Sản phẩm được tìm nhiều</div>
+                <div class="search-product-grid" id="pnj-search-results-grid">
+                    {% if search_products %}
+                        {% for product in search_products %}
+                            <a href="{{ product.href }}" class="search-product-item">
+                                <img src="{{ product.thumb }}" alt="{{ product.name }}" class="product-thumb">
+                                <div class="product-info">{{ product.name }}</div>
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Fallback if no products found -->
+                        <a href="#" class="search-product-item">
+                            <div class="product-thumb"></div>
+                            <div class="product-info">Nhẫn cưới Kim cương</div>
+                        </a>
+                        <a href="#" class="search-product-item">
+                            <div class="product-thumb"></div>
+                            <div class="product-info">Dây chuyền vàng 10K</div>
+                        </a>
+                        <a href="#" class="search-product-item">
+                            <div class="product-thumb"></div>
+                            <div class="product-info">Bông tai vàng 18K</div>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     // Mega Menu Interaction
@@ -214,6 +306,92 @@ document.addEventListener("DOMContentLoaded", function() {
     if (navClose && navContainer) {
         navClose.addEventListener("click", function() {
             navContainer.classList.remove("active");
+        });
+    }
+
+    // Search Modal Toggle
+    const searchInput = document.querySelector(".pnj-search input");
+    const searchModal = document.getElementById("pnj-search-modal");
+    const searchModalInput = document.getElementById("pnj-search-modal-input");
+    const closeSearch = document.querySelector(".pnj-close-search");
+    const searchOverlay = document.querySelector(".pnj-search-modal-overlay");
+
+    if (searchInput && searchModal) {
+        searchInput.addEventListener("click", function(e) {
+            e.preventDefault();
+            searchModal.classList.add("active");
+            if (searchModalInput) {
+                setTimeout(() => {
+                    searchModalInput.focus();
+                }, 100);
+            }
+        });
+    }
+
+    const closeModal = function() {
+        if (searchModal) searchModal.classList.remove("active");
+    };
+
+    if (closeSearch) closeSearch.addEventListener("click", closeModal);
+    if (searchOverlay) searchOverlay.addEventListener("click", closeModal);
+
+    // Close on ESC key
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeModal();
+    });
+
+    // --- LIVE SEARCH LOGIC ---
+    const searchModalBody = document.querySelector("#pnj-search-modal-body");
+    const searchResultGrid = document.querySelector("#pnj-search-results-grid");
+    const searchSectionTitle = document.querySelector("#pnj-search-results-title");
+    
+    // Store original product lists (Popular Products)
+    let originalProductsHTML = "";
+    if (searchResultGrid) originalProductsHTML = searchResultGrid.innerHTML;
+
+    if (searchModalInput && searchResultGrid) {
+        let searchTimeout = null;
+
+        searchModalInput.addEventListener("input", function() {
+            const query = this.value.trim();
+            
+            if (searchTimeout) clearTimeout(searchTimeout);
+
+            if (query.length < 2) {
+                // Restore original list if query too short
+                searchResultGrid.innerHTML = originalProductsHTML;
+                if (searchSectionTitle) searchSectionTitle.innerHTML = '<i class="fa fa-search"></i> Sản phẩm được tìm nhiều';
+                if (searchModalBody) searchModalBody.classList.remove("is-searching");
+                return;
+            }
+
+            // Setting loading state or just wait
+            searchTimeout = setTimeout(function() {
+                if (searchModalBody) searchModalBody.classList.add("is-searching");
+                fetch('index.php?route=extension/dc_minimal/module/search.autocomplete&filter_name=' + encodeURIComponent(query))
+                    .then(response => response.json())
+                    .then(data => {
+                        if (searchSectionTitle) searchSectionTitle.innerHTML = '<i class="fa fa-search"></i> Kết quả tìm kiếm cho "' + query + '"';
+                        
+                        if (data.length > 0) {
+                            let html = '';
+                            data.forEach(product => {
+                                html += `
+                                    <a href="${product.href}" class="search-product-item">
+                                        <img src="${product.thumb}" alt="${product.name}" class="product-thumb">
+                                        <div class="product-info">${product.name}</div>
+                                    </a>
+                                `;
+                            });
+                            searchResultGrid.innerHTML = html;
+                        } else {
+                            searchResultGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #999;">Không tìm thấy sản phẩm phù hợp.</div>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Search error:', error);
+                    });
+            }, 300); // 300ms debounce
         });
     }
 });

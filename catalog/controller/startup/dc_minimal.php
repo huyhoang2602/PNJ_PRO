@@ -59,6 +59,7 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 		// Inject data for specific routes
 		if ($route == 'extension/dc_minimal/common/header' || $route == 'common/header') {
 			$this->load->language('extension/dc_minimal/dc_minimal');
+            $this->load->model('catalog/manufacturer');
 			
 			$hotline = $this->config->get('theme_dc_minimal_phone');
 			if (is_array($hotline)) {
@@ -66,6 +67,48 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 			} else {
 				$data['dc_hotline'] = (string)$hotline;
 			}
+
+            // GET TOP SEARCH CATEGORIES
+            $data['search_categories'] = [];
+            $this->load->model('catalog/category');
+            $categories = $this->model_catalog_category->getCategories(0);
+            foreach ($categories as $category) {
+                if (count($data['search_categories']) >= 6) break;
+                $data['search_categories'][] = [
+                    'name' => (string)$category['name'],
+                    'href' => (string)$this->url->link('product/category', 'language=' . $this->config->get('config_language') . '&path=' . $category['category_id'], true)
+                ];
+            }
+
+            // GET BRANDS FOR SEARCH MODAL
+            $data['brands'] = [];
+            $manufacturers = $this->model_catalog_manufacturer->getManufacturers();
+            foreach ($manufacturers as $manufacturer) {
+                $data['brands'][] = [
+                    'name' => (string)$manufacturer['name'],
+                    'href' => (string)$this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . '&manufacturer_id=' . $manufacturer['manufacturer_id'], true)
+                ];
+            }
+
+            // GET PRODUCTS FOR SEARCH MODAL
+            $data['search_products'] = [];
+            $this->load->model('catalog/product');
+            $this->load->model('tool/image');
+            
+            $results = $this->model_catalog_product->getProducts(['sort' => 'p.viewed', 'order' => 'DESC', 'start' => 0, 'limit' => 3]);
+            foreach ($results as $result) {
+                if ($result['image'] && is_file(DIR_IMAGE . $result['image'])) {
+                    $image = $this->model_tool_image->resize($result['image'], 200, 200);
+                } else {
+                    $image = $this->model_tool_image->resize('placeholder.png', 200, 200);
+                }
+
+                $data['search_products'][] = [
+                    'name'  => $result['name'],
+                    'thumb' => $image,
+                    'href'  => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $result['product_id'], true)
+                ];
+            }
 		}
 
 		// Home page specific data
