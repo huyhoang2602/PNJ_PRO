@@ -108,6 +108,34 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
             $data['action'] = $this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . $url, true);
 
             $this->injectDynamicFilters('manufacturer', $manufacturer_id, $data);
+
+            // Inject Manufacturer Image for Banner
+            $this->load->model('tool/image');
+            $this->load->model('catalog/manufacturer');
+            $m_info = $this->model_catalog_manufacturer->getManufacturer($manufacturer_id);
+            
+            if ($m_info) {
+                // Check custom logos
+                $custom_brands = $this->config->get('module_brand_brands');
+                $brand_logo = '';
+                if (!empty($custom_brands) && is_array($custom_brands)) {
+                    foreach ($custom_brands as $brand) {
+                        if ($brand['manufacturer_id'] == $manufacturer_id && !empty($brand['logo'])) {
+                            $brand_logo = $brand['logo'];
+                            break;
+                        }
+                    }
+                }
+                
+                $image_to_use = $brand_logo ?: ($m_info['image'] ?? '');
+                $image_path = html_entity_decode($image_to_use, ENT_QUOTES, 'UTF-8');
+                
+                if ($image_path && is_file(DIR_IMAGE . $image_path)) {
+                    $data['manufacturer_image'] = $this->model_tool_image->resize($image_path, 200, 200);
+                } else {
+                    $data['manufacturer_image'] = ''; // No image or placeholder if you prefer
+                }
+            }
         } elseif (in_array($route, ['product/manufacturer_list', 'extension/dc_minimal/product/manufacturer_list'])) {
             // Inject images for brand index
             $this->load->model('tool/image');

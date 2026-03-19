@@ -250,4 +250,120 @@
         padding: 8px 15px;
         top: 70px;
     }
-}
+}
+
+/* Manufacturer Info Page Styles - Architectural Redesign */
+.banner-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.brand-info-logo {
+    margin-bottom: 30px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.05);
+    border: 1px solid #f0f0f0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    min-height: 140px;
+}
+
+.brand-info-logo img {
+    max-height: 100px;
+    max-width: 100%;
+    object-fit: contain;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+}
+
+.brand-banner-pnj .pnj-title {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.brand-banner-pnj .pnj-subtitle {
+    margin-bottom: 25px;
+}
+.listing-interface {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.02);
+}
+
+.btn-filter-pnj {
+    background: #003468;
+    color: #fff;
+    border-radius: 50px;
+    padding: 8px 25px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-filter-pnj:hover {
+    background: #00264d;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 52, 104, 0.2);
+    color: #fff;
+}
+
+.listing-interface .form-select {
+    border-radius: 50px;
+    padding-left: 20px;
+    font-size: 13px;
+    border-color: #eee;
+    color: #444;
+}
+
+.listing-interface .input-group-text {
+    background: transparent;
+    border: none;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    font-weight: 600;
+}
+
+#product-manufacturer .breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+#product-manufacturer .breadcrumb-item a {
+    color: #aaa;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+}
+
+#product-manufacturer .breadcrumb-item.active {
+    color: #003468;
+}
+
+@media (max-width: 768px) {
+    .listing-interface {
+        padding: 15px;
+    }
+    .listing-interface .col-md-4 {
+        margin-bottom: 15px;
+    }
+}
