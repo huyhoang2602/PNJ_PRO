@@ -234,7 +234,9 @@
                         {% for brand in brands %}
                             {% set brand_name_up = brand.name|upper %}
                             {% if 'PNJ' in brand_name_up or 'MANCODE' in brand_name_up or 'STYLE' in brand_name_up or 'DISNEY' in brand_name_up %}
-                                <a href="{{ brand.href }}" class="search-brand-item">{{ brand.name }}</a>
+                                <a href="{{ brand.href }}" class="search-brand-item">
+                                    <img src="{{ brand.thumb }}" alt="{{ brand.name }}">
+                                </a>
                             {% endif %}
                         {% endfor %}
                         <!-- If some are specifically needed and not in catalog yet, add as interactive but with warning if # -->

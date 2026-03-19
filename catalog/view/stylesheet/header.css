@@ -379,24 +379,37 @@
 .brand-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 12px;
 }
 
 .search-brand-item {
-    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 50px;
+    padding: 8px;
     border: 1px solid #f0f0f0;
     border-radius: 4px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #003468;
-    text-decoration: none;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: #fff;
+    overflow: hidden;
+}
+
+.search-brand-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s;
 }
 
 .search-brand-item:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
     border-color: #c48c31;
+}
+
+.search-brand-item:hover img {
+    transform: scale(1.05);
 }
 
 .search-product-grid {

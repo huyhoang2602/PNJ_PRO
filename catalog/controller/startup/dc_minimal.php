@@ -82,11 +82,36 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 
             // GET BRANDS FOR SEARCH MODAL
             $data['brands'] = [];
+            $this->load->model('catalog/manufacturer');
+            $this->load->model('tool/image');
+            
+            // Get custom brand logos from Slider module settings
+            $custom_brands = $this->config->get('module_brand_brands');
+            $brand_logo_map = [];
+            if (!empty($custom_brands) && is_array($custom_brands)) {
+                foreach ($custom_brands as $brand) {
+                    if (!empty($brand['manufacturer_id']) && !empty($brand['logo'])) {
+                        $brand_logo_map[$brand['manufacturer_id']] = $brand['logo'];
+                    }
+                }
+            }
+            
             $manufacturers = $this->model_catalog_manufacturer->getManufacturers();
             foreach ($manufacturers as $manufacturer) {
+                // Priority: module_brand_brands (logo) > manufacturer record (image)
+                $image_to_use = $brand_logo_map[$manufacturer['manufacturer_id']] ?? ($manufacturer['image'] ?? '');
+                $image_path = html_entity_decode($image_to_use, ENT_QUOTES, 'UTF-8');
+                
+                if ($image_path && is_file(DIR_IMAGE . $image_path)) {
+                    $image = $this->model_tool_image->resize($image_path, 100, 50);
+                } else {
+                    $image = $this->model_tool_image->resize('placeholder.png', 100, 50);
+                }
+
                 $data['brands'][] = [
-                    'name' => (string)$manufacturer['name'],
-                    'href' => (string)$this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . '&manufacturer_id=' . $manufacturer['manufacturer_id'], true)
+                    'name'  => (string)$manufacturer['name'],
+                    'thumb' => $image,
+                    'href'  => (string)$this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . '&manufacturer_id=' . $manufacturer['manufacturer_id'], true)
                 ];
             }
 
