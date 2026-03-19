@@ -1,0 +1,70 @@
+<div class="modern-account-sidebar mb-4">
+  <div class="sidebar-header">
+    <h3 class="header-title">{{ text_account }}</h3>
+  </div>
+  
+  <div class="sidebar-menu">
+    {% if not logged %}
+      <a href="{{ login }}" class="modern-menu-item">
+        <i class="fa-solid fa-right-to-bracket menu-icon"></i>
+        <span class="menu-text">{{ text_login }}</span>
+      </a>
+      <a href="{{ register }}" class="modern-menu-item">
+        <i class="fa-solid fa-user-plus menu-icon"></i>
+        <span class="menu-text">{{ text_register }}</span>
+      </a>
+      <a href="{{ forgotten }}" class="modern-menu-item">
+        <i class="fa-solid fa-key menu-icon"></i>
+        <span class="menu-text">{{ text_forgotten }}</span>
+      </a>
+    {% endif %}
+
+    <a href="{{ account }}" class="modern-menu-item {% if '/account' in request.get.route and '/account/' not in request.get.route %}active-modern-item{% endif %}">
+      <i class="fa-solid fa-gauge-high menu-icon"></i>
+      <span class="menu-text">{{ text_account }}</span>
+    </a>
+
+    {% if logged %}
+      <a href="{{ edit }}" class="modern-menu-item {% if 'account/edit' in request.get.route %}active-modern-item{% endif %}">
+        <i class="fa-solid fa-user-pen menu-icon"></i>
+        <span class="menu-text">{{ text_edit }}</span>
+      </a>
+      <a href="{{ password }}" class="modern-menu-item {% if 'account/password' in request.get.route %}active-modern-item{% endif %}">
+        <i class="fa-solid fa-shield-halved menu-icon"></i>
+        <span class="menu-text">{{ text_password }}</span>
+      </a>
+    {% endif %}
+
+    <a href="{{ address }}" class="modern-menu-item {% if 'account/address' in request.get.route %}active-modern-item{% endif %}">
+      <i class="fa-solid fa-map-location-dot menu-icon"></i>
+      <span class="menu-text">{{ text_address }}</span>
+    </a>
+
+    <a href="{{ wishlist }}" class="modern-menu-item {% if 'account/wishlist' in request.get.route %}active-modern-item{% endif %}">
+      <i class="fa-solid fa-heart menu-icon"></i>
+      <span class="menu-text">{{ text_wishlist }}</span>
+    </a>
+
+    <a href="{{ order }}" class="modern-menu-item {% if 'account/order' in request.get.route %}active-modern-item{% endif %}">
+      <i class="fa-solid fa-box-open menu-icon"></i>
+      <span class="menu-text">{{ text_order }}</span>
+    </a>
+
+    <a href="{{ download }}" class="modern-menu-item {% if 'account/download' in request.get.route %}active-modern-item{% endif %}">
+      <i class="fa-solid fa-download menu-icon"></i>
+      <span class="menu-text">{{ text_download }}</span>
+    </a>
+
+    <a href="{{ newsletter }}" class="modern-menu-item {% if 'account/newsletter' in request.get.route %}active-modern-item{% endif %}">
+      <i class="fa-solid fa-envelope-open-text menu-icon"></i>
+      <span class="menu-text">{{ text_newsletter }}</span>
+    </a>
+
+    {% if logged %}
+      <a href="{{ logout }}" class="modern-menu-item logout-link">
+        <i class="fa-solid fa-power-off menu-icon text-danger"></i>
+        <span class="menu-text text-danger">{{ text_logout }}</span>
+      </a>
+    {% endif %}
+  </div>
+</div>

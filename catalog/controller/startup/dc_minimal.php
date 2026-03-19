@@ -56,7 +56,13 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 			if (is_file($view_path)) {
 				$route = 'extension/dc_minimal/' . $route;
 			}
-		}
+		} elseif (strpos($route, 'extension/opencart/') !== false) {
+            $stripped_route = str_replace('extension/opencart/', '', $route);
+            $view_path = DIR_EXTENSION . 'dc_minimal/catalog/view/template/' . $stripped_route . '.twig';
+            if (is_file($view_path)) {
+                $route = 'extension/dc_minimal/' . $stripped_route;
+            }
+        }
 
 		// Inject data for specific routes
 		if ($route == 'extension/dc_minimal/common/header' || $route == 'common/header') {

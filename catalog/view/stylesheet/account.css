@@ -145,29 +145,172 @@
     font-weight: 700;
 }
 
-.auth-toggle {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #f5f5f5;
-    font-size: 14px;
-    color: #888;
+/* Modern Sidebar Premium Crystal Style */
+.modern-account-sidebar {
+    background: #fff;
+    border: 1px solid #f2f2f1;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
-.toggle-link {
-    color: #c48c31;
+.sidebar-header {
+    padding: 25px 25px 15px;
+    background-color: #fdfdfb;
+    border-bottom: 1px solid #f2f2f1;
+}
+
+.header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
     font-weight: 700;
+    color: #003468;
+    margin: 0;
+}
+
+.sidebar-menu {
+    padding: 15px 0;
+}
+
+.modern-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 25px;
     text-decoration: none;
-    margin-left: 5px;
+    color: #444;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    border-bottom: 1px solid #fcfcfc;
+}
+
+.modern-menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-icon {
+    width: 24px;
+    font-size: 16px;
+    color: #c48c31;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.3s;
 }
 
-.toggle-link:hover {
-    color: #003468;
-    text-decoration: underline;
+.menu-text {
+    font-size: 15px;
+    font-weight: 500;
 }
 
-#auth-login, #auth-register {
-    transition: opacity 0.3s ease-in-out;
+.modern-menu-item:hover {
+    background-color: #fdfaf4;
+    color: #003468;
+    padding-left: 30px;
+}
+
+.modern-menu-item:hover .menu-icon {
+    transform: scale(1.1);
+}
+
+.active-modern-item {
+    background-color: #fdfaf4;
+    color: #003468;
+    font-weight: 700;
+}
+
+.active-modern-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #c48c31;
+}
+
+.active-modern-item .menu-icon {
+    color: #003468;
+}
+
+.logout-link:hover {
+    background-color: #fff5f5;
+}
+
+.logout-link:hover .menu-icon {
+    color: #dc3545 !important;
+}
+
+/* Dashboard Premium Crystal Style */
+.account-container {
+    padding-top: 40px;
+    padding-bottom: 80px;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: #003468;
+    margin-bottom: 25px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: #c48c31;
+}
+
+.account-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 15px;
+    background: #fdfaf4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.account-icon-wrapper img {
+    max-width: 40px;
+    height: auto;
+    opacity: 0.8;
+}
+
+.account-item-link {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #555;
+    transition: all 0.3s;
+}
+
+.account-item-link:hover .account-icon-wrapper {
+    background: #003468;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 52, 104, 0.2);
+}
+
+.account-item-link:hover .account-icon-wrapper img {
+    filter: brightness(0) invert(1);
+    opacity: 1;
+}
+
+.account-item-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #003468;
+}
+
+.account-item-link:hover .account-item-text {
+    color: #c48c31;
 }
 
 @media (max-width: 767px) {

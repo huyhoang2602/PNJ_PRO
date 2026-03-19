@@ -1,201 +1,165 @@
 {{ header }}
-{{ content_top }}
+<div id="account-account" class="container account-container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
 
-<div id="account-account" class="container">
-	<div class="page-header">
-		<div class="page-title">
-			<h1>{{ heading_title }}</h1>
-		</div>
-		<div class="page-breadcrumb">
-			<ul class="breadcrumb">
-				{% for breadcrumb in breadcrumbs %}
-					<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-				{% endfor %}
-			</ul>	
-		</div>
-		<div class="row"></div>
-	</div>
-  
-    {% if success %}
-		<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
-	{% endif %}
-	
-	<div class="row">
-		{{ column_left }}
-		
-		{% if column_left and column_right %}
-			{% set class = 'col-sm-6' %}
-		{% elseif column_left or column_right %}
-			{% set class = 'col-sm-9' %}
-		{% else %}
-			{% set class = 'col-sm-12' %}
-		{% endif %}
-		
-		<div id="content" class="{{ class }}">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <strong>{{ text_my_account }}</strong>
+  {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa-solid fa-circle-check"></i> {{ success }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endif %}
+
+  <div class="row">
+    {{ column_left }}
+    
+    <div id="content" class="col">
+      {{ content_top }}
+      
+      <!-- My Account Section -->
+      <div class="account-section mb-5">
+        <h2 class="section-title">{{ text_my_account }}</h2>
+        <div class="account-card p-4">
+          <div class="row g-4">
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ edit }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-account_information.png" alt="{{ text_edit }}" />
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ edit }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-account_information.png" alt="icon {{ text_edit }}" /><br/>
-                                {{ text_edit }}
-                            </a>
-                        </div>
-
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ password }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-password.png" alt="icon {{ text_password }}" /><br/>
-                                {{ text_password }}
-                            </a>
-                        </div>
-
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ address }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-address_book.png" alt="icon {{ text_address }}" /><br/>
-                                {{ text_address }}
-                            </a>
-                        </div>
-
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ wishlist }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-wish_list.png" alt="icon {{ text_wishlist }}" /><br/>
-                                {{ text_wishlist }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <span class="account-item-text">{{ text_edit }}</span>
+              </a>
             </div>
-
-            {% if credit_cards %}
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <strong>{{ text_credit_card }}</strong>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-unstyled account-icons">
-                            {% for credit_card in credit_cards %}
-                                <li><a href="{{ credit_card.href }}">{{ credit_card.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ password }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-password.png" alt="{{ text_password }}" />
                 </div>
+                <span class="account-item-text">{{ text_password }}</span>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ address }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-address_book.png" alt="{{ text_address }}" />
+                </div>
+                <span class="account-item-text">{{ text_address }}</span>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ wishlist }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-wish_list.png" alt="{{ text_wishlist }}" />
+                </div>
+                <span class="account-item-text">{{ text_wishlist }}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Orders Section -->
+      <div class="account-section mb-5">
+        <h2 class="section-title">{{ text_my_orders }}</h2>
+        <div class="account-card p-4">
+          <div class="row g-4">
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ order }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-order_history.png" alt="{{ text_order }}" />
+                </div>
+                <span class="account-item-text">{{ text_order }}</span>
+              </a>
+            </div>
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ download }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-download.png" alt="{{ text_download }}" />
+                </div>
+                <span class="account-item-text">{{ text_download }}</span>
+              </a>
+            </div>
+            {% if reward %}
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ reward }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-reward.png" alt="{{ text_reward }}" />
+                </div>
+                <span class="account-item-text">{{ text_reward }}</span>
+              </a>
+            </div>
             {% endif %}
-
-            <div class="card mb-3">
-                <div class="card-header">
-                    <strong>{{ text_my_orders }}</strong>
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ return }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-returns.png" alt="{{ text_return }}" />
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ order }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-order_history.png" alt="icon {{ text_order }}" /><br/>
-                                {{ text_order }}
-                            </a>
-                        </div>
-
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ download }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-download.png" alt="icon {{ text_download }}" /><br/>
-                                {{ text_download }}
-                            </a>
-                        </div>
-
-                        {% if reward %}
-                            <div class="col-sm-6 col-md-3 text-center account-col">
-                                <a href="{{ reward }}">
-                                    <img src="extension/dc_minimal/catalog/view/image/account/icons-reward.png" alt="icon {{ text_reward }}" /><br/>
-                                    {{ text_reward }}
-                                </a>
-                            </div>
-                        {% endif %}
-
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ return }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-returns.png" alt="icon {{ text_return }}" /><br/>
-                                {{ text_return }}
-                            </a>
-                        </div>
-
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ transaction }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-transactions.png" alt="icon {{ text_transaction }}" /><br/>
-                                {{ text_transaction }}
-                            </a>
-                        </div>
-
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ recurring }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-recurring.png" alt="icon {{ text_transaction }}" /><br/>
-                                {{ text_recurring }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <span class="account-item-text">{{ text_return }}</span>
+              </a>
             </div>
-
-            <div class="card mb-3">
-                <div class="card-header">
-                    <strong>{{ text_my_affiliate }}</strong>
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ transaction }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-transactions.png" alt="{{ text_transaction }}" />
                 </div>
-                <div class="card-body">
-                    {% if not tracking %}
-                        <a href="{{ affiliate }}">{{ text_affiliate_add }}</a>
-                    {% else %}
-                        <div class="row">
-                            <div class="col-sm-6 col-md-3 text-center account-col">
-                                <a href="{{ affiliate }}">
-                                    <img src="extension/dc_minimal/catalog/view/image/account/icons-affiliate_add.png" alt="icon {{ text_affiliate_edit }}" /><br/>
-                                    {{ text_affiliate_add }}
-                                </a>
-                            </div>
-
-                            <div class="col-sm-6 col-md-3 text-center account-col">
-                                <a href="{{ affiliate }}">
-                                    <img src="extension/dc_minimal/catalog/view/image/account/icons-account_information.png" alt="icon {{ text_affiliate_edit }}" /><br/>
-                                    {{ text_affiliate_edit }}
-                                </a>
-                            </div>
-
-                            <div class="col-sm-6 col-md-3 text-center account-col">
-                                <a href="{{ tracking }}">
-                                    <img src="extension/dc_minimal/catalog/view/image/account/icons-account_tracking.png" alt="icon {{ text_affiliate_edit }}" /><br/>
-                                    {{ text_tracking }}
-                                </a>
-                            </div>
-                        </div>
-                    {% endif %}
-                    
-                </div>
+                <span class="account-item-text">{{ text_transaction }}</span>
+              </a>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="card mb-3">
-                <div class="card-header">
-                    <strong>{{ text_my_newsletter }}</strong>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6 col-md-3 text-center account-col">
-                            <a href="{{ newsletter }}">
-                                <img src="extension/dc_minimal/catalog/view/image/account/icons-newsletter.png" alt="icon {{ text_newsletter }}" /><br/>
-                                {{ text_newsletter }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <!-- Affiliate Section -->
+      <div class="account-section mb-5">
+        <h2 class="section-title">{{ text_my_affiliate }}</h2>
+        <div class="account-card p-4">
+          {% if not tracking %}
+            <div class="text-center p-3">
+              <a href="{{ affiliate }}" class="btn-crystal btn-crystal-outline">{{ text_affiliate_add }}</a>
             </div>
-			
-		</div>
-		{{ column_right }}
-	</div>
+          {% else %}
+            <div class="row g-4">
+              <div class="col-sm-6 col-md-3">
+                <a href="{{ affiliate }}" class="account-item-link">
+                  <div class="account-icon-wrapper">
+                    <img src="extension/dc_minimal/catalog/view/image/account/icons-affiliate_add.png" alt="{{ text_affiliate_add }}" />
+                  </div>
+                  <span class="account-item-text">{{ text_affiliate_add }}</span>
+                </a>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <a href="{{ tracking }}" class="account-item-link">
+                  <div class="account-icon-wrapper">
+                    <img src="extension/dc_minimal/catalog/view/image/account/icons-account_tracking.png" alt="{{ text_tracking }}" />
+                  </div>
+                  <span class="account-item-text">{{ text_tracking }}</span>
+                </a>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Newsletter Section -->
+      <div class="account-section mb-5">
+        <h2 class="section-title">{{ text_my_newsletter }}</h2>
+        <div class="account-card p-4">
+          <div class="row g-4">
+            <div class="col-sm-6 col-md-3">
+              <a href="{{ newsletter }}" class="account-item-link">
+                <div class="account-icon-wrapper">
+                  <img src="extension/dc_minimal/catalog/view/image/account/icons-newsletter.png" alt="{{ text_newsletter }}" />
+                </div>
+                <span class="account-item-text">{{ text_newsletter }}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {{ content_bottom }}
+    </div>
+    
+    {{ column_right }}
+  </div>
 </div>
-	
-<div id="super_bottom">
-	{{ super_bottom }}
-</div>
-	
-{{ content_bottom }}
 {{ footer }}
