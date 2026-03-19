@@ -84,9 +84,25 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
             $path = (string)($this->request->get['path'] ?? '');
             $parts = $path ? explode('_', $path) : [];
             $category_id = $parts ? (int)end($parts) : 0;
+            
+            // Inject action URL for AJAX
+            $url = '';
+            if (isset($this->request->get['path'])) {
+                $url .= '&path=' . $this->request->get['path'];
+            }
+            $data['action'] = $this->url->link('product/category', 'language=' . $this->config->get('config_language') . $url, true);
+
             $this->injectDynamicFilters('category', $category_id, $data);
         } elseif (in_array($route, ['product/manufacturer_info', 'extension/dc_minimal/product/manufacturer_info'])) {
             $manufacturer_id = (int)($this->request->get['manufacturer_id'] ?? 0);
+            
+            // Inject action URL for AJAX
+            $url = '';
+            if (isset($this->request->get['manufacturer_id'])) {
+                $url .= '&manufacturer_id=' . $this->request->get['manufacturer_id'];
+            }
+            $data['action'] = $this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . $url, true);
+
             $this->injectDynamicFilters('manufacturer', $manufacturer_id, $data);
         }
 	}

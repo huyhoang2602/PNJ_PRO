@@ -40,6 +40,9 @@ class Filter extends \Opencart\System\Engine\Controller {
         $this->load->model('extension/dc_minimal/module/filter');
         $query_parts = $this->model_extension_dc_minimal_module_filter->buildFilterCondition($active);
 
+        $this->log->write("PNJ FILTER ACTIVE: " . json_encode($active));
+        $this->log->write("PNJ FILTER PARTS: " . json_encode($query_parts));
+
         $args[0]['filter_pnj_joins'] = $query_parts['joins'];
         $args[0]['filter_pnj_where'] = $query_parts['where'];
     }
