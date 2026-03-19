@@ -313,19 +313,78 @@
     color: #c48c31;
 }
 
-@media (max-width: 767px) {
-    .account-card {
-        padding: 30px 20px;
+.account-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+/* Account Responsive Refinements */
+@media (max-width: 991.98px) {
+    .modern-account-sidebar {
+        margin-bottom: 40px;
+    }
+    
+    .account-dashboard-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 20px;
+    }
+    
+    #column-right, #column-left {
+        width: 100% !important;
         margin-bottom: 30px;
     }
     
-    #column-right {
-        padding-left: 15px;
-        margin-top: 40px;
+    .account-card {
+        padding: 40px 30px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .account-dashboard-grid {
+        grid-template-columns: repeat(2, 1fr) !important; /* 2 cols on tablet/large mobile */
+    }
+    
+    .account-card {
+        padding: 30px 20px !important;
     }
 
     #content.col-lg-6 {
         max-width: 100%;
         width: 100%;
+    }
+    
+    .account-icon-wrapper {
+        width: 65px;
+        height: 65px;
+    }
+}
+
+@media (max-width: 430px) {
+    /* Specific iPhone 14 Pro Max refinements */
+    .account-dashboard-grid {
+        grid-template-columns: 1fr !important; /* 1 col on smaller mobile */
+    }
+    
+    .section-title {
+        font-size: 22px;
+    }
+    
+    .account-card {
+        padding: 25px 15px !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .modern-menu-item {
+        padding: 12px 20px;
+        font-size: 13px;
+    }
+    
+    .btn-crystal {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 14px 20px;
     }
 }

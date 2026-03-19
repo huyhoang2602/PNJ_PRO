@@ -220,3 +220,222 @@
     color: #c48c31;
     transform: translateY(-2px);
 }
+
+/* Checkout Premium Layout */
+#checkout-checkout h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: #003468;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+.checkout-card {
+    background: #fff;
+    border: 1px solid #f2f2f1;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+.checkout-card legend {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: #003468 !important;
+    margin-bottom: 25px !important;
+    float: none !important;
+    width: 100% !important;
+}
+
+.checkout-card .form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.checkout-card .form-control,
+.checkout-card .form-select {
+    padding: 12px 15px;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    background-color: #fcfcfb;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.checkout-card .form-control:focus,
+.checkout-card .form-select:focus {
+    background-color: #fff;
+    border-color: #c48c31;
+    box-shadow: 0 0 0 4px rgba(196, 140, 49, 0.1);
+    outline: none;
+}
+
+/* Shipping & Payment Methods Selection */
+.method-selection-group {
+    background: #fdfdfb;
+    padding: 20px;
+    border: 1px solid #f2f2f1;
+    border-radius: 12px;
+}
+
+.method-selection-group .input-group-text {
+    background: #fff;
+    border-color: #efefef;
+    color: #c48c31;
+}
+
+.method-selection-group .form-control[readonly] {
+    background-color: #fff;
+    border-color: #efefef;
+    cursor: default;
+}
+
+#button-shipping-methods,
+#button-payment-methods {
+    background-color: #003468;
+    border: none;
+    font-weight: 600;
+    padding: 10px 20px;
+}
+
+#button-shipping-methods:hover,
+#button-payment-methods:hover {
+    background-color: #c48c31;
+}
+
+/* Order Review Final Summary */
+#checkout-confirm .table-responsive {
+    border: 1px solid #f2f2f1;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+}
+
+#checkout-confirm table {
+    margin-bottom: 0 !important;
+}
+
+#checkout-confirm thead th {
+    background-color: #fdfdfb;
+    border-bottom: 1px solid #f2f2f1 !important;
+    padding: 15px 20px !important;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #888;
+}
+
+#checkout-confirm tbody td {
+    padding: 15px 20px !important;
+    font-size: 14px;
+}
+
+#checkout-confirm tfoot td {
+    padding: 12px 20px !important;
+}
+
+#button-confirm {
+    width: 100%;
+}
+
+/* Responsive Boutique Refinements */
+@media (max-width: 991.98px) {
+    #checkout-cart, #checkout-checkout {
+        padding-top: 20px;
+        padding-bottom: 40px;
+    }
+
+    .crystal-cart-page,
+    .crystal-checkout-page {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .checkout-summary-sticky {
+        position: static !important;
+        margin-top: 30px;
+        width: 100% !important;
+    }
+    
+    .cart-totals-card {
+        margin-top: 30px;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    #checkout-checkout h1,
+    #checkout-cart h1 {
+        font-size: 26px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .checkout-card {
+        padding: 25px 20px;
+    }
+
+    .cart-table-wrapper {
+        margin-bottom: 30px;
+    }
+
+    .cart-table thead th {
+        padding: 15px 10px !important;
+        font-size: 11px;
+    }
+
+    .cart-table tbody td {
+        padding: 15px 10px !important;
+    }
+
+    .cart-product-name {
+        font-size: 15px;
+    }
+
+    .cart-qty-group {
+        max-width: 110px !important;
+    }
+
+    .btn-crystal, 
+    .btn-crystal-outline {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 15px;
+        padding: 15px 20px;
+        font-size: 13px;
+    }
+    
+    .cart-actions {
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+}
+
+@media (max-width: 430px) {
+    /* Specific iPhone 14 Pro Max refinements */
+    #checkout-checkout h1,
+    #checkout-cart h1 {
+        font-size: 22px;
+    }
+    
+    .checkout-card {
+        padding: 20px 15px;
+    }
+    
+    .cart-table thead th {
+        font-size: 10px;
+        padding: 12px 8px !important;
+    }
+    
+    .cart-product-name {
+        font-size: 14px;
+    }
+    
+    .cart-product-info {
+        font-size: 11px;
+    }
+}

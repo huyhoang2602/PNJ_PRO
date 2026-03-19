@@ -1,0 +1,59 @@
+{{ header }}
+<div id="checkout-checkout" class="container crystal-checkout-page pb-5">
+  <ul class="breadcrumb mb-5">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  
+  <div class="row">
+    {{ column_left }}
+    <div id="content" class="col">
+      {{ content_top }}
+      
+      <div class="checkout-header mb-5">
+        <h1 class="text-center">{{ heading_title }}</h1>
+      </div>
+
+      <div class="row g-5">
+        {% if register or payment_address or shipping_address %}
+          <div class="col-lg-7">
+            <div id="checkout-main-forms">
+                {% if register %}
+                  <div id="checkout-register" class="checkout-card mb-4">{{ register }}</div>
+                {% endif %}
+                {% if payment_address %}
+                  <div id="checkout-payment-address" class="checkout-card mb-4">{{ payment_address }}</div>
+                {% endif %}
+                {% if shipping_address %}
+                  <div id="checkout-shipping-address" class="checkout-card mb-4">{{ shipping_address }}</div>
+                {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        
+        <div class="col-lg-5">
+          <div class="checkout-summary-sticky sticky-top" style="top: 100px;">
+              {% if shipping_method %}
+                <div id="checkout-shipping-method" class="checkout-card mb-4">
+                    {{ shipping_method }}
+                </div>
+              {% endif %}
+              
+              <div id="checkout-payment-method" class="checkout-card mb-4">
+                  {{ payment_method }}
+              </div>
+              
+              <div id="checkout-confirm" class="checkout-card mb-4 shadow-sm">
+                  {{ confirm }}
+              </div>
+          </div>
+        </div>
+      </div>
+      
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+{{ footer }}

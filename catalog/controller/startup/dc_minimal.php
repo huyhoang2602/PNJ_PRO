@@ -144,6 +144,16 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
                     'href'  => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $result['product_id'], true)
                 ];
             }
+
+            // FORCE PNJ LOGO FALLBACK IF EMPTY
+            if (empty($data['logo'])) {
+                $base_url = $this->config->get('config_url');
+                if (is_file(\DIR_IMAGE . 'catalog/demo/logopnj.png')) {
+                    $data['logo'] = $base_url . 'image/catalog/demo/logopnj.png';
+                } elseif (is_file(\DIR_IMAGE . 'catalog/demo/manufacturer/logo_brand_pnj.png')) {
+                    $data['logo'] = $base_url . 'image/catalog/demo/manufacturer/logo_brand_pnj.png';
+                }
+            }
 		}
 
 		// Home page specific data

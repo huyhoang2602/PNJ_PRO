@@ -1,0 +1,94 @@
+<div class="method-selection-group">
+  <label class="section-title h5 mb-3 d-block" style="font-family: 'Playfair Display', serif; font-weight: 700; color: #003468;">{{ heading_title }}</label>
+  <div class="input-group">
+    <span class="input-group-text"><i class="fa fa-truck"></i></span>
+    <input type="text" name="shipping_method" value="{{ shipping_method }}" placeholder="{{ entry_shipping_method }}" id="input-shipping-method" class="form-control" readonly/>
+    <button type="button" id="button-shipping-methods" class="btn btn-primary px-4">{{ button_choose }}</button>
+  </div>
+  <input type="hidden" name="code" value="{{ code }}" id="input-shipping-code"/>
+  <div id="error-shipping-method" class="invalid-feedback"></div>
+</div>
+
+<script type="text/javascript"><!--
+$('#button-shipping-methods').on('click', function() {
+    var element = this;
+    chain.attach(function() {
+        return $.ajax({
+            url: 'index.php?route=checkout/shipping_method.quote&language={{ language }}',
+            dataType: 'json',
+            beforeSend: function() { $(element).prop('disabled', true); },
+            complete: function() { $(element).prop('disabled', false); },
+            success: function(json) {
+                $('#input-shipping-method').removeClass('is-invalid');
+                $('#error-shipping-method').removeClass('d-block');
+                if (json['error']) {
+                    $('#input-shipping-method').addClass('is-invalid');
+                    $('#error-shipping-method').html(json['error']).addClass('d-block');
+                }
+                if (json['shipping_methods']) {
+                    $('#modal-shipping').remove();
+                    html = '<div id="modal-shipping" class="modal fade">';
+                    html += '  <div class="modal-dialog modal-dialog-centered">';
+                    html += '    <div class="modal-content shadow-lg border-0" style="border-radius: 12px;">';
+                    html += '      <div class="modal-header border-bottom-0 pb-0">';
+                    html += '        <h5 class="modal-title" style="font-family: \'Playfair Display\', serif; font-weight: 700; color: #003468;"><i class="fa fa-truck me-2"></i> {{ text_shipping_method|escape('js') }}</h5>';
+                    html += '        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>';
+                    html += '      </div>';
+                    html += '      <div class="modal-body p-4">';
+                    html += '        <form id="form-shipping-method">';
+                    var first = true;
+                    for (i in json['shipping_methods']) {
+                        html += '<p class="fw-bold text-muted small text-uppercase mb-3">' + json['shipping_methods'][i]['name'] + '</p>';
+                        if (!json['shipping_methods'][i]['error']) {
+                            for (j in json['shipping_methods'][i]['quote']) {
+                                var code = i + '-' + j.replaceAll('_', '-');
+                                var checked = (json['shipping_methods'][i]['quote'][j]['code'] == $('#input-shipping-code').val()) || (!$('#input-shipping-code').val() && first);
+                                if (checked) first = false;
+                                
+                                html += '<div class="form-check p-2 border rounded mb-2 transition-all hover-ivory" style="cursor: pointer;">';
+                                html += '  <input type="radio" name="shipping_method" value="' + json['shipping_methods'][i]['quote'][j]['code'] + '" id="input-shipping-method-' + code + '" class="form-check-input ms-0 me-3" ' + (checked ? 'checked' : '') + '/>';
+                                html += '  <label class="form-check-label w-100" for="input-shipping-method-' + code + '" style="cursor: pointer;">' + json['shipping_methods'][i]['quote'][j]['name'] + ' <span class="float-end fw-bold" style="color: #c48c31;">' + json['shipping_methods'][i]['quote'][j]['text'] + '</span></label>';
+                                html += '</div>';
+                            }
+                        } else { html += '<div class="alert alert-danger">' + json['shipping_methods'][i]['error'] + '</div>'; }
+                    }
+                    html += '          <div class="text-end mt-4">';
+                    html += '            <button type="submit" id="button-shipping-method" class="btn-crystal py-2">{{ button_continue|escape('js') }}</button>';
+                    html += '          </div>';
+                    html += '        </form>';
+                    html += '      </div>';
+                    html += '    </div>';
+                    html += '  </div>';
+                    html += '</div>';
+                    $('body').append(html);
+                    $('#modal-shipping').modal('show');
+                }
+            }
+        });
+    });
+});
+
+$(document).on('submit', '#form-shipping-method', function(e) {
+    e.preventDefault();
+    chain.attach(function() {
+        return $.ajax({
+            url: 'index.php?route=checkout/shipping_method.save&language={{ language }}',
+            type: 'post',
+            data: $('#form-shipping-method').serialize(),
+            dataType: 'json',
+            beforeSend: function() { $('#button-shipping-method').prop('disabled', true); },
+            complete: function() { $('#button-shipping-method').prop('disabled', false); },
+            success: function(json) {
+                if (json['redirect']) location = json['redirect'];
+                if (json['error']) { $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>'); }
+                if (json['success']) {
+                    $('#modal-shipping').modal('hide');
+                    $('#input-shipping-method').val($('input[name=\'shipping_method\']:checked').parent().find('label').text());
+                    $('#input-shipping-code').val($('input[name=\'shipping_method\']:checked').val());
+                    $('#checkout-confirm').load('index.php?route=checkout/confirm.confirm&language={{ language }}');
+                }
+            }
+        });
+    });
+});
+//--></script>

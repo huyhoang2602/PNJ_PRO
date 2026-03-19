@@ -1,0 +1,53 @@
+<div class="table-responsive border rounded-3 shadow-sm mb-4" style="overflow-x: auto;">
+  <table class="table align-middle mb-0" style="min-width: 500px;">
+    <thead class="bg-light">
+      <tr>
+        <th class="text-start py-3 ps-4" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">{{ column_name }}</th>
+        <th class="text-start py-3" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">{{ column_model }}</th>
+        <th class="text-center py-3" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">{{ column_quantity }}</th>
+        <th class="text-end py-3" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">{{ column_price }}</th>
+        <th class="text-end py-3 pe-4" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; min-width: 110px; white-space: nowrap;">{{ column_total }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+        <tr>
+          <td class="text-start py-3 ps-4">
+            <a href="{{ product.href }}" class="fw-bold text-decoration-none" style="color: #003468; font-family: 'Playfair Display', serif; font-size: 16px;">{{ product.name }}</a>
+            {% for option in product.option %}
+              <br/><small class="text-muted">- {{ option.name }}: {{ option.value }}</small>
+            {% endfor %}
+            {% if product.subscription %}
+              <br/><small class="text-muted">- {{ text_subscription }}: {{ product.subscription }}</small>
+            {% endif %}
+          </td>
+          <td class="text-start py-3">{{ product.model }}</td>
+          <td class="text-center py-3">{{ product.quantity }}</td>
+          <td class="text-end py-3">{{ product.price }}</td>
+          <td class="text-end py-3 pe-4 fw-bold" style="color: #c48c31;">{{ product.total }}</td>
+        </tr>
+      {% endfor %}
+      {% for voucher in vouchers %}
+        <tr>
+          <td class="text-start py-3 ps-4">{{ voucher.description }}</td>
+          <td class="text-start py-3"></td>
+          <td class="text-center py-3">1</td>
+          <td class="text-end py-3">{{ voucher.amount }}</td>
+          <td class="text-end py-3 pe-4">{{ voucher.amount }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot id="checkout-total">
+      {% for total in totals %}
+        <tr class="{% if loop.last %}border-top{% endif %}">
+          <td colspan="4" class="text-end py-3 {% if loop.last %}fw-bold{% endif %}" style="{% if loop.last %}font-family: 'Playfair Display', serif; font-size: 18px; color: #003468;{% endif %}">{{ total.title }}</td>
+          <td class="text-end py-3 pe-4 fw-bold" style="{% if loop.last %}font-size: 20px; color: #c48c31;{% endif %} min-width: 110px; white-space: nowrap;">{{ total.text }}</td>
+        </tr>
+      {% endfor %}
+    </tfoot>
+  </table>
+</div>
+
+<div id="checkout-payment" class="mt-4 p-4 bg-white border rounded-3 shadow-sm">
+  {{ payment }}
+</div>
