@@ -45,6 +45,8 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
                 $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/brand.css');
             } elseif (strpos($route_get, 'account/') !== false) {
                 $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/account.css');
+            } elseif (strpos($route_get, 'checkout/') !== false) {
+                $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/checkout.css');
             }
 		}
 	}
