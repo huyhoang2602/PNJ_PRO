@@ -367,3 +367,255 @@
         margin-bottom: 15px;
     }
 }
+
+/* Product Details Page - Crystal Luxury */
+#product-info h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: #003468;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+#product-info .price-new {
+    color: #003468;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+#product-info .price-old {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+#product-info .list-unstyled {
+    margin-bottom: 25px;
+}
+
+#product-info .list-unstyled li {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+#product-info .list-unstyled li a {
+    color: #c48c46;
+    font-weight: 600;
+}
+
+#product-info .btn-group .btn-light {
+    border-radius: 50px;
+    width: 45px;
+    height: 45px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #eee;
+    background: #fff;
+    color: #003468;
+    transition: all 0.3s ease;
+}
+
+#product-info .btn-group .btn-light:hover {
+    background: #003468;
+    color: #fff;
+    border-color: #003468;
+}
+
+#button-cart {
+    background: #003468;
+    color: #fff;
+    border-radius: 50px;
+    padding: 12px 40px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    transition: all 0.4s ease;
+    border: none;
+}
+
+#button-cart:hover {
+    background: #c48c46;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(196, 140, 70, 0.3);
+}
+
+#product-info .input-group #quantity-minus,
+#product-info .input-group #quantity-plus {
+    border-radius: 50% !important;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    line-height: 36px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+}
+
+#product-info .input-group #input-quantity {
+    border: none;
+    font-weight: 700;
+    font-size: 16px;
+    max-width: 50px;
+}
+
+#product-info .nav-tabs {
+    border: none;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#product-info .nav-tabs .nav-link {
+    border: none;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #999;
+    padding: 10px 0;
+    position: relative;
+    background: transparent;
+}
+
+#product-info .nav-tabs .nav-link.active {
+    color: #003468;
+    font-weight: 700;
+}
+
+#product-info .nav-tabs .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #003468;
+}
+
+/* Options Styling */
+#product h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    margin-top: 30px;
+    color: #003468;
+}
+
+#product .form-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    font-weight: 600;
+}
+
+/* Product Tabs Redesign - Crystal Luxury */
+.product-tabs-wrapper .tab-content {
+    background: #fff;
+    border: 1px solid #f2f2f2 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03) !important;
+    padding: 40px !important;
+}
+
+#tab-description {
+    line-height: 1.8;
+    color: #555;
+    font-size: 15px;
+}
+
+#tab-specification table {
+    border: none !important;
+}
+
+#tab-specification table tr td {
+    border: none;
+    border-bottom: 1px solid #f8f8f8;
+    padding: 15px 0;
+    font-size: 14px;
+}
+
+#tab-specification table thead td {
+    background: transparent;
+    border-bottom: 2px solid #003468;
+    padding-bottom: 10px;
+}
+
+#tab-specification table thead td strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #003468;
+    text-transform: none;
+}
+
+#tab-specification table tbody td:first-child {
+    color: #888;
+    font-weight: 500;
+    width: 30%;
+}
+
+#tab-specification table tbody td:last-child {
+    color: #333;
+    font-weight: 600;
+    text-align: right;
+}
+
+#tab-review h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: #003468;
+    margin-bottom: 25px;
+}
+
+#tab-review .form-control {
+    border-radius: 12px;
+    padding: 12px 20px;
+    border-color: #eee;
+    background: #fdfdfd;
+}
+
+#tab-review .form-control:focus {
+    border-color: #c48c46;
+    box-shadow: 0 0 10px rgba(196, 140, 70, 0.1);
+}
+
+#tab-review .btn-primary {
+    background: #003468;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 40px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+    .product-tabs-wrapper .tab-content {
+        padding: 20px !important;
+    }
+    #tab-specification table tbody td:first-child {
+        width: 40%;
+    }
+}
+
+#product-info .breadcrumb {
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    #product-info h1 {
+        font-size: 24px;
+    }
+    #product-info .nav-tabs {
+        gap: 15px;
+    }
+    #product-info .nav-tabs .nav-link {
+        font-size: 15px;
+    }
+}
