@@ -1,0 +1,147 @@
+{{ header }}
+<div id="account-login" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+
+  {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa-solid fa-circle-check"></i> {{ success }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endif %}
+  {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> {{ error_warning }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div id="content" class="col-lg-6 col-md-8">
+      {{ content_top }}
+      
+      <div class="account-card auth-card">
+        <!-- Login Section -->
+        <div id="auth-login">
+          <h2>{{ text_returning_customer }}</h2>
+          <p class="text-center">{{ text_i_am_returning_customer }}</p>
+          
+          <form id="form-login" action="{{ login }}" method="post" data-oc-toggle="ajax">
+            <div class="mb-3">
+              <label for="input-email" class="form-label">{{ entry_email }}</label>
+              <input type="email" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control"/>
+            </div>
+            
+            <div class="mb-4">
+              <label for="input-password" class="form-label">{{ entry_password }}</label>
+              <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control"/>
+              <a href="{{ forgotten }}" class="forgotten-link">{{ text_forgotten }}</a>
+            </div>
+
+            {% if redirect %}
+              <input type="hidden" name="redirect" value="{{ redirect }}"/>
+            {% endif %}
+
+            <div class="text-center mb-4">
+              <button type="submit" class="btn-crystal w-100">{{ button_login }}</button>
+            </div>
+          </form>
+
+          <div class="auth-toggle text-center">
+            <span>Bạn mới biết đến PNJ? </span>
+            <a href="javascript:void(0);" onclick="toggleAuth('register');" class="toggle-link">Đăng ký ngay</a>
+          </div>
+        </div>
+
+        <!-- Register Section (Hidden by Default) -->
+        <div id="auth-register" style="display: none;">
+          <h2>{{ text_new_customer }}</h2>
+          <p class="text-center">{{ text_register }}</p>
+
+          <form id="form-register-quick" action="{{ register }}" method="post" data-oc-toggle="ajax">
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label for="input-firstname" class="form-label">Họ</label>
+                <input type="text" name="firstname" value="" placeholder="Họ" id="input-firstname" class="form-control"/>
+              </div>
+              <div class="col-6 mb-3">
+                <label for="input-lastname" class="form-label">Tên</label>
+                <input type="text" name="lastname" value="" placeholder="Tên" id="input-lastname" class="form-control"/>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="input-reg-email" class="form-label">{{ entry_email }}</label>
+              <input type="email" name="email" value="" placeholder="{{ entry_email }}" id="input-reg-email" class="form-control"/>
+            </div>
+
+            <div class="mb-3">
+              <label for="input-telephone" class="form-label">Số điện thoại</label>
+              <input type="tel" name="telephone" value="" placeholder="Số điện thoại" id="input-telephone" class="form-control"/>
+            </div>
+
+            <div class="mb-3">
+              <label for="input-reg-password" class="form-label">{{ entry_password }}</label>
+              <input type="password" name="password" value="" placeholder="{{ entry_password }}" id="input-reg-password" class="form-control"/>
+            </div>
+
+            <div class="mb-4">
+              <label for="input-confirm" class="form-label">Xác nhận mật khẩu</label>
+              <input type="password" name="confirm" value="" placeholder="Xác nhận mật khẩu" id="input-confirm" class="form-control"/>
+            </div>
+
+            <div class="mb-4 form-check">
+              <input type="checkbox" name="agree" value="1" class="form-check-input" id="input-agree">
+              <label class="form-check-label" for="input-agree" style="font-size: 13px;">
+                Tôi đã đọc và đồng ý với <a href="#" style="color: #c48c31;">Điều khoản sử dụng</a>
+              </label>
+            </div>
+
+            <div class="text-center mb-4">
+              <button type="submit" class="btn-crystal w-100">{{ button_continue }}</button>
+            </div>
+          </form>
+
+          <div class="auth-toggle text-center">
+            <span>Đã có tài khoản? </span>
+            <a href="javascript:void(0);" onclick="toggleAuth('login');" class="toggle-link">Đăng nhập</a>
+          </div>
+        </div>
+      </div>
+      
+      {{ content_bottom }}
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript"><!--
+function toggleAuth(type) {
+    const login = document.getElementById('auth-login');
+    const register = document.getElementById('auth-register');
+    
+    if (type === 'register') {
+        login.style.opacity = '0';
+        setTimeout(() => {
+            login.style.display = 'none';
+            register.style.display = 'block';
+            setTimeout(() => {
+                register.style.opacity = '1';
+            }, 50);
+        }, 300);
+    } else {
+        register.style.opacity = '0';
+        setTimeout(() => {
+            register.style.display = 'none';
+            login.style.display = 'block';
+            setTimeout(() => {
+                login.style.opacity = '1';
+            }, 50);
+        }, 300);
+    }
+}
+
+// Initial opacity for transition
+document.getElementById('auth-login').style.transition = 'opacity 0.3s ease';
+document.getElementById('auth-register').style.transition = 'opacity 0.3s ease';
+document.getElementById('auth-login').style.opacity = '1';
+document.getElementById('auth-register').style.opacity = '0';
+//--></script>
+
+{{ footer }}

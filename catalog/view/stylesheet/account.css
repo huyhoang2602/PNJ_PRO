@@ -1,0 +1,188 @@
+/* Account Login Premium Crystal Style */
+
+#account-login {
+    padding-top: 40px;
+    padding-bottom: 80px;
+}
+
+#account-login .breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+#account-login .breadcrumb-item, 
+#account-login .breadcrumb-item a {
+    font-size: 13px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+#account-login h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: #003468;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.account-card {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    padding: 40px;
+    height: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.account-card:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
+}
+
+.account-card p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+#account-login .form-label {
+    font-weight: 600;
+    color: #003468;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+#account-login .form-control {
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+    padding: 12px 15px;
+    font-size: 14px;
+    transition: all 0.3s;
+    background-color: #f9f9f9;
+}
+
+#account-login .form-control:focus {
+    background-color: #fff;
+    border-color: #c48c31;
+    box-shadow: 0 0 0 3px rgba(196, 140, 49, 0.1);
+    outline: none;
+}
+
+.btn-crystal {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #003468;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    border: 1px solid #003468;
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-crystal:hover {
+    background: #c48c31;
+    border-color: #c48c31;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(196, 140, 49, 0.3);
+}
+
+.btn-crystal-outline {
+    background: transparent;
+    color: #003468;
+    border-color: #003468;
+}
+
+.btn-crystal-outline:hover {
+    background: #003468;
+    color: #fff;
+}
+
+#account-login .forgotten-link {
+    display: block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #c48c31;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+#account-login .forgotten-link:hover {
+    color: #003468;
+    text-decoration: underline;
+}
+
+/* Sidebar Menu Styling */
+#column-right {
+    padding-left: 30px;
+}
+
+#column-right .list-group-item {
+    border: none;
+    padding: 12px 0;
+    font-size: 14px;
+    color: #555;
+    transition: all 0.3s;
+}
+
+#column-right .list-group-item:hover,
+#column-right .active {
+    background: transparent;
+    color: #c48c31;
+    padding-left: 5px;
+}
+
+#column-right .list-group-item.active {
+    font-weight: 700;
+}
+
+.auth-toggle {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #f5f5f5;
+    font-size: 14px;
+    color: #888;
+}
+
+.toggle-link {
+    color: #c48c31;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 5px;
+    transition: all 0.3s;
+}
+
+.toggle-link:hover {
+    color: #003468;
+    text-decoration: underline;
+}
+
+#auth-login, #auth-register {
+    transition: opacity 0.3s ease-in-out;
+}
+
+@media (max-width: 767px) {
+    .account-card {
+        padding: 30px 20px;
+        margin-bottom: 30px;
+    }
+    
+    #column-right {
+        padding-left: 15px;
+        margin-top: 40px;
+    }
+
+    #content.col-lg-6 {
+        max-width: 100%;
+        width: 100%;
+    }
+}
