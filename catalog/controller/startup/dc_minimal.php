@@ -31,14 +31,18 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 			$this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/dc_minimal.css');
 			$this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/stylesheet.css');
 			
-            // Load more CSS specifically for the homepage
-            if (!isset($this->request->get['route']) || $this->request->get['route'] == 'common/home') {
+            // Load more CSS specifically for the homepage and brand pages
+            $route_get = (string)($this->request->get['route'] ?? 'common/home');
+            
+            if ($route_get == 'common/home') {
                 $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/home.css');
                 $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/hero.css');
                 $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/featured.css');
                 $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/category.css');
                 $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/brand.css');
                 $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/ship.css');
+            } elseif (strpos($route_get, 'product/manufacturer') !== false) {
+                $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/brand.css');
             }
 		}
 	}
@@ -104,6 +108,40 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
             $data['action'] = $this->url->link('product/manufacturer.info', 'language=' . $this->config->get('config_language') . $url, true);
 
             $this->injectDynamicFilters('manufacturer', $manufacturer_id, $data);
+        } elseif (in_array($route, ['product/manufacturer_list', 'extension/dc_minimal/product/manufacturer_list'])) {
+            // Inject images for brand index
+            $this->load->model('tool/image');
+            
+            // Get custom brand logos from Slider module settings
+            $custom_brands = $this->config->get('module_brand_brands');
+            $brand_logo_map = [];
+            if (!empty($custom_brands) && is_array($custom_brands)) {
+                foreach ($custom_brands as $brand) {
+                    if (!empty($brand['manufacturer_id']) && !empty($brand['logo'])) {
+                        $brand_logo_map[$brand['manufacturer_id']] = $brand['logo'];
+                    }
+                }
+            }
+            
+            if (!empty($data['categories'])) {
+                foreach ($data['categories'] as &$category) {
+                    if (!empty($category['manufacturer'])) {
+                        foreach ($category['manufacturer'] as &$manufacturer) {
+                            $manufacturer_id = $manufacturer['manufacturer_id'] ?? 0;
+                            
+                            // Check if custom logo exists, otherwise use default manufacturer image
+                            $image_to_use = $brand_logo_map[$manufacturer_id] ?? ($manufacturer['image'] ?? '');
+                            $image_path = html_entity_decode($image_to_use, ENT_QUOTES, 'UTF-8');
+                            
+                            if ($image_path && is_file(DIR_IMAGE . $image_path)) {
+                                $manufacturer['image'] = $this->model_tool_image->resize($image_path, 150, 150);
+                            } else {
+                                $manufacturer['image'] = $this->model_tool_image->resize('placeholder.png', 150, 150);
+                            }
+                        }
+                    }
+                }
+            }
         }
 	}
 

@@ -1,0 +1,97 @@
+{{ header }}
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link href="extension/dc_minimal/catalog/view/stylesheet/brand.css" rel="stylesheet">
+<div id="product-manufacturer" class="container brand-index-page">
+    <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+            <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="row">
+        <div id="content" class="col">
+            {{ content_top }}
+            
+            <div class="brand-banner-pnj">
+                <div class="decorative-circles"></div>
+                <div class="banner-content text-center">
+                    <h1 class="pnj-title">{{ heading_title }}</h1>
+                    <p class="pnj-subtitle">Khám phá thế giới trang sức từ các thương hiệu hàng đầu</p>
+                </div>
+            </div>
+
+            {% if categories %}
+                <div class="brand-navigation">
+                    <div id="brand-filters" class="brand-index-pills d-flex flex-wrap justify-content-center gap-2">
+                        <a href="#" class="pill-item active" data-filter="all">Tất cả</a>
+                        {% for category in categories %}
+                            <a href="#brand-group-{{ category.name }}" class="pill-item" data-filter="{{ category.name }}">{{ category.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div id="brand-list-container">
+                    {% for category in categories %}
+                        <div id="brand-group-{{ category.name }}" class="brand-group-section mb-5 py-5" data-letter="{{ category.name }}">
+                            <div class="crystal-header text-center mb-5">
+                                <h2 class="crystal-letter">{{ category.name }}</h2>
+                                <div class="crystal-line"></div>
+                            </div>
+                            
+                            {% if category.manufacturer %}
+                                <div class="row row-cols-3 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 row-cols-xl-8 g-4 justify-content-center">
+                                    {% for manufacturer in category.manufacturer %}
+                                        <div class="col">
+                                            <a href="{{ manufacturer.href }}" class="brand-card-item">
+                                                <div class="brand-logo-wrapper">
+                                                    <img src="{{ manufacturer.image }}" alt="{{ manufacturer.name }}" class="img-fluid" loading="lazy">
+                                                </div>
+                                            </a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+{% else %}
+        <div class="text-center py-5">
+            <p class="mb-4 text-muted">{{ text_no_results }}</p>
+            <a href="{{ continue }}" class="btn btn-primary px-4 rounded-pill">{{ button_continue }}</a>
+        </div>
+      {% endif %}
+
+      {{ content_bottom }}
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript"><!--
+$(document).ready(function() {
+    $('#brand-filters .pill-item').on('click', function(e) {
+        e.preventDefault();
+        
+        const filter = $(this).data('filter');
+        
+        // Update active class
+        $('#brand-filters .pill-item').removeClass('active');
+        $(this).addClass('active');
+        
+        if (filter === 'all') {
+            $('.brand-group-section').fadeIn(500);
+        } else {
+            $('.brand-group-section').hide();
+            $('#brand-group-' + filter).fadeIn(500);
+            
+            // Wait for fade in to start before scrolling for smoother feel
+            setTimeout(function() {
+                $('html, body').animate({
+                    scrollTop: $('#brand-group-' + filter).offset().top - 180
+                }, 800, 'swing');
+            }, 100);
+        }
+    });
+});
+//--></script>
+
+{{ footer }}

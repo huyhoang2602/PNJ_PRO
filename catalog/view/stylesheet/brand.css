@@ -79,3 +79,175 @@
     width: 8px;
     height: 8px;
 }
+
+/* Brand Index Page - Crystal Catalog Overhaul */
+.brand-index-page {
+    padding-bottom: 150px;
+    background-color: #fff;
+}
+
+/* 1. Crystal Banner */
+.brand-banner-pnj {
+    background: #fff;
+    padding: 120px 20px;
+    border-radius: 0 0 60px 60px;
+    margin-bottom: 80px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.01);
+    border-bottom: 1px solid #fcfcfc;
+    position: relative;
+}
+
+.pnj-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 700;
+    color: #003468;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+}
+
+.pnj-subtitle {
+    font-size: 13px;
+    color: #c48c46;
+    font-weight: 500;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 15px;
+}
+
+.pnj-subtitle::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 1px;
+    background: #c48c46;
+}
+
+/* 2. Floating Pearl Navigator */
+.brand-navigation {
+    position: sticky;
+    top: 100px;
+    z-index: 1000;
+    background: #fff;
+    padding: 12px 25px;
+    border-radius: 100px;
+    margin-bottom: 80px !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+    border: 1px solid #f0f0f0;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.brand-index-pills .pill-item {
+    display: inline-block;
+    padding: 8px 16px;
+    color: #888;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border-radius: 50px;
+    letter-spacing: 1px;
+}
+
+.brand-index-pills .pill-item:hover {
+    color: #003468;
+}
+
+.brand-index-pills .pill-item.active {
+    background: #003468;
+    color: #fff !important;
+    box-shadow: 0 8px 20px rgba(0, 52, 104, 0.2);
+}
+
+/* 3. Crystal Group Header (Centered) */
+.brand-group-section {
+    scroll-margin-top: 220px;
+}
+
+.crystal-header {
+    position: relative;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.crystal-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    color: #003468;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.crystal-line {
+    width: 60px;
+    height: 1px;
+    background: #c48c46;
+    margin: 0 auto;
+    opacity: 0.6;
+}
+
+/* 4. Crystal Brand Cards */
+.brand-card-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    text-decoration: none;
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    border: 1px solid #f2f2f2;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+}
+
+.brand-card-item:hover {
+    box-shadow: 0 30px 60px rgba(0, 52, 104, 0.08);
+    transform: translateY(-12px);
+    border-color: rgba(196, 140, 70, 0.2);
+}
+
+.brand-logo-wrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-logo-wrapper img {
+    max-height: 85%;
+    max-width: 85%;
+    object-fit: contain;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.brand-card-item:hover .brand-logo-wrapper img {
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .brand-banner-pnj {
+        padding: 80px 15px;
+    }
+    .pnj-title {
+        font-size: 36px;
+    }
+    .crystal-letter {
+        font-size: 48px;
+    }
+    .brand-navigation {
+        max-width: 95%;
+        padding: 8px 15px;
+        top: 70px;
+    }
+}
