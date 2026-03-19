@@ -58,7 +58,12 @@
 <header class="pnj-header">
     <div class="pnj-top">
         <div class="pnj-container pnj-flex">
-            <div class="pnj-top-left">
+            <!-- Mobile Toggle -->
+            <div class="pnj-mobile-toggle d-lg-none">
+                <i class="fa fa-bars"></i>
+            </div>
+
+            <div class="pnj-top-left d-none d-lg-flex">
                 <a href="#"><i class="fa fa-book"></i> Câu Chuyện PNJ</a>
                 <a href="#"><i class="fa fa-users"></i> Quan Hệ Cổ Đông (IR)</a>
                 <a href="#"><i class="fa fa-map-marker"></i> Cửa Hàng</a>
@@ -72,110 +77,107 @@
             </div>
 
             <div class="pnj-top-right">
-                <span class="hotline">
+                <span class="hotline d-none d-md-inline">
                     <i class="fa fa-headphones"></i> {{ dc_hotline ? dc_hotline : '1800 54 54 57' }}
                 </span>
 
-                {% if logged %}
-                    <a href="{{ account }}"><i class="fa fa-user"></i> Tài khoản của tôi</a>
-                {% else %}
-                    <a href="{{ login }}"><i class="fa fa-user"></i> Đăng nhập</a>
-                {% endif %}
+                <div class="pnj-tools">
+                    {% if logged %}
+                        <a href="{{ account }}"><i class="fa fa-user"></i> <span class="d-none d-sm-inline">Tài khoản</span></a>
+                    {% else %}
+                        <a href="{{ login }}"><i class="fa fa-user"></i> <span class="d-none d-sm-inline">Đăng nhập</span></a>
+                    {% endif %}
 
-                <a href="{{ shopping_cart }}" class="cart-link">
-                    <i class="fa fa-shopping-bag"></i> Giỏ hàng
-                    <span class="cart-badge">0</span>
-                </a>
+                    <a href="{{ shopping_cart }}" class="cart-link">
+                        <i class="fa fa-shopping-bag"></i> <span class="d-none d-sm-inline">Giỏ hàng</span>
+                        <span class="cart-badge">0</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="pnj-divider"></div>
+    <div class="pnj-divider d-none d-lg-block"></div>
 
     <div class="pnj-bottom">
         <div class="pnj-container pnj-bottom-flex">
-            <ul class="pnj-menu">
-                <li class="mega-parent">
-                    <a href="#">Nữ</a>
-                    <div class="mega-modal">
-                        <div class="mega-left">
-                            <div class="mega-item active" data-target="nu-brand">Thương Hiệu</div>
-                            <div class="mega-item" data-target="nu-new">Hàng Mới</div>
-                            <div class="mega-item" data-target="nu-jewelry">Trang Sức</div>
-                            <div class="mega-item" data-target="nu-jewelry-c">Trang Sức Cưới</div>
-                            <div class="mega-item">Đồng Hồ</div>
-                            <div class="mega-item sale">Khuyến Mãi</div>
-                        </div>
-                        <div class="mega-right">
-                            <div class="mega-content active" id="nu-brand">
-                                <div class="mega-col">
-                                    <h4>Thương Hiệu Sản Phẩm</h4>
-                                    {% for brand in brands %}<a href="{{ brand.href }}">{{ brand.name }}</a>{% endfor %}
-                                </div>
-                                <div class="mega-col">
-                                    <h4>Dòng Hàng Quốc Tế</h4>
-                                    <a href="#">Disney x PNJ</a>
-                                    <a href="#">Hello Kitty</a>
-                                    <a href="#">Doraemon</a>
-                                </div>
+            <div id="pnj-nav-container" class="pnj-nav-container">
+                <div class="pnj-nav-header d-lg-none">
+                    <span>Danh Mục</span>
+                    <i class="fa fa-times pnj-nav-close"></i>
+                </div>
+                <ul class="pnj-menu">
+                    <li class="mega-parent">
+                        <a href="#">Nữ</a>
+                        <div class="mega-modal">
+                            <div class="mega-left">
+                                <div class="mega-item active" data-target="nu-brand">Thương Hiệu</div>
+                                <div class="mega-item" data-target="nu-new">Hàng Mới</div>
+                                <div class="mega-item" data-target="nu-jewelry">Trang Sức</div>
+                                <div class="mega-item" data-target="nu-jewelry-c">Trang Sức Cưới</div>
+                                <div class="mega-item">Đồng Hồ</div>
+                                <div class="mega-item sale">Khuyến Mãi</div>
                             </div>
-                            <div class="mega-content" id="nu-new">
-                                <div class="mega-col">
-                                    <h4>Hàng Mới</h4>
-                                    <a href="#">Trang sức</a>
-                                    <a href="#">Đồng hồ</a>
+                            <div class="mega-right">
+                                <div class="mega-content active" id="nu-brand">
+                                    <div class="mega-col">
+                                        <h4>Thương Hiệu Sản Phẩm</h4>
+                                        {% for brand in brands %}<a href="{{ brand.href }}">{{ brand.name }}</a>{% endfor %}
+                                    </div>
+                                    <div class="mega-col">
+                                        <h4>Dòng Hàng Quốc Tế</h4>
+                                        <a href="#">Disney x PNJ</a>
+                                        <a href="#">Hello Kitty</a>
+                                        <a href="#">Doraemon</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mega-content" id="nu-jewelry">
-                                <div class="mega-col">
-                                    <h4>Chủng Loại</h4>
-                                    <a href="#">Nhẫn</a>
-                                    <a href="#">Dây chuyền</a>
-                                    <a href="#">Bông tai</a>
+                                <!-- ... rest of the contents can be truncated if needed for brevty but let's keep it complete if possible ... -->
+                                <div class="mega-content" id="nu-new">
+                                    <div class="mega-col">
+                                        <h4>Hàng Mới</h4>
+                                        <a href="#">Trang sức</a>
+                                        <a href="#">Đồng hồ</a>
+                                    </div>
                                 </div>
-                                <div class="mega-col">
-                                    <h4>Chất Liệu</h4>
-                                    <a href="#">Vàng</a>
-                                    <a href="#">Bạc</a>
-                                    <a href="#">Platinum</a>
+                                <div class="mega-content" id="nu-jewelry">
+                                    <div class="mega-col">
+                                        <h4>Chủng Loại</h4>
+                                        <a href="#">Nhẫn</a>
+                                        <a href="#">Dây chuyền</a>
+                                        <a href="#">Bông tai</a>
+                                    </div>
+                                    <div class="mega-col">
+                                        <h4>Chất Liệu</h4>
+                                        <a href="#">Vàng</a>
+                                        <a href="#">Bạc</a>
+                                        <a href="#">Platinum</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mega-content" id="nu-jewelry-c">
-                                <div class="mega-col">
-                                    <h4>Mục Đích</h4>
-                                    <a href="#">Cầu Hôn</a>
-                                    <a href="#">Kết Hôn</a>
-                                    <a href="#">Kỷ Niệm</a>
-                                </div>
-                                <div class="mega-col">
-                                    <h4>Chủng Loại</h4>
-                                    <a href="#">Vàng</a>
-                                    <a href="#">Bạc</a>
-                                    <a href="#">Platinum</a>
-                                </div>
-                                <div class="mega-col">
-                                    <h4>Dòng hàng</h4>
-                                    <a href="#">Nhẫn</a>
-                                    <a href="#">Dây chuyền</a>
-                                    <a href="#">Bông tai</a>
-                                </div>
-                                <div class="mega-col">
-                                    <h4>Chất Liệu</h4>
-                                    <a href="#">Vàng</a>
-                                    <a href="#">Bạc</a>
-                                    <a href="#">Platinum</a>
+                                <div class="mega-content" id="nu-jewelry-c">
+                                    <div class="mega-col">
+                                        <h4>Mục Đích</h4>
+                                        <a href="#">Cầu Hôn</a>
+                                        <a href="#">Kết Hôn</a>
+                                        <a href="#">Kỷ Niệm</a>
+                                    </div>
+                                    <div class="mega-col">
+                                        <h4>Chủng Loại</h4>
+                                        <a href="#">Nhẫn</a>
+                                        <a href="#">Dây chuyền</a>
+                                        <a href="#">Bông tai</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li><a href="#">Nam</a></li>
-                <li><a href="#">Trẻ em</a></li>
-            </ul>
+                    </li>
+                    <li><a href="#">Nam</a></li>
+                    <li><a href="#">Trẻ em</a></li>
+                </ul>
+            </div>
 
             <div class="pnj-search">
-                <input type="text" placeholder="Tìm kiếm nhanh">
                 <i class="fa fa-search"></i>
+                <input type="text" placeholder="Tìm kiếm nhanh">
             </div>
         </div>
     </div>
@@ -183,6 +185,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    // Mega Menu Interaction
     const items = document.querySelectorAll(".mega-item");
     items.forEach(item => {
         item.addEventListener("click", function() {
@@ -196,5 +199,22 @@ document.addEventListener("DOMContentLoaded", function() {
             if (targetEl) targetEl.classList.add("active");
         });
     });
+
+    // Mobile Menu Toggle
+    const mobileToggle = document.querySelector(".pnj-mobile-toggle");
+    const navContainer = document.getElementById("pnj-nav-container");
+    const navClose = document.querySelector(".pnj-nav-close");
+
+    if (mobileToggle && navContainer) {
+        mobileToggle.addEventListener("click", function() {
+            navContainer.classList.add("active");
+        });
+    }
+
+    if (navClose && navContainer) {
+        navClose.addEventListener("click", function() {
+            navContainer.classList.remove("active");
+        });
+    }
 });
 </script>

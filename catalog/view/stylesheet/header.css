@@ -1,14 +1,8 @@
-/* PNJ Luxurious Header Styles */
-.pnj-header {
-    background: #fff;
-    font-family: 'Inter', sans-serif;
-    border-bottom: 1px solid #eee;
-}
-
-/* TOP BAR */
+/* 1. TOP BAR */
 .pnj-top {
-    height: 70px;
-    padding: 10px 0;
+    height: auto;
+    padding: 15px 0;
+    background: #fff;
     display: flex;
     align-items: center;
 }
@@ -28,7 +22,15 @@
     width: 100%;
 }
 
-/* Logo Center - Force Size and Position */
+/* Mobile Toggle */
+.pnj-mobile-toggle {
+    font-size: 20px;
+    color: #003468;
+    cursor: pointer;
+    width: 40px;
+}
+
+/* Logo Center */
 .pnj-logo-center {
     position: absolute;
     left: 50%;
@@ -38,38 +40,70 @@
 }
 
 .pnj-logo-center img {
-    height: 45px !important;
+    height: 38px !important;
     width: auto !important;
     display: block;
 }
 
 /* Links and Typography */
-.pnj-top-left a, 
-.pnj-top-right a,
-.pnj-menu li a {
-    text-decoration: none !important;
-    color: #003468; /* PNJ Blue */
-    font-size: 13px;
-    margin-right: 15px;
+.pnj-top-left a {
+    text-decoration: none;
+    color: #444;
+    font-size: 12px;
+    padding: 0 12px;
+    border-right: 1px solid #eee;
     transition: color 0.3s;
 }
 
-.pnj-top-left a:hover, 
-.pnj-top-right a:hover,
-.pnj-menu li a:hover {
-    color: #c48c31; /* PNJ Gold */
-}
+.pnj-top-left a:last-child { border-right: none; }
+.pnj-top-left a i { margin-right: 5px; color: #003468; }
+
+.pnj-top-left a:hover { color: #c48c31; }
 
 .hotline {
     color: #003468;
     font-weight: 700;
+    font-size: 13px;
     margin-right: 20px;
 }
 
-/* Bottom Menu */
+.pnj-tools {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.pnj-tools a {
+    text-decoration: none;
+    color: #003468;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pnj-tools a i {
+    font-size: 18px;
+}
+
+.cart-link { position: relative; }
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: #e11b22;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 50px;
+    font-weight: 700;
+}
+
+/* 2. BOTTOM MENU & SEARCH */
 .pnj-bottom {
-    padding: 12px 0;
-    border-top: 1px solid #f2f2f2;
+    padding: 10px 0;
+    border-bottom: 1px solid #f2f2f2;
 }
 
 .pnj-bottom-flex {
@@ -87,82 +121,113 @@
 }
 
 .pnj-menu li a {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
     text-transform: uppercase;
+    text-decoration: none;
+    color: #003468;
+    padding: 10px 0;
+    display: block;
+    transition: all 0.3s;
 }
 
-/* Search Bar */
+.pnj-menu li a:hover { color: #c48c31; }
+
+/* REFINED SEARCH UI (Matching Request) */
 .pnj-search {
     position: relative;
+    width: 320px;
 }
 
 .pnj-search input {
-    background: #f2f2f2;
-    border: none;
-    padding: 8px 15px 8px 35px;
-    border-radius: 20px;
+    background: #f8f8f8;
+    border: 1px solid #f0f0f0;
+    padding: 10px 20px 10px 65px !important; /* Increased to 65px and added !important */
+    border-radius: 50px;
     font-size: 13px;
-    width: 250px;
+    width: 100%;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.pnj-search input::placeholder { color: #aaa; }
+
+.pnj-search input:focus {
+    background: #fff;
+    border-color: #003468;
+    outline: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .pnj-search i {
     position: absolute;
-    left: 12px;
+    left: 24px !important; /* Adjusted to 24px and added !important */
     top: 50%;
     transform: translateY(-50%);
-    color: #888;
-}
-
-/* MEGA MENU STYLES */
-.mega-parent { position: relative; }
-.mega-modal {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 1000px;
-    background: #fff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    z-index: 1000;
-    padding: 20px;
-}
-
-.mega-parent:hover .mega-modal { display: flex; }
-
-.mega-left {
-    width: 200px;
-    border-right: 1px solid #eee;
-}
-
-.mega-item {
-    padding: 10px;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.mega-item.active {
-    color: #c48c31;
-    background: #f9f9f9;
-}
-
-.mega-right {
-    flex: 1;
-    padding-left: 30px;
-}
-
-.mega-content { display: none; }
-.mega-content.active { display: flex; gap: 40px; }
-
-.mega-col h4 {
-    color: #003468;
-    margin-bottom: 15px;
+    color: #999;
     font-size: 14px;
+    pointer-events: none;
 }
 
-.mega-col a {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 13px;
-    color: #555;
+/* 3. RESPONSIVE STYLES */
+@media (max-width: 991px) {
+    .pnj-logo-center { position: static; transform: none; margin: 0 auto; }
+    
+    .pnj-nav-container {
+        position: fixed;
+        left: -300px;
+        top: 0;
+        width: 300px;
+        height: 100%;
+        background: #fff;
+        z-index: 9999;
+        box-shadow: 5px 0 30px rgba(0,0,0,0.1);
+        transition: left 0.4s ease;
+        padding: 20px;
+        display: block !important;
+    }
+    
+    .pnj-nav-container.active { left: 0; }
+    
+    .pnj-nav-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .pnj-nav-header span {
+        font-weight: 700;
+        color: #003468;
+        text-transform: uppercase;
+    }
+    
+    .pnj-nav-close { font-size: 20px; cursor: pointer; color: #888; }
+    
+    .pnj-menu {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .pnj-menu li { border-bottom: 1px solid #f8f8f8; }
+    .pnj-menu li a { font-size: 15px; padding: 15px 0; }
+    
+    .mega-modal { position: static; width: 100%; box-shadow: none; padding: 10px 0 10px 20px; display: none; }
+    .mega-parent:hover .mega-modal { display: block; }
+    .mega-left { width: 100%; border: none; }
+    .mega-right { width: 100%; padding-left: 0; margin-top: 15px; }
+    
+    .pnj-bottom { border-top: 1px solid #eee; }
+    .pnj-search { width: 100%; margin-top: 5px; }
+    
+    .pnj-logo-center img { height: 32px !important; }
+}
+
+@media (max-width: 576px) {
+    .pnj-top { padding: 10px 0; }
+    .pnj-tools { gap: 10px; }
+    .pnj-tools a i { font-size: 20px; }
+    .pnj-search input { padding: 8px 15px 8px 40px; }
 }
