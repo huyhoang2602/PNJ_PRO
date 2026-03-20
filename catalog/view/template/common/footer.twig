@@ -43,6 +43,22 @@
             </div>
         </footer>
         {{ cookie }}
+        
+        <!-- Global Message Modal -->
+        <div class="modal fade" id="message-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content border-0 shadow">
+                    <div id="message-modal-header" class="modal-header border-0 justify-content-center">
+                        <button type="button" class="btn-close position-absolute end-0 top-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center pb-5">
+                        <div id="message-modal-icon" class="mb-4"></div>
+                        <div id="message-modal-body" class="fs-5 fw-600"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {% for style in styles %}
         <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
         {% endfor %}

@@ -1,0 +1,62 @@
+{% if products %}
+  <div class="table-responsive shadow-sm rounded-3 overflow-hidden border">
+    <table class="table table-hover align-middle mb-0 bg-white">
+      <thead class="bg-light text-uppercase small fw-700 text-muted">
+        <tr>
+          <th class="text-center py-3" style="width: 120px;">{{ column_image }}</th>
+          <th class="py-3">{{ column_name }}</th>
+          <th class="py-3">{{ column_model }}</th>
+          <th class="text-center py-3">{{ column_stock }}</th>
+          <th class="text-end py-3">{{ column_price }}</th>
+          <th class="text-center py-3" style="width: 150px;">{{ column_action }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set product_row = 0 %}
+        {% for product in products %}
+          <tr>
+            <td class="text-center py-3">
+              {% if product.thumb %}
+                <a href="{{ product.href }}">
+                    <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-fluid rounded" style="max-height: 80px;"/>
+                </a>
+              {% endif %}
+            </td>
+            <td class="py-3">
+                <a href="{{ product.href }}" class="fw-700 text-dark text-decoration-none h6 mb-1 d-block">{{ product.name }}</a>
+                <form id="form-product-{{ product_row }}" action="{{ cart_add }}" method="post" data-oc-toggle="ajax" data-oc-load="{{ cart }}" data-oc-target="#cart">
+                    <input type="hidden" name="product_id" value="{{ product.product_id }}"/>
+                    <input type="hidden" name="quantity" value="{{ product.minimum }}"/>
+                </form>
+            </td>
+            <td class="text-muted">{{ product.model }}</td>
+            <td class="text-center">{{ product.stock }}</td>
+            <td class="text-end fw-700 text-dark">
+              {% if product.price %}
+                {% if not product.special %}
+                    {{ product.price }}
+                {% else %}
+                    <div class="text-danger">{{ product.special }}</div>
+                    <div class="text-muted text-decoration-line-through small">{{ product.price }}</div>
+                {% endif %}
+              {% endif %}
+            </td>
+            <td class="text-center py-3">
+              <div class="d-grid gap-2">
+                <button type="submit" form="form-product-{{ product_row }}" class="btn btn-outline-dark btn-sm rounded-pill fw-600 px-3">Add to Cart</button>
+                <a href="{{ product.remove }}" class="btn btn-danger btn-sm rounded-pill fw-600 px-3 btn-remove-wishlist">Remove</a>
+              </div>
+            </td>
+          </tr>
+          {% set product_row = product_row + 1 %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="text-center py-5 bg-light rounded-3 border">
+    <div class="mb-3 text-muted opacity-50"><i class="fa fa-heart-broken fa-4x"></i></div>
+    <p class="fs-5 text-muted">{{ text_no_results }}</p>
+    <a href="{{ continue }}" class="btn btn-primary px-4 py-2 rounded-pill mt-3">Tiếp tục mua sắm</a>
+  </div>
+{% endif %}

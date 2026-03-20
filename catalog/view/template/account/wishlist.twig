@@ -1,0 +1,70 @@
+{{ header }}
+<div id="account-wishlist" class="container py-5">
+  <ul class="breadcrumb mb-4">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }} text-decoration-none">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  
+  <div class="row">
+    <div id="content" class="col-lg-9 col-md-8">
+      {{ content_top }}
+      <h1 class="mb-4 fw-700">{{ heading_title }}</h1>
+      
+      <div id="wishlist" class="mb-4">
+        {{ list }}
+      </div>
+      
+      <div class="d-flex justify-content-end mt-4">
+        <a href="{{ continue }}" class="btn btn-outline-dark px-4 py-2 rounded-pill fw-600">{{ button_continue }}</a>
+      </div>
+      
+      {{ content_bottom }}
+    </div>
+    
+    <div class="col-lg-3 col-md-4">
+        {{ column_right }}
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript"><!--
+$('#wishlist').on('click', '.btn-remove-wishlist', function(e) {
+    e.preventDefault();
+
+    var element = this;
+
+    $.ajax({
+        url: $(element).attr('href'),
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i>');
+        },
+        complete: function() {
+            $(element).prop('disabled', false).html('Remove');
+        },
+        success: function(json) {
+            if (json['error']) {
+                showModalMessage('danger', json['error']);
+            }
+
+            if (json['success']) {
+                showModalMessage('success', json['success']);
+                
+                // FIX: Include customer_token in the load call to prevent redirect to login
+                var customer_token = getURLVar('customer_token');
+                var url = 'index.php?route=account/wishlist.list&language={{ language }}';
+                if (customer_token) {
+                    url += '&customer_token=' + customer_token;
+                }
+                
+                $('#wishlist').load(url);
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+//--></script>
+{{ footer }}

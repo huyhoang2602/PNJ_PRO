@@ -70,3 +70,36 @@ $(document).ready(function() {
         });
     }
 });
+
+/**
+ * Redefine global showModalMessage to use top-right toasts instead of centered modals
+ */
+window.showModalMessage = function(type, message) {
+    const icon = type === 'success' ? '<i class="fa-solid fa-circle-check"></i>' : 
+                 type === 'danger' ? '<i class="fa-solid fa-circle-xmark"></i>' : 
+                 '<i class="fa-solid fa-info-circle"></i>';
+    
+    const alertClass = type === 'success' ? 'bg-success' : 
+                       type === 'danger' ? 'bg-danger' : 
+                       'bg-info';
+    
+    const html = `
+        <div class="alert alert-dismissible show ${alertClass} text-white border-0 mb-2 shadow-lg" role="alert" style="border-radius: 12px; min-width: 320px; max-width: 450px; animation: slideInRight 0.3s ease-out; display: flex; align-items: center; padding: 1rem 1.5rem;">
+            <span class="fs-3 me-3">${icon}</span>
+            <div class="fw-600 line-clamp-2 pr-4">${message}</div>
+            <button type="button" class="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-2" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    
+    if (!$('#alert').length) {
+        $('body').append('<div id="alert" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>');
+    }
+    
+    $('#alert').prepend(html);
+    
+    // Auto-remove after 5 seconds
+    const $newToast = $('#alert .toast:first');
+    setTimeout(() => {
+        $newToast.fadeOut(500, function() { $(this).remove(); });
+    }, 5000);
+};
