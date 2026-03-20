@@ -46,12 +46,22 @@ $('#shopping-cart').on('submit', '#output-cart form', function(e) {
                 location = json['redirect'];
             }
             if (json['error']) {
-                $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+                showModalMessage('danger', json['error']);
+            }
+            if (json['warning']) {
+                showModalMessage('danger', json['warning']);
+                $('#shopping-cart').load('index.php?route=checkout/cart.list&language={{ language }}', {}, function() {
+                    $('#cart').load('index.php?route=common/cart.info&language={{ language }}', function() {
+                        updateCartCount();
+                    });
+                });
             }
             if (json['success']) {
-                $('#alert').prepend('<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-circle-check"></i> ' + json['success'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+                showModalMessage('success', json['success']);
                 $('#shopping-cart').load('index.php?route=checkout/cart.list&language={{ language }}', {}, function() {
-                    $('#cart').load('index.php?route=common/cart.info&language={{ language }}');
+                    $('#cart').load('index.php?route=common/cart.info&language={{ language }}', function() {
+                        updateCartCount();
+                    });
                 });
             }
         }
@@ -75,8 +85,11 @@ $('#shopping-cart').on('click', '.btn-remove-item', function(e) {
                 location = json['redirect'];
             }
             if (json['success']) {
+                showModalMessage('success', json['success']);
                 $('#shopping-cart').load('index.php?route=checkout/cart.list&language={{ language }}', {}, function() {
-                    $('#cart').load('index.php?route=common/cart.info&language={{ language }}');
+                    $('#cart').load('index.php?route=common/cart.info&language={{ language }}', function() {
+                        updateCartCount();
+                    });
                 });
             }
         }

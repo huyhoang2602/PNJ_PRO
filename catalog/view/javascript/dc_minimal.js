@@ -103,3 +103,31 @@ window.showModalMessage = function(type, message) {
         $newToast.fadeOut(500, function() { $(this).remove(); });
     }, 5000);
 };
+/**
+ * Redefine global updateCartCount to target the correct .cart-badge class
+ * and ensure it fetches the latest state from the server.
+ */
+window.updateCartCount = function() {
+    $.get('index.php?route=common/cart.info', function(html) {
+        const $temp = $('<div>').append(html);
+        let totalQty = 0;
+        $temp.find('.qty-input').each(function() {
+            totalQty += parseInt($(this).val()) || 0;
+        });
+        
+        const $badge = $('.cart-badge');
+        if ($badge.length) {
+            $badge.text(totalQty);
+            if (totalQty > 0) {
+                $badge.show();
+            } else {
+                $badge.hide();
+            }
+        }
+    });
+};
+
+// Initial update on page load (handles cases where server-side rendering might be cached)
+$(document).ready(function() {
+    setTimeout(updateCartCount, 500);
+});
