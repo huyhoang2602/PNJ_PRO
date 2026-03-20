@@ -1,53 +1,88 @@
-<div class="table-responsive border rounded-3 shadow-sm mb-4" style="overflow-x: auto;">
-  <table class="table align-middle mb-0" style="min-width: 500px;">
-    <thead class="bg-light">
-      <tr>
-        <th class="text-start py-3 ps-4" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">{{ column_name }}</th>
-        <th class="text-start py-3" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">{{ column_model }}</th>
-        <th class="text-center py-3" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">{{ column_quantity }}</th>
-        <th class="text-end py-3" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888;">{{ column_price }}</th>
-        <th class="text-end py-3 pe-4" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; min-width: 110px; white-space: nowrap;">{{ column_total }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for product in products %}
+<div class="checkout-review-section">
+  <h5 class="mb-4 text-dark fw-bold" style="font-family: 'Playfair Display', serif;">{{ text_confirm_order ?: 'Review Your Order' }}</h5>
+  
+  <div class="table-responsive border-0 rounded-4 overflow-hidden shadow-sm mb-4">
+    <table class="table align-middle mb-0" style="min-width: 600px; background: white;">
+      <thead style="background: #f8f9fa;">
         <tr>
-          <td class="text-start py-3 ps-4">
-            <a href="{{ product.href }}" class="fw-bold text-decoration-none" style="color: #003468; font-family: 'Playfair Display', serif; font-size: 16px;">{{ product.name }}</a>
-            {% for option in product.option %}
-              <br/><small class="text-muted">- {{ option.name }}: {{ option.value }}</small>
-            {% endfor %}
-            {% if product.subscription %}
-              <br/><small class="text-muted">- {{ text_subscription }}: {{ product.subscription }}</small>
-            {% endif %}
-          </td>
-          <td class="text-start py-3">{{ product.model }}</td>
-          <td class="text-center py-3">{{ product.quantity }}</td>
-          <td class="text-end py-3">{{ product.price }}</td>
-          <td class="text-end py-3 pe-4 fw-bold" style="color: #c48c31;">{{ product.total }}</td>
+          <th class="py-3 ps-4 border-0 text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">{{ column_name }}</th>
+          <th class="py-3 border-0 text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">{{ column_model }}</th>
+          <th class="py-3 text-center border-0 text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">{{ column_quantity }}</th>
+          <th class="py-3 text-end border-0 text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">{{ column_price }}</th>
+          <th class="py-3 pe-4 text-end border-0 text-uppercase small fw-bold text-muted" style="letter-spacing: 1px;">{{ column_total }}</th>
         </tr>
-      {% endfor %}
-      {% for voucher in vouchers %}
-        <tr>
-          <td class="text-start py-3 ps-4">{{ voucher.description }}</td>
-          <td class="text-start py-3"></td>
-          <td class="text-center py-3">1</td>
-          <td class="text-end py-3">{{ voucher.amount }}</td>
-          <td class="text-end py-3 pe-4">{{ voucher.amount }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-    <tfoot id="checkout-total">
-      {% for total in totals %}
-        <tr class="{% if loop.last %}border-top{% endif %}">
-          <td colspan="4" class="text-end py-3 {% if loop.last %}fw-bold{% endif %}" style="{% if loop.last %}font-family: 'Playfair Display', serif; font-size: 18px; color: #003468;{% endif %}">{{ total.title }}</td>
-          <td class="text-end py-3 pe-4 fw-bold" style="{% if loop.last %}font-size: 20px; color: #c48c31;{% endif %} min-width: 110px; white-space: nowrap;">{{ total.text }}</td>
-        </tr>
-      {% endfor %}
-    </tfoot>
-  </table>
+      </thead>
+      <tbody>
+        {% for product in products %}
+          <tr>
+            <td class="py-4 ps-4 border-bottom-0">
+              <div class="d-flex align-items-center">
+                <div>
+                  <a href="{{ product.href }}" class="fw-bold text-dark text-decoration-none d-block mb-1" style="font-size: 1.1rem;">{{ product.name }}</a>
+                  {% for option in product.option %}
+                    <div class="small text-muted"><span class="opacity-75">{{ option.name }}:</span> {{ option.value }}</div>
+                  {% endfor %}
+                </div>
+              </div>
+            </td>
+            <td class="py-4 text-muted">{{ product.model }}</td>
+            <td class="py-4 text-center">
+              <span class="badge rounded-pill bg-light text-dark border px-3 py-2 fw-normal">{{ product.quantity }}</span>
+            </td>
+            <td class="py-4 text-end">{{ product.price }}</td>
+            <td class="py-4 pe-4 text-end fw-bold text-primary">{{ product.total }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="col-md-5">
+      <div class="totals-box p-4 bg-white border rounded-4 shadow-sm">
+        {% for total in totals %}
+          <div class="d-flex justify-content-between mb-3 {% if loop.last %}border-top pt-3 mt-3 fs-4 fw-bold text-dark{% else %}text-muted{% endif %}">
+            <span class="{% if loop.last %}text-uppercase small align-self-center{% endif %}">{{ total.title }}:</span>
+            <span class="{% if loop.last %}text-danger{% endif %}">{{ total.text }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </div>
 
-<div id="checkout-payment" class="mt-4 p-4 bg-white border rounded-3 shadow-sm">
+<script type="text/javascript">
+$(document).ready(function() {
+    // Sync Products to Sidebar
+    var productsHtml = '';
+    {% for product in products %}
+        productsHtml += '<div class="d-flex align-items-center mb-3 pb-3 border-bottom-dotted">';
+        productsHtml += '  <div class="flex-grow-1">';
+        productsHtml += '    <div class="fw-bold small text-dark">' + {{ product.name|json_encode }} + '</div>';
+        productsHtml += '    <div class="small text-muted">Qty: ' + {{ product.quantity }} + '</div>';
+        productsHtml += '  </div>';
+        productsHtml += '  <div class="text-end fw-bold small text-primary">' + {{ product.total|json_encode }} + '</div>';
+        productsHtml += '</div>';
+    {% endfor %}
+    $('#checkout-sidebar-products').html(productsHtml || '<div class="text-center py-3 text-muted">No items</div>');
+
+    // Sync Totals to Sidebar
+    var totalsHtml = '';
+    {% for total in totals %}
+        totalsHtml += '<div class="d-flex justify-content-between mb-2 small pt-2 {% if loop.last %}border-top mt-2 fw-bold fs-5 text-dark{% endif %}">';
+        totalsHtml += '<span>' + {{ total.title|json_encode }} + '</span>';
+        totalsHtml += '<span class="{% if loop.last %}text-danger{% endif %}">' + {{ total.text|json_encode }} + '</span>';
+        totalsHtml += '</div>';
+    {% endfor %}
+    $('#checkout-sidebar-totals').html(totalsHtml);
+});
+</script>
+
+<style>
+.border-bottom-dotted { border-bottom: 1px dotted #eee; }
+.border-bottom-dotted:last-child { border-bottom: none; }
+</style>
+
+<div id="checkout-payment" class="mt-5">
   {{ payment }}
 </div>

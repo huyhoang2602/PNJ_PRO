@@ -1,0 +1,109 @@
+<div class="vnpay-qr-container p-4 border rounded shadow-sm bg-white" style="font-family: 'Inter', sans-serif; max-width: 900px; margin: 0 auto;">
+  <div class="header-vnpay d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+    <div class="d-flex align-items-center">
+        <img src="https://sandbox.vnpayment.vn/paymentv2/Styles/images/logo.png" alt="VNPAY" style="height: 35px;" class="me-3">
+        <h4 class="m-0 fw-bold text-primary">{{ text_instruction }}</h4>
+    </div>
+    <div class="text-danger fw-bold fs-3">{{ total }}</div>
+  </div>
+
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-7">
+      <div class="alert alert-info border-0 shadow-sm p-4 rounded-4 mb-4">
+        <div class="d-flex align-items-center mb-2">
+            <i class="fa-solid fa-circle-info fs-4 me-3"></i>
+            <h6 class="m-0 fw-bold">{{ text_description }}</h6>
+        </div>
+        <p class="small mb-0 opacity-75">Sử dụng ứng dụng Ngân hàng hoặc Ví VNPAY để quét mã QR bên phải.</p>
+      </div>
+      
+      <div id="payment-status-box" class="p-4 rounded-4 border text-center bg-light transition-all">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <h5 class="fw-bold text-dark mb-2" id="status-text">{{ text_waiting }}</h5>
+        <div class="progress mt-3" style="height: 6px;">
+          <div id="polling-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="mt-4 text-center">
+        <a href="{{ vnp_payment_url }}" target="_blank" class="btn btn-outline-primary rounded-pill px-4 py-2 small">
+            <i class="fa-solid fa-external-link me-2"></i> Mở trang thanh toán VNPAY (nếu QR không quét được)
+        </a>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="qr-wrapper p-4 bg-white border rounded shadow-sm text-center position-relative">
+        <div class="qr-img-box p-3 bg-white border rounded mx-auto mb-3 shadow-inner" style="max-width: 280px; transition: transform 0.3s;">
+          <img src="{{ vnp_qr_url }}" alt="Scan VNPAY QR" class="img-fluid" id="vnpay-qr-image">
+          <div class="qr-overlay d-none position-absolute top-50 start-50 translate-middle bg-white p-3 rounded-circle shadow">
+            <i class="fa-solid fa-check text-success fs-1"></i>
+          </div>
+        </div>
+        <div class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">
+          <i class="fa-solid fa-bolt-lightning me-1"></i> Thanh toán tự động
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-5 border-top pt-4">
+    <button type="button" id="button-confirm" class="btn btn-primary rounded-pill px-5 py-3 shadow-lg fw-bold" style="background: #e02020; border: none; font-size: 1.1rem; min-width: 280px;">
+      {{ button_confirm }} <i class="fa-solid fa-arrow-right ms-2"></i>
+    </button>
+  </div>
+</div>
+
+<script type="text/javascript">
+var pollCount = 0;
+var maxPoll = 120; // 10 minutes (5s gap)
+var pollInterval = setInterval(function() {
+    pollCount++;
+    var progress = (pollCount / maxPoll) * 100;
+    $('#polling-progress').css('width', progress + '%');
+
+    if (pollCount > maxPoll) {
+        clearInterval(pollInterval);
+        $('#status-text').text('Hết thời gian chờ. Vui lòng làm mới trang.');
+        return;
+    }
+
+    $.ajax({
+        url: 'index.php?route=extension/dc_minimal/payment/dc_vnpay.check&order_id={{ order_id }}&language={{ language }}',
+        dataType: 'json',
+        success: function(json) {
+            if (json['status'] === 'success') {
+                clearInterval(pollInterval);
+                handlePaymentSuccess();
+            }
+        }
+    });
+}, 5000);
+
+function handlePaymentSuccess() {
+    $('#payment-status-box').removeClass('bg-light').addClass('bg-success-subtle border-success');
+    $('#payment-status-box .spinner-border').remove();
+    $('#payment-status-box').prepend('<i class="fa-solid fa-circle-check text-success fs-1 mb-3"></i>');
+    $('#status-text').html('<span class="text-success">{{ text_success }}</span><br/><small class="text-dark">{{ text_redirect }}</small>');
+    $('.qr-overlay').removeClass('d-none');
+    $('#vnpay-qr-image').css('opacity', '0.2');
+    
+    setTimeout(function() {
+        $('#button-confirm').trigger('click');
+    }, 3000);
+}
+
+$('#button-confirm').on('click', function() {
+    var element = this;
+    $.ajax({
+        url: 'index.php?route=extension/dc_minimal/payment/dc_vnpay.confirm&language={{ language }}',
+        dataType: 'json',
+        beforeSend: function() { $(element).prop('disabled', true); },
+        success: function(json) {
+            if (json['redirect']) location = json['redirect'];
+        }
+    });
+});
+</script>

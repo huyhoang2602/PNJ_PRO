@@ -1,0 +1,121 @@
+<div class="dc-bank-transfer-container p-4 border rounded shadow-sm bg-white" style="font-family: 'Inter', sans-serif; max-width: 900px; margin: 0 auto;">
+  <div class="header-bank d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+    <h4 class="m-0" style="color: #c9a441; font-weight: 700; letter-spacing: 0.5px;">{{ text_instruction }}</h4>
+    <div class="text-danger fw-bold fs-3" style="font-family: 'Inter', sans-serif;">{{ amount }}</div>
+  </div>
+
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-7">
+      <div class="alert alert-light border-0 small text-muted mb-4 p-0">
+        {{ text_description }}
+      </div>
+      
+      <div class="bank-details-grid bg-light p-4 rounded-3 border">
+        <div class="row mb-3 align-items-center">
+          <div class="col-sm-4 text-secondary small text-uppercase fw-bold">{{ text_bank_name }}</div>
+          <div class="col-sm-8 text-dark fw-bold">
+            {{ bank_name }}
+            {% if branch %}<div class="small fw-normal text-muted mt-1">{{ branch }}</div>{% endif %}
+          </div>
+        </div>
+
+        <div class="row mb-3 align-items-center">
+          <div class="col-sm-4 text-secondary small text-uppercase fw-bold">{{ text_account_name }}</div>
+          <div class="col-sm-8 text-dark fw-bold text-uppercase">{{ account_name }}</div>
+        </div>
+
+        <div class="row mb-3 align-items-center">
+          <div class="col-sm-4 text-secondary small text-uppercase fw-bold">{{ text_account_no }}</div>
+          <div class="col-sm-8 d-flex align-items-center">
+            <span class="text-dark fw-bold fs-5 me-3" style="letter-spacing: 1px;">{{ account_number }}</span>
+            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3" onclick="copyToClipboard('{{ account_number }}', this)">
+              <i class="fa-regular fa-copy me-1"></i> {{ text_copy }}
+            </button>
+          </div>
+        </div>
+
+        <div class="row align-items-center pt-2 mt-2 border-top">
+          <div class="col-sm-4 text-secondary small text-uppercase fw-bold">{{ text_content }}</div>
+          <div class="col-sm-8 d-flex align-items-center">
+            <span class="text-primary fw-bold fs-5 me-3" style="letter-spacing: 1px;">{{ transfer_content }}</span>
+            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3" onclick="copyToClipboard('{{ transfer_content }}', this)">
+              <i class="fa-regular fa-copy me-1"></i> {{ text_copy }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {% if bank %}
+        <div class="mt-4 p-3 bg-white border-start border-4 border-warning rounded shadow-sm text-muted small">
+          {{ bank }}
+        </div>
+      {% endif %}
+      
+      <div class="mt-4 text-secondary small d-flex align-items-center">
+        <i class="fa-solid fa-circle-check text-success me-2 fs-5"></i>
+        <span>{{ text_payment }}</span>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="qr-wrapper p-4 bg-white border rounded shadow-sm text-center">
+        <div class="mb-3">
+          <img src="https://img.vietqr.io/image/vietqr-logo-standard.png" alt="VietQR" style="height: 30px;">
+        </div>
+        <div class="qr-img-box p-3 bg-white border rounded mx-auto mb-3" style="max-width: 260px;">
+          <img src="{{ qr_url }}" alt="Scan payment" class="img-fluid">
+        </div>
+        <div class="small text-muted mb-1 fw-bold">Mở ứng dụng Ngân hàng để quét</div>
+        <div class="badge bg-danger-subtle text-danger rounded-pill px-3 py-2">
+          <i class="fa-solid fa-bolt-lightning me-1"></i> Thanh toán nhanh & chính xác
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirm-section mt-5 border-top pt-4 text-center">
+    <button type="button" id="button-confirm" class="btn btn-primary btn-xl rounded-pill px-5 py-3 shadow" style="background: linear-gradient(135deg, #c9a441 0%, #b38b2d 100%); border: none; font-weight: 700; font-size: 1.1rem; min-width: 250px;">
+      {{ button_confirm }} <i class="fa-solid fa-arrow-right ms-2"></i>
+    </button>
+  </div>
+</div>
+
+<script type="text/javascript">
+function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(function() {
+        var originalHtml = $(btn).html();
+        $(btn).html('<i class="fa-solid fa-check text-success"></i>');
+        $(btn).addClass('border-success');
+        setTimeout(function() {
+            $(btn).html(originalHtml);
+            $(btn).removeClass('border-success');
+        }, 2000);
+    });
+}
+$('#button-confirm').on('click', function() {
+    var element = this;
+
+    $.ajax({
+        url: 'index.php?route=extension/dc_minimal/payment/dc_bank_transfer.confirm&language={{ language }}',
+        dataType: 'json',
+        beforeSend: function() {
+            $(element).prop('disabled', true);
+        },
+        complete: function() {
+            $(element).prop('disabled', false);
+        },
+        success: function(json) {
+            if (json['error']) {
+                alert(json['error']);
+            }
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+</script>
