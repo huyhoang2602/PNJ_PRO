@@ -14,7 +14,7 @@ class DcVnpay extends \Opencart\System\Engine\Controller {
 			$vnp_Url = $this->config->get('payment_dc_vnpay_url') ?: 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
 			
             // Fix: OpenCart might return &amp;, VNPAY needs raw &
-            $vnp_ReturnUrl = str_replace('&amp;', '&', $this->url->link('checkout/success', 'language=' . $this->config->get('config_language')));
+			$vnp_ReturnUrl = str_replace('&amp;', '&', $this->url->link('extension/dc_minimal/payment/dc_vnpay.callback', 'language=' . $this->config->get('config_language')));
 
 			$vnp_TxnRef = $this->session->data['order_id'];
 			$vnp_OrderInfo = "Thanh toan don hang #" . $this->session->data['order_id'];
@@ -67,8 +67,8 @@ class DcVnpay extends \Opencart\System\Engine\Controller {
 				$vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
 			}
 
-            // QR Generation
-            $data['vnp_qr_url'] = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" . urlencode($vnp_Url);
+            // Bind to template variables
+            $data['vnp_qr_url'] = "https://quickchart.io/qr?size=250&text=" . urlencode($vnp_Url);
             $data['vnp_payment_url'] = $vnp_Url;
             $data['order_id'] = $order_info['order_id'];
             
@@ -102,7 +102,9 @@ class DcVnpay extends \Opencart\System\Engine\Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 
-	public function ipn(): void {
+    public function callback(): void {
+		$this->load->language('extension/dc_minimal/payment/dc_vnpay');
+
 		$inputData = array();
 		foreach ($this->request->get as $key => $val) {
 			if (substr($key, 0, 4) == "vnp_") {
@@ -110,7 +112,7 @@ class DcVnpay extends \Opencart\System\Engine\Controller {
 			}
 		}
 
-		$vnp_SecureHash = $inputData['vnp_SecureHash'];
+		$vnp_SecureHash = $inputData['vnp_SecureHash'] ?? '';
 		unset($inputData['vnp_SecureHash']);
 		ksort($inputData);
 		$i = 0;
@@ -125,7 +127,55 @@ class DcVnpay extends \Opencart\System\Engine\Controller {
 		}
 
 		$secureHash = hash_hmac('sha512', $hashData, $this->config->get('payment_dc_vnpay_hash_secret'));
-		$order_id = $inputData['vnp_TxnRef'];
+
+		if ($secureHash == $vnp_SecureHash && isset($inputData['vnp_ResponseCode'])) {
+			if ($inputData['vnp_ResponseCode'] == '00') {
+                // Localhost IPN Fallback: Update order status to paid if IPN hasn't reached us
+                if (isset($this->session->data['order_id'])) {
+                    $this->load->model('checkout/order');
+                    $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+                    if ($order_info && $order_info['order_status_id'] != $this->config->get('payment_dc_vnpay_order_status_id')) {
+                        $this->model_checkout_order->addHistory($this->session->data['order_id'], $this->config->get('payment_dc_vnpay_order_status_id'), 'VNPAY Callback Success Return (Localhost Fallback)', true);
+                    }
+                }
+				// Payment Success -> Go to Success
+				$this->response->redirect($this->url->link('checkout/success', 'language=' . $this->config->get('config_language'), true));
+			} else {
+				// Payment Failed or Canceled -> Go to Checkout
+				$this->session->data['error'] = "Giao dịch thanh toán VNPAY đã bị hủy hoặc không thành công.";
+				$this->response->redirect($this->url->link('checkout/checkout', 'language=' . $this->config->get('config_language'), true));
+			}
+		} else {
+			// Invalid signature or missing data
+			$this->session->data['error'] = "Phản hồi từ VNPAY không hợp lệ.";
+			$this->response->redirect($this->url->link('checkout/checkout', 'language=' . $this->config->get('config_language'), true));
+		}
+	}
+
+	public function ipn(): void {
+		$inputData = array();
+		foreach ($this->request->get as $key => $val) {
+			if (substr($key, 0, 4) == "vnp_") {
+				$inputData[$key] = $val;
+			}
+		}
+
+		$vnp_SecureHash = $inputData['vnp_SecureHash'] ?? '';
+		unset($inputData['vnp_SecureHash']);
+		ksort($inputData);
+		$i = 0;
+		$hashData = "";
+		foreach ($inputData as $key => $value) {
+			if ($i == 1) {
+				$hashData = $hashData . '&' . urlencode($key) . "=" . urlencode($value);
+			} else {
+				$hashData = $hashData . urlencode($key) . "=" . urlencode($value);
+				$i = 1;
+			}
+		}
+
+		$secureHash = hash_hmac('sha512', $hashData, $this->config->get('payment_dc_vnpay_hash_secret'));
+		$order_id = $inputData['vnp_TxnRef'] ?? 0;
 
 		if ($secureHash == $vnp_SecureHash) {
 			$this->load->model('checkout/order');

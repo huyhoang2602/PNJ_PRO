@@ -1,60 +1,88 @@
-<div class="vnpay-qr-container p-4 border rounded shadow-sm bg-white" style="font-family: 'Inter', sans-serif; max-width: 900px; margin: 0 auto;">
-  <div class="header-vnpay d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-    <div class="d-flex align-items-center">
-        <img src="https://sandbox.vnpayment.vn/paymentv2/Styles/images/logo.png" alt="VNPAY" style="height: 35px;" class="me-3">
-        <h4 class="m-0 fw-bold text-primary">{{ text_instruction }}</h4>
-    </div>
-    <div class="text-danger fw-bold fs-3">{{ total }}</div>
+<div class="vnpay-custom-container p-4 border rounded shadow-sm bg-white" style="font-family: 'Inter', sans-serif; max-width: 900px; margin: 0 auto; margin-bottom: 2rem;">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+    <h4 class="m-0 fw-bold" style="color: #c49a45;">{{ text_instruction }}</h4>
+    <div class="fw-bold fs-3" style="color: #d13030;">{{ total }}</div>
   </div>
 
-  <div class="row g-4 align-items-start">
-    <div class="col-lg-7">
-      <div class="alert alert-info border-0 shadow-sm p-4 rounded-4 mb-4">
-        <div class="d-flex align-items-center mb-2">
-            <i class="fa-solid fa-circle-info fs-4 me-3"></i>
-            <h6 class="m-0 fw-bold">{{ text_description }}</h6>
-        </div>
-        <p class="small mb-0 opacity-75">Sử dụng ứng dụng Ngân hàng hoặc Ví VNPAY để quét mã QR bên phải.</p>
-      </div>
+  <div class="row g-4 align-items-stretch">
+    <!-- Left Column -->
+    <div class="col-lg-7 d-flex flex-column">
+      <p class="mb-4 text-muted">Vui lòng mở ứng dụng Ngân hàng hoặc Ví VNPAY để quét mã QR bên phải.</p>
       
-      <div id="payment-status-box" class="p-4 rounded-4 border text-center bg-light transition-all">
-        <div class="spinner-border text-primary mb-3" role="status">
-          <span class="visually-hidden">Loading...</span>
+      <div class="info-box p-4 rounded mb-4" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+        <div class="row mb-3 align-items-center">
+          <div class="col-4 fw-bold text-muted small" style="letter-spacing: 0.5px;">THANH TOÁN</div>
+          <div class="col-8 fw-bold text-dark">
+            <img src="https://sandbox.vnpayment.vn/paymentv2/Styles/images/logo.png" alt="VNPAY" style="height: 22px;">
+          </div>
         </div>
-        <h5 class="fw-bold text-dark mb-2" id="status-text">{{ text_waiting }}</h5>
-        <div class="progress mt-3" style="height: 6px;">
-          <div id="polling-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+        <div class="row mb-3 align-items-center">
+          <div class="col-4 fw-bold text-muted small" style="letter-spacing: 0.5px;">THỤ HƯỞNG</div>
+          <div class="col-8 fw-bold text-dark fs-6">Website PNJ PRO</div>
+        </div>
+        <div class="row mb-3 align-items-center">
+          <div class="col-4 fw-bold text-muted small" style="letter-spacing: 0.5px;">MÃ ĐƠN HÀNG</div>
+          <div class="col-8 fw-bold text-dark fs-5">#{{ order_id }}</div>
+        </div>
+        <div class="row align-items-center border-top pt-3 mt-1">
+          <div class="col-4 fw-bold text-muted small" style="letter-spacing: 0.5px;">TỔNG TIỀN</div>
+          <div class="col-8 fw-bold fs-4" style="color: #005baa;">{{ total }}</div>
         </div>
       </div>
 
-      <div class="mt-4 text-center">
-        <a href="{{ vnp_payment_url }}" target="_blank" class="btn btn-outline-primary rounded-pill px-4 py-2 small">
-            <i class="fa-solid fa-external-link me-2"></i> Mở trang thanh toán VNPAY (nếu QR không quét được)
-        </a>
+      <div class="alert mt-auto mb-0" style="border-left: 4px solid #ffc107; background-color: #fff9e6; border-radius: 4px; padding: 1rem 1.25rem;">
+        <div id="payment-status-box" class="d-flex align-items-center">
+            <div class="spinner-border text-warning spinner-border-sm me-3" role="status"></div>
+            <span class="text-dark" id="status-text" style="font-size: 0.95rem;">{{ text_waiting }}</span>
+        </div>
+        <div class="progress mt-3" style="height: 4px; border-radius: 2px;" id="progress-container">
+            <div id="polling-progress" class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+        </div>
+      </div>
+      
+      <div class="mt-3 text-success small fw-medium">
+        <i class="fa-solid fa-circle-check me-2"></i> Hệ thống chốt đơn tự động ngay khi thanh toán thành công.
       </div>
     </div>
 
+    <!-- Right Column -->
     <div class="col-lg-5">
-      <div class="qr-wrapper p-4 bg-white border rounded shadow-sm text-center position-relative">
-        <div class="qr-img-box p-3 bg-white border rounded mx-auto mb-3 shadow-inner" style="max-width: 280px; transition: transform 0.3s;">
+      <div class="qr-card p-4 bg-white border rounded text-center h-100 d-flex flex-column justify-content-center" style="border-color: #e9ecef!important;">
+        <h5 class="fw-bold mb-3" style="color: #005baa;">VNPAY<sup class="ms-1" style="color:#d13030">QR</sup></h5>
+        <div class="qr-img-box p-2 bg-white border rounded mx-auto mb-3 position-relative" style="max-width: 240px;">
           <img src="{{ vnp_qr_url }}" alt="Scan VNPAY QR" class="img-fluid" id="vnpay-qr-image">
           <div class="qr-overlay d-none position-absolute top-50 start-50 translate-middle bg-white p-3 rounded-circle shadow">
             <i class="fa-solid fa-check text-success fs-1"></i>
           </div>
         </div>
-        <div class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">
-          <i class="fa-solid fa-bolt-lightning me-1"></i> Thanh toán tự động
+        <div class="mt-auto">
+            <p class="fw-bold text-dark mb-2" style="font-size: 0.95rem;">Mở ứng dụng Ngân hàng để quét</p>
+            <div class="badge rounded-pill px-3 py-2 mb-3" style="background-color: #ffeaea; color: #d13030; font-weight: 600;">
+                <i class="fa-solid fa-bolt-lightning me-1"></i> Thanh toán tự động
+            </div>
+            
+            <div class="d-block w-100">
+                <a href="{{ vnp_payment_url }}" target="_blank" class="text-decoration-underline text-muted" style="font-size: 0.85rem;">Mở trang VNPAY (nếu không quét được)</a>
+            </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="text-center mt-5 border-top pt-4">
-    <button type="button" id="button-confirm" class="btn btn-primary rounded-pill px-5 py-3 shadow-lg fw-bold" style="background: #e02020; border: none; font-size: 1.1rem; min-width: 280px;">
-      {{ button_confirm }} <i class="fa-solid fa-arrow-right ms-2"></i>
+  <div class="text-center mt-5 pt-4 border-top">
+    <button type="button" id="button-confirm" class="btn rounded-pill px-5 py-3 fw-bold w-100 disabled" disabled style="background-color: #c49a45; color: white; max-width: 400px; font-size: 1.1rem; border: none; box-shadow: 0 4px 6px rgba(196, 154, 69, 0.2); transition: all 0.3s; opacity: 0.7;">
+      <i class="fa-solid fa-lock me-2"></i> <span id="btn-text">Vui lòng thanh toán để hoàn tất</span>
     </button>
   </div>
 </div>
+
+<style>
+#button-confirm:not(:disabled):hover {
+    background-color: #b08a3e !important;
+    box-shadow: 0 6px 12px rgba(196, 154, 69, 0.3) !important;
+}
+</style>
 
 <script type="text/javascript">
 var pollCount = 0;
@@ -83,27 +111,26 @@ var pollInterval = setInterval(function() {
 }, 5000);
 
 function handlePaymentSuccess() {
-    $('#payment-status-box').removeClass('bg-light').addClass('bg-success-subtle border-success');
+    $('#payment-status-box').parent().removeClass('alert-warning').addClass('alert-success');
+    $('#payment-status-box').parent().css({'border-left-color': '#198754', 'background-color': '#d1e7dd'});
     $('#payment-status-box .spinner-border').remove();
-    $('#payment-status-box').prepend('<i class="fa-solid fa-circle-check text-success fs-1 mb-3"></i>');
-    $('#status-text').html('<span class="text-success">{{ text_success }}</span><br/><small class="text-dark">{{ text_redirect }}</small>');
+    $('#progress-container').remove();
+    $('#payment-status-box').prepend('<i class="fa-solid fa-circle-check text-success fs-4 me-3"></i>');
+    $('#status-text').html('<span class="fw-bold">{{ text_success }}</span><br/><small class="text-dark">{{ text_redirect }}</small>');
     $('.qr-overlay').removeClass('d-none');
     $('#vnpay-qr-image').css('opacity', '0.2');
     
+    $('#button-confirm').removeClass('disabled').prop('disabled', false).css('opacity', '1').html('{{ button_confirm }} <i class="fa-solid fa-check ms-2"></i>');
+
     setTimeout(function() {
-        $('#button-confirm').trigger('click');
-    }, 3000);
+        location.href = 'index.php?route=checkout/success&language={{ language }}';
+    }, 2000);
 }
 
 $('#button-confirm').on('click', function() {
     var element = this;
-    $.ajax({
-        url: 'index.php?route=extension/dc_minimal/payment/dc_vnpay.confirm&language={{ language }}',
-        dataType: 'json',
-        beforeSend: function() { $(element).prop('disabled', true); },
-        success: function(json) {
-            if (json['redirect']) location = json['redirect'];
-        }
-    });
+    // Fallback manual click in case the auto-redirect fails
+    $(element).prop('disabled', true).html('<div class="spinner-border spinner-border-sm me-2" role="status"></div> Đang xử lý...');
+    location.href = 'index.php?route=checkout/success&language={{ language }}';
 });
 </script>
