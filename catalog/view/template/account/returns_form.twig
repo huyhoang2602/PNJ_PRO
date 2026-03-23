@@ -1,0 +1,182 @@
+{{ header }}
+<div id="account-return" class="container py-4" style="font-family: 'Inter', sans-serif;">
+  <ul class="breadcrumb bg-transparent p-0 mb-4" style="font-size: 0.9rem;">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}" class="text-decoration-none text-muted">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <div class="row">
+    {{ column_left }}
+    <div id="content" class="col-lg-9 col-12">
+      {{ content_top }}
+      
+      <div class="mb-4 pb-3 border-bottom d-flex align-items-center">
+        <h2 class="mb-0 fw-bold" style="color: #005baa;">{{ heading_title }}</h2>
+      </div>
+      <p class="text-muted mb-4">{{ text_description }}</p>
+
+      <form id="form-return" action="{{ save }}" method="post" data-oc-toggle="ajax">
+        
+        <!-- Order Information Card -->
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px; background-color: #fcfcfc;">
+          <div class="card-body p-4">
+            <h5 class="fw-bold mb-4 pb-2 border-bottom d-flex align-items-center" style="color: #c49a45;">
+              <i class="fa-solid fa-receipt me-3 fs-5"></i> {{ text_order }}
+            </h5>
+            <div class="row g-4">
+              <div class="col-md-6 required">
+                <label for="input-order-id" class="form-label fw-medium text-dark">{{ entry_order_id }}</label>
+                <input type="text" name="order_id" value="{{ order_id }}" placeholder="{{ entry_order_id }}" id="input-order-id" class="form-control form-control-lg custom-input"/>
+                <div id="error-order-id" class="invalid-feedback"></div>
+              </div>
+              <div class="col-md-6">
+                <label for="input-date-ordered" class="form-label fw-medium text-dark">{{ entry_date_ordered }}</label>
+                <input type="date" name="date_ordered" value="{{ date_ordered }}" placeholder="{{ entry_date_ordered }}" id="input-date-ordered" class="form-control form-control-lg custom-input"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Information Card -->
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px; background-color: #fcfcfc;">
+          <div class="card-body p-4">
+            <h5 class="fw-bold mb-4 pb-2 border-bottom d-flex align-items-center" style="color: #c49a45;">
+              <i class="fa-regular fa-user me-3 fs-5"></i> {{ text_customer }}
+            </h5>
+            <div class="row g-4">
+              <div class="col-md-6 required">
+                <label for="input-firstname" class="form-label fw-medium text-dark">{{ entry_firstname }}</label>
+                <input type="text" name="firstname" value="{{ firstname }}" placeholder="{{ entry_firstname }}" id="input-firstname" class="form-control form-control-lg custom-input"/>
+                <div id="error-firstname" class="invalid-feedback"></div>
+              </div>
+              <div class="col-md-6 required">
+                <label for="input-lastname" class="form-label fw-medium text-dark">{{ entry_lastname }}</label>
+                <input type="text" name="lastname" value="{{ lastname }}" placeholder="{{ entry_lastname }}" id="input-lastname" class="form-control form-control-lg custom-input"/>
+                <div id="error-lastname" class="invalid-feedback"></div>
+              </div>
+              <div class="col-md-6 required">
+                <label for="input-email" class="form-label fw-medium text-dark">{{ entry_email }}</label>
+                <input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control form-control-lg custom-input"/>
+                <div id="error-email" class="invalid-feedback"></div>
+              </div>
+              {% if config_telephone_display %}
+              <div class="col-md-6 {% if config_telephone_required %}required{% endif %}">
+                <label for="input-telephone" class="form-label fw-medium text-dark">{{ entry_telephone }}</label>
+                <input type="text" name="telephone" value="{{ telephone }}" placeholder="{{ entry_telephone }}" id="input-telephone" class="form-control form-control-lg custom-input"/>
+                <div id="error-telephone" class="invalid-feedback"></div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Information Card -->
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px; background-color: #fcfcfc;">
+          <div class="card-body p-4">
+            <h5 class="fw-bold mb-4 pb-2 border-bottom d-flex align-items-center" style="color: #c49a45;">
+              <i class="fa-solid fa-box-open me-3 fs-5"></i> {{ text_product }}
+            </h5>
+            <div class="row g-4 mb-4">
+              <div class="col-md-6 required">
+                <label for="input-product" class="form-label fw-medium text-dark">{{ entry_product }}</label>
+                <input type="hidden" name="product_id" value="{{ product_id }}"/>
+                <input type="text" name="product" value="{{ product }}" placeholder="{{ entry_product }}" id="input-product" class="form-control form-control-lg custom-input"/>
+                <div id="error-product" class="invalid-feedback"></div>
+              </div>
+              <div class="col-md-3 required">
+                <label for="input-model" class="form-label fw-medium text-dark">{{ entry_model }}</label>
+                <input type="text" name="model" value="{{ model }}" placeholder="{{ entry_model }}" id="input-model" class="form-control form-control-lg custom-input"/>
+                <div id="error-model" class="invalid-feedback"></div>
+              </div>
+              <div class="col-md-3">
+                <label for="input-quantity" class="form-label fw-medium text-dark">{{ entry_quantity }}</label>
+                <input type="text" name="quantity" value="1" placeholder="{{ entry_quantity }}" id="input-quantity" class="form-control form-control-lg custom-input text-center"/>
+              </div>
+            </div>
+
+            <div class="row g-4">
+              <div class="col-md-6 required">
+                <label class="form-label fw-bold text-dark d-block mb-3 border-bottom pb-2">{{ entry_reason }}</label>
+                <div id="input-reason" class="p-3 bg-white border rounded shadow-sm custom-input">
+                  {% for return_reason in return_reasons %}
+                    <div class="form-check custom-radio mb-2">
+                      <input type="radio" name="return_reason_id" value="{{ return_reason.return_reason_id }}" id="input-return-reason-{{ return_reason.return_reason_id }}" class="form-check-input" style="cursor: pointer;"/> 
+                      <label for="input-return-reason-{{ return_reason.return_reason_id }}" class="form-check-label text-muted" style="cursor: pointer;">{{ return_reason.name }}</label>
+                    </div>
+                  {% endfor %}
+                </div>
+                <div id="error-reason" class="invalid-feedback"></div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="required mb-4">
+                  <label class="form-label fw-bold text-dark d-block mb-3 border-bottom pb-2">{{ entry_opened }}</label>
+                  <div class="d-flex gap-4">
+                    <div class="form-check custom-radio">
+                      <input type="radio" name="opened" value="1" id="input-opened-yes" class="form-check-input" checked style="cursor: pointer;"/>
+                      <label for="input-opened-yes" class="form-check-label text-muted" style="cursor: pointer;">{{ text_yes }}</label>
+                    </div>
+                    <div class="form-check custom-radio">
+                      <input type="radio" name="opened" value="0" id="input-opened-no" class="form-check-input" style="cursor: pointer;"/>
+                      <label for="input-opened-no" class="form-check-label text-muted" style="cursor: pointer;">{{ text_no }}</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="">
+                  <label for="input-comment" class="form-label fw-bold text-dark d-block mb-3">{{ entry_fault_detail }}</label>
+                  <textarea name="comment" rows="4" placeholder="{{ entry_fault_detail }}" id="input-comment" class="form-control custom-input"></textarea>
+                </div>
+              </div>
+            </div>
+
+            {{ captcha }}
+          </div>
+        </div>
+
+        <!-- Submission Actions -->
+        <div class="d-flex justify-content-between align-items-center mt-5 mb-5">
+          <a href="{{ back }}" class="btn btn-outline-secondary rounded-pill px-4 py-2"><i class="fa-solid fa-arrow-left me-2"></i> {{ button_back }}</a>
+          
+          <div class="d-flex align-items-center gap-3">
+            {% if text_agree %}
+              <div class="form-check">
+                <input type="hidden" name="agree" value="0"/>
+                <input type="checkbox" name="agree" value="1" id="input-agree" class="form-check-input shadow-sm" style="cursor: pointer; width: 1.25em; height: 1.25em; margin-top: 0.1em;"/>
+                <label for="input-agree" class="form-check-label ms-2 text-dark user-select-none" style="cursor: pointer;">{{ text_agree }}</label>
+              </div>
+            {% endif %}
+            <button type="submit" class="btn rounded-pill px-5 py-2 fw-bold text-white shadow-sm" style="background-color: #c49a45; border: none; transition: all 0.3s;" id="button-submit-return">{{ button_submit }} <i class="fa-solid fa-paper-plane ms-2"></i></button>
+          </div>
+        </div>
+
+      </form>
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+
+<style>
+.custom-input {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.custom-input:focus {
+    border-color: #c49a45;
+    box-shadow: 0 0 0 0.25rem rgba(196, 154, 69, 0.15);
+}
+.custom-radio .form-check-input:checked {
+    background-color: #c49a45;
+    border-color: #c49a45;
+}
+#button-submit-return:hover {
+    background-color: #b08a3e !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(196, 154, 69, 0.25) !important;
+}
+</style>
+{{ footer }}

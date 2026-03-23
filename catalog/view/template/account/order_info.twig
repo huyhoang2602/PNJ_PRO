@@ -1,0 +1,254 @@
+{{ header }}
+<div id="account-order" class="container py-4">
+  <ul class="breadcrumb bg-transparent p-0 mb-4" style="font-size: 0.9rem;">
+    {% for breadcrumb in breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}" class="text-decoration-none text-muted">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  
+  <div class="row">
+    {{ column_left }}
+    <div id="content" class="col-lg-9 col-12">
+      {{ content_top }}
+      
+      <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+        <h2 class="mb-0 fw-bold" style="color: #005baa;">{{ text_order_id }} <span style="color: #c49a45;">#{{ order_id }}</span></h2>
+        {% if invoice_no %}
+        <span class="badge bg-light text-dark border px-3 py-2 fs-6">{{ text_invoice_no }}: {{ invoice_no }}</span>
+        {% endif %}
+      </div>
+
+      <!-- Detail Cards -->
+      <div class="row g-4 mb-5">
+        {% if payment_address or shipping_address %}
+            {% if shipping_address %}
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; background-color: #fcfcfc;">
+                    <div class="card-body p-4">
+                        <h6 class="text-uppercase fw-bold mb-3 d-flex align-items-center" style="color: #8c734b; font-size: 0.85rem; letter-spacing: 1px;">
+                            <i class="fa-solid fa-location-dot me-2 fs-5"></i> {{ text_shipping_address }}
+                        </h6>
+                        <div class="text-dark" style="line-height: 1.8;">{{ shipping_address }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if payment_address %}
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; background-color: #fcfcfc;">
+                    <div class="card-body p-4">
+                        <h6 class="text-uppercase fw-bold mb-3 d-flex align-items-center" style="color: #8c734b; font-size: 0.85rem; letter-spacing: 1px;">
+                            <i class="fa-solid fa-file-invoice-dollar me-2 fs-5"></i> {{ text_payment_address }}
+                        </h6>
+                        <div class="text-dark" style="line-height: 1.8;">{{ payment_address }}</div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+
+        {% if shipping_method or payment_method %}
+            {% if shipping_method %}
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; border-left: 4px solid #005baa !important;">
+                    <div class="card-body p-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-2" style="font-size: 0.8rem; letter-spacing: 1px;">{{ text_shipping_method }}</h6>
+                        <p class="fs-6 text-dark fw-medium mb-0">{{ shipping_method }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="col-md-{{ shipping_method ? '6' : '12' }}">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; border-left: 4px solid #c49a45 !important;">
+                    <div class="card-body p-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-2" style="font-size: 0.8rem; letter-spacing: 1px;">{{ text_payment_method }}</h6>
+                        <p class="fs-6 text-dark fw-medium mb-0">{{ payment_method }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+      </div>
+
+      <!-- Products Table -->
+      <div class="card border-0 shadow-sm mb-5" style="border-radius: 12px; overflow: hidden;">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0" style="min-width: 800px;">
+            <thead style="background-color: #f8f9fa;">
+              <tr>
+                <th class="py-3 px-4 text-uppercase text-muted" style="font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px;">{{ column_product }}</th>
+                <th class="py-3 px-4 text-center text-uppercase text-muted" style="font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px; width: 100px;">{{ column_quantity }}</th>
+                <th class="py-3 px-4 text-end text-uppercase text-muted" style="font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px; width: 150px;">{{ column_price }}</th>
+                <th class="py-3 px-4 text-end text-uppercase text-muted" style="font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px; width: 150px;">{{ column_total }}</th>
+                <th class="py-3 px-4 text-end text-uppercase text-muted" style="font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px; width: 160px;">{{ column_action }}</th>
+              </tr>
+            </thead>
+            <tbody class="border-top-0">
+              {% set product_row = 0 %}
+              {% for product in products %}
+                <tr id="product-row-{{ product_row }}">
+                  <td class="px-4 py-4">
+                    <a href="{{ product.view }}" class="fw-bold text-decoration-none text-dark fs-6 hover-gold">{{ product.name }}</a>
+                    <div id="error-{{ product_row }}-product" class="invalid-feedback mt-0"></div>
+                    <ul class="list-unstyled mb-0 mt-2 text-muted" style="font-size: 0.9rem;">
+                      <li><small>Mã SP: <span class="text-dark fw-medium">{{ product.model }}</span></small></li>
+                      {% for option in product.option %}
+                        <li>
+                          <small>{{ option.name }}: <span class="text-dark fw-medium">{{ option.value }}</span></small>
+                          <div id="error-{{ product_row }}-option-{{ option.product_option_id }}" class="invalid-feedback mt-0"></div>
+                        </li>
+                      {% endfor %}
+                      {% if product.subscription %}
+                        <li>
+                          <small>{{ text_subscription }}: {% if product.subscription %}<a href="{{ product.subscription }}" target="_blank" class="text-primary">{{ product.subscription_plan }}</a>{% else %}<span class="text-dark">{{ product.subscription_plan }}</span>{% endif %}</small>
+                          <div id="error-{{ product_row }}-subscription" class="invalid-feedback mt-0"></div>
+                        </li>
+                      {% endif %}
+                      {% if product.reward %}
+                        <li><small>{{ text_points }}: <span class="text-success">{{ product.reward }}</span></small></li>
+                      {% endif %}
+                    </ul>
+                    <form id="form-product-{{ product_row }}">
+                      <input type="hidden" name="product_id" value="{{ product.product_id }}"/> <input type="hidden" name="quantity" value="{{ product.quantity }}"/>
+                      {% for option in product.option %}
+                        {% if option.type == 'select' or option.type == 'radio' %}
+                          <input type="hidden" name="option[{{ option.product_option_id }}]" value="{{ option.product_option_value_id }}"/>
+                        {% endif %}
+                        {% if option.type == 'checkbox' %}
+                          <input type="hidden" name="option[{{ option.product_option_id }}][]" value="{{ option.product_option_value_id }}"/>
+                        {% endif %}
+                        {% if option.type == 'text' or option.type == 'textarea' or option.type == 'file' or option.type == 'date' or option.type == 'datetime' or option.type == 'time' %}
+                          <input type="hidden" name="option[{{ option.product_option_id }}]" value="{{ option.value }}"/>
+                        {% endif %}
+                      {% endfor %}
+                      <input type="hidden" name="subscription_plan_id" value="{{ product.subscription_plan_id }}"/>
+                    </form>
+                  </td>
+                  <td class="text-center px-4 py-4 fw-medium">{{ product.quantity }}</td>
+                  <td class="text-end px-4 py-4 text-muted">{{ product.price }}</td>
+                  <td class="text-end px-4 py-4 fw-bold text-dark fs-6">{{ product.total }}</td>
+                  <td class="text-end px-4 py-4">
+                    <div class="d-flex flex-column gap-2 align-items-end">
+                      <button type="submit" form="form-product-{{ product_row }}" class="btn btn-sm btn-outline-primary rounded-pill px-3"><i class="fa-solid fa-cart-plus me-1"></i> {{ button_reorder }}</button>
+                      <a href="{{ product.return }}" class="btn btn-sm btn-outline-danger rounded-pill px-3"><i class="fa-solid fa-arrow-rotate-left me-1"></i> {{ button_return }}</a>
+                    </div>
+                  </td>
+                </tr>
+                {% set product_row = product_row + 1 %}
+              {% endfor %}
+            </tbody>
+            <tfoot class="border-top-1" style="background-color: #fafbfc;">
+              {% for total in totals %}
+                <tr>
+                  <td colspan="3" class="text-end py-3 px-4 text-muted">{{ total.title }}:</td>
+                  <td class="text-end py-3 px-4 fw-bold {% if loop.last %}fs-4 text-danger{% else %}text-dark fs-6{% endif %}">{{ total.text }}</td>
+                  <td></td>
+                </tr>
+              {% endfor %}
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      {% if comment %}
+        <div class="card border-0 shadow-sm mb-5" style="border-radius: 12px; background-color: #fffaf0;">
+            <div class="card-body p-4">
+                <h6 class="text-uppercase fw-bold mb-3 d-flex align-items-center" style="color: #c49a45; font-size: 0.85rem; letter-spacing: 1px;">
+                    <i class="fa-solid fa-comment-dots me-2 fs-5"></i> {{ text_comment }}
+                </h6>
+                <div class="fst-italic text-dark">{{ comment }}</div>
+            </div>
+        </div>
+      {% endif %}
+
+      <div class="mb-4 d-flex align-items-center justify-content-between">
+          <h3 class="mb-0 fw-bold" style="color: #005baa;">{{ text_history }}</h3>
+      </div>
+      <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px; overflow: hidden;">
+          <div class="card-body p-0">
+              <div id="history">{{ history }}</div>
+          </div>
+      </div>
+
+      <div class="text-end mt-4 mb-5">
+          <a href="{{ continue }}" class="btn rounded-pill px-5 py-3 fw-bold" style="background-color: #c49a45; color: white; transition: all 0.3s; box-shadow: 0 4px 6px rgba(196,154,69,0.2);">{{ button_continue }} <i class="fa-solid fa-arrow-right ms-2"></i></a>
+      </div>
+      
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+
+<style>
+.hover-gold:hover { color: #c49a45 !important; }
+</style>
+
+<script type="text/javascript"><!--
+var product_row = 0;
+
+$('form').on('submit', function(e) {
+    e.preventDefault();
+
+    var element = this;
+
+    if (e.originalEvent !== undefined && e.originalEvent.submitter !== undefined) {
+        var button = e.originalEvent.submitter;
+    } else {
+        var button = '';
+    }
+
+    $.ajax({
+        url: 'index.php?route=checkout/cart.add&language={{ language }}',
+        type: 'post',
+        data: $(element).serialize(),
+        dataType: 'json',
+        cache: false,
+        processData: false,
+        beforeSend: function() {
+            $(button).button('loading');
+        },
+        complete: function() {
+            $(button).button('reset');
+        },
+        success: function(json) {
+            console.log(json);
+
+            $('form').find('.invalid-feedback').removeClass('d-block');
+
+            if (json['error']) {
+                $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> {{ error_reorder }} <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+
+                product_row = $(element).attr('id').substr(13);
+
+                if (json['error']['warning']) {
+                    $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error']['warning'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+
+                    delete json['error']['warning'];
+                }
+
+                for (key in json['error']) {
+                    $('#error-' + product_row + '-' + key.replaceAll('_', '-')).html(json['error'][key]).addClass('d-block');
+                }
+            }
+
+            if (json['success']) {
+                $('#alert').prepend('<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-circle-check"></i> ' + json['success'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+
+                $('#cart').load('index.php?route=common/cart.info&language={{ language }}');
+            }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+$('#history').on('click', '.pagination a', function(e) {
+    e.preventDefault();
+
+    $('#history').load(this.href);
+});
+//--></script>
+{{ footer }}
