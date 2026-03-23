@@ -9,6 +9,7 @@ $_['text_edit']        = 'Edit DC Minimal - Flash Sale Module';
 
 // Entry
 $_['entry_name']       = 'Module Name';
+$_['entry_title']      = 'Custom Title';
 $_['entry_product']    = 'Products';
 $_['entry_limit']      = 'Limit';
 $_['entry_width']      = 'Width';

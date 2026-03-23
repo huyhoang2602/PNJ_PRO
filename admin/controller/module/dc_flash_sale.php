@@ -51,6 +51,12 @@ class DcFlashSale extends \Opencart\System\Engine\Controller {
 			$data['name'] = '';
 		}
 
+		if (isset($module_info['title'])) {
+			$data['title'] = $module_info['title'];
+		} else {
+			$data['title'] = '';
+		}
+
 		$this->load->model('catalog/product');
 		$data['products'] = [];
 
