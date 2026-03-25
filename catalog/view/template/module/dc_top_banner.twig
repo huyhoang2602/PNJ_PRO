@@ -1,35 +1,50 @@
-<div id="dc-top-banner" class="dc-top-banner" style="background-image: url('{{ image }}');">
-    <div class="container py-3">
-        <div class="row align-items-center">
-            <div class="col-12 text-center text-white banner-content">
-                <span class="banner-text fw-bold me-3">{{ title }}</span>
-                <a href="{{ link }}" class="btn banner-btn px-4 shadow-sm">{{ button }}</a>
-            </div>
+<div id="dc-top-banner-wrapper" class="dc-top-banner-wrapper">
+    <div id="topBannerCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+            {% for key, banner in banners %}
+                <div class="carousel-item {% if key == 0 %}active{% endif %}" style="background-image: url('{{ banner.image }}');">
+                    <div class="d-flex align-items-center w-100" style="min-height: 80px;">
+                        <div class="container py-3">
+                            <div class="row align-items-center">
+                                <div class="col-12 text-center text-white banner-content">
+                                    {% if banner.title %}
+                                        <span class="banner-text fw-bold me-3">{{ banner.title }}</span>
+                                    {% endif %}
+                                    {% if banner.button %}
+                                        <a href="{{ banner.link }}" class="btn banner-btn px-4 shadow-sm">{{ banner.button }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
     <button type="button" id="close-top-banner" title="Close" aria-label="Close">&times;</button>
 </div>
 
 <style>
-.dc-top-banner {
-    background-size: cover;
-    background-position: center;
+.dc-top-banner-wrapper {
     position: relative;
     z-index: 1050;
     transition: all 0.3s ease;
-    min-height: 50px;
-    display: flex;
-    align-items: center;
+    background-color: #f8f9fa;
 }
+.carousel-item {
+    background-size: cover;
+    background-position: center;
+}
+
 .banner-text {
     font-size: 1.4rem;
-    color: #003468; /* Dark blue like PNJ */
+    color: #003468;
     text-shadow: none;
     font-family: serif;
     vertical-align: middle;
 }
 .banner-btn {
-    background-color: #9e1c21; /* PNJ dark red */
+    background-color: #9e1c21;
     color: white !important;
     border-radius: 8px;
     font-weight: bold;
@@ -47,18 +62,32 @@
 }
 #close-top-banner {
     position: absolute;
-    right: 10px;
-    top: 5px;
-    background: none;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.3);
     border: none;
-    color: rgba(255,255,255,0.8);
+    color: #333;
     font-size: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     cursor: pointer;
-    line-height: 1;
+    line-height: 28px;
     z-index: 1060;
+    text-align: center;
+    transition: all 0.2s;
 }
 #close-top-banner:hover {
-    color: white;
+    background: rgba(255,255,255,0.8);
+    color: #000;
+}
+.carousel-control-prev, .carousel-control-next {
+    width: 5%;
+    opacity: 0.5;
+}
+.carousel-control-prev:hover, .carousel-control-next:hover {
+    opacity: 1;
 }
 @media (max-width: 768px) {
     .banner-text {
@@ -67,21 +96,19 @@
         margin-bottom: 10px;
     }
     .banner-content {
-        padding-right: 20px;
+        padding: 0 40px;
+    }
+    #close-top-banner {
+        top: 10px;
+        transform: none;
     }
 }
 </style>
 
 <script type="text/javascript">
 $(document).ready(function() {
-    if (localStorage.getItem('dc_top_banner_closed') === 'true') {
-        $('#dc-top-banner').hide();
-    }
-
     $('#close-top-banner').on('click', function() {
-        $('#dc-top-banner').slideUp(300, function() {
-            localStorage.setItem('dc_top_banner_closed', 'true');
-        });
+        $('#dc-top-banner-wrapper').slideUp(300);
     });
 });
 </script>

@@ -15,15 +15,25 @@ class DcTopBanner extends \Opencart\System\Engine\Controller {
 			$this->log->write('DC Top Banner Module: Setting NOT found for ID: ' . $module_id);
 		}
 
-		if ($setting && isset($setting['status']) && $setting['status']) {
-			$data['title'] = html_entity_decode($setting['title'], ENT_QUOTES, 'UTF-8');
-			$data['link'] = $setting['link'];
-			$data['button'] = html_entity_decode($setting['button'], ENT_QUOTES, 'UTF-8');
+		if ($setting && isset($setting['status']) && $setting['status'] && !empty($setting['banners'])) {
+			$data['banners'] = [];
 
-			if (is_file(DIR_IMAGE . html_entity_decode($setting['image'], ENT_QUOTES, 'UTF-8'))) {
-				$data['image'] = HTTP_SERVER . 'image/' . html_entity_decode($setting['image'], ENT_QUOTES, 'UTF-8');
-			} else {
-				$data['image'] = '';
+			foreach ($setting['banners'] as $banner) {
+				$image = '';
+				if (is_file(DIR_IMAGE . html_entity_decode($banner['image'], ENT_QUOTES, 'UTF-8'))) {
+					$image = HTTP_SERVER . 'image/' . html_entity_decode($banner['image'], ENT_QUOTES, 'UTF-8');
+				}
+
+				$data['banners'][] = [
+					'title'  => html_entity_decode($banner['title'], ENT_QUOTES, 'UTF-8'),
+					'link'   => $banner['link'],
+					'button' => html_entity_decode($banner['button'], ENT_QUOTES, 'UTF-8'),
+					'image'  => $image
+				];
+			}
+
+			if (empty($data['banners'])) {
+				return '';
 			}
 
 			return $this->load->view('extension/dc_minimal/module/dc_top_banner', $data);

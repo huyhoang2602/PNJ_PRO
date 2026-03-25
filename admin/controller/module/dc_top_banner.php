@@ -51,45 +51,38 @@ class DcTopBanner extends \Opencart\System\Engine\Controller {
 			$data['name'] = '';
 		}
 
-		if (isset($module_info['title'])) {
-			$data['title'] = $module_info['title'];
-		} else {
-			$data['title'] = '';
-		}
-
-		if (isset($module_info['image'])) {
-			$data['image'] = $module_info['image'];
-		} else {
-			$data['image'] = '';
-		}
-
 		$this->load->model('tool/image');
 
-		if (isset($module_info['image']) && is_file(DIR_IMAGE . html_entity_decode($module_info['image'], ENT_QUOTES, 'UTF-8'))) {
-			$data['thumb'] = $this->model_tool_image->resize(html_entity_decode($module_info['image'], ENT_QUOTES, 'UTF-8'), 100, 100);
-		} else {
-			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['banners'] = [];
+
+		if (isset($module_info['banners'])) {
+			foreach ($module_info['banners'] as $banner) {
+				if (is_file(DIR_IMAGE . html_entity_decode($banner['image'], ENT_QUOTES, 'UTF-8'))) {
+					$thumb = $this->model_tool_image->resize(html_entity_decode($banner['image'], ENT_QUOTES, 'UTF-8'), 100, 100);
+				} else {
+					$thumb = $this->model_tool_image->resize('no_image.png', 100, 100);
+				}
+
+				$data['banners'][] = [
+					'title'  => $banner['title'],
+					'image'  => $banner['image'],
+					'thumb'  => $thumb,
+					'link'   => $banner['link'],
+					'button' => $banner['button']
+				];
+			}
 		}
 
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
-
-		if (isset($module_info['link'])) {
-			$data['link'] = $module_info['link'];
-		} else {
-			$data['link'] = '';
-		}
-
-		if (isset($module_info['button'])) {
-			$data['button'] = $module_info['button'];
-		} else {
-			$data['button'] = '';
-		}
 
 		if (isset($module_info['status'])) {
 			$data['status'] = $module_info['status'];
 		} else {
 			$data['status'] = '';
 		}
+
+		$data['button_add'] = $this->language->get('button_add');
+		$data['button_remove'] = $this->language->get('button_remove');
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

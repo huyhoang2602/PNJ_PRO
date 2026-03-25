@@ -25,36 +25,54 @@
               <div id="error-name" class="invalid-feedback"></div>
             </div>
           </div>
-          <div class="row mb-3">
-            <label for="input-title" class="col-sm-2 col-form-label">{{ entry_title }}</label>
-            <div class="col-sm-10">
-              <input type="text" name="title" value="{{ title }}" placeholder="{{ entry_title }}" id="input-title" class="form-control"/>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">{{ entry_image }}</label>
-            <div class="col-sm-10">
-              <div class="card image">
-                <img src="{{ thumb }}" alt="" title="" id="thumb-image" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/>
-                <input type="hidden" name="image" value="{{ image }}" id="input-image"/>
-                <div class="card-body">
-                  <button type="button" data-oc-toggle="image" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-primary btn-sm btn-block"><i class="fa-solid fa-pencil"></i> {{ button_edit }}</button>
-                  <button type="button" data-oc-toggle="clear" data-oc-target="#input-image" data-oc-thumb="#thumb-image" class="btn btn-warning btn-sm btn-block"><i class="fa-solid fa-trash-can"></i> {{ button_clear }}</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <label for="input-button" class="col-sm-2 col-form-label">{{ entry_button }}</label>
-            <div class="col-sm-10">
-              <input type="text" name="button" value="{{ button }}" placeholder="{{ entry_button }}" id="input-button" class="form-control"/>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <label for="input-link" class="col-sm-2 col-form-label">{{ entry_link }}</label>
-            <div class="col-sm-10">
-              <input type="text" name="link" value="{{ link }}" placeholder="{{ entry_link }}" id="input-link" class="form-control"/>
-            </div>
+          <div class="table-responsive">
+            <table id="banners" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td class="text-start">{{ entry_title }}</td>
+                  <td class="text-start">{{ entry_image }}</td>
+                  <td class="text-start">{{ entry_link }}</td>
+                  <td class="text-start">{{ entry_button }}</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {% set banner_row = 0 %}
+                {% for banner in banners %}
+                  <tr id="banner-row-{{ banner_row }}">
+                    <td class="text-start">
+                      <input type="text" name="banners[{{ banner_row }}][title]" value="{{ banner.title }}" placeholder="{{ entry_title }}" class="form-control"/>
+                    </td>
+                    <td class="text-start">
+                      <div class="card image">
+                        <img src="{{ banner.thumb }}" alt="" title="" id="thumb-image-{{ banner_row }}" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/>
+                        <input type="hidden" name="banners[{{ banner_row }}][image]" value="{{ banner.image }}" id="input-image-{{ banner_row }}"/>
+                        <div class="card-body p-2">
+                          <button type="button" data-oc-toggle="image" data-oc-target="#input-image-{{ banner_row }}" data-oc-thumb="#thumb-image-{{ banner_row }}" class="btn btn-primary btn-sm w-100 mb-1"><i class="fa-solid fa-pencil"></i></button>
+                          <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-{{ banner_row }}" data-oc-thumb="#thumb-image-{{ banner_row }}" class="btn btn-warning btn-sm w-100"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-start">
+                      <input type="text" name="banners[{{ banner_row }}][link]" value="{{ banner.link }}" placeholder="{{ entry_link }}" class="form-control"/>
+                    </td>
+                    <td class="text-start">
+                      <input type="text" name="banners[{{ banner_row }}][button]" value="{{ banner.button }}" placeholder="{{ entry_button }}" class="form-control"/>
+                    </td>
+                    <td class="text-end">
+                      <button type="button" onclick="$('#banner-row-{{ banner_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button>
+                    </td>
+                  </tr>
+                  {% set banner_row = banner_row + 1 %}
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4"></td>
+                  <td class="text-end"><button type="button" onclick="addBanner();" data-bs-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button></td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
           <div class="row mb-3">
             <label for="input-status" class="col-sm-2 col-form-label">{{ entry_status }}</label>
@@ -70,4 +88,30 @@
     </div>
   </div>
 </div>
+<script type="text/javascript"><!--
+var banner_row = {{ banner_row }};
+
+function addBanner() {
+    html  = '<tr id="banner-row-' + banner_row + '">';
+    html += '  <td class="text-start"><input type="text" name="banners[' + banner_row + '][title]" value="" placeholder="{{ entry_title }}" class="form-control"/></td>';
+    html += '  <td class="text-start">';
+    html += '    <div class="card image">';
+    html += '      <img src="{{ placeholder }}" alt="" title="" id="thumb-image-' + banner_row + '" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/>';
+    html += '      <input type="hidden" name="banners[' + banner_row + '][image]" value="" id="input-image-' + banner_row + '"/>';
+    html += '      <div class="card-body p-2">';
+    html += '        <button type="button" data-oc-toggle="image" data-oc-target="#input-image-' + banner_row + '" data-oc-thumb="#thumb-image-' + banner_row + '" class="btn btn-primary btn-sm w-100 mb-1"><i class="fa-solid fa-pencil"></i></button>';
+    html += '        <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-' + banner_row + '" data-oc-thumb="#thumb-image-' + banner_row + '" class="btn btn-warning btn-sm w-100"><i class="fa-solid fa-trash-can"></i></button>';
+    html += '      </div>';
+    html += '    </div>';
+    html += '  </td>';
+    html += '  <td class="text-start"><input type="text" name="banners[' + banner_row + '][link]" value="" placeholder="{{ entry_link }}" class="form-control"/></td>';
+    html += '  <td class="text-start"><input type="text" name="banners[' + banner_row + '][button]" value="" placeholder="{{ entry_button }}" class="form-control"/></td>';
+    html += '  <td class="text-end"><button type="button" onclick="$(\'#banner-row-' + banner_row + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
+    html += '</tr>';
+
+    $('#banners tbody').append(html);
+
+    banner_row++;
+}
+//--></script>
 {{ footer }}
