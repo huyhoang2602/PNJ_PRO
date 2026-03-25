@@ -1,0 +1,192 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <div class="row mb-3">
+            <label for="input-name" class="col-sm-2 col-form-label">{{ entry_name }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              <div id="error-name" class="invalid-feedback"></div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-title" class="col-sm-2 col-form-label">{{ entry_title }} (VD: Bộ sưu tập mới)</label>
+            <div class="col-sm-10">
+              <input type="text" name="title" value="{{ title }}" placeholder="{{ entry_title }}" id="input-title" class="form-control"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="input-status" class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <select name="status" id="input-status" class="form-select">
+                <option value="1"{% if status %} selected="selected"{% endif %}>{{ text_enabled }}</option>
+                <option value="0"{% if not status %} selected="selected"{% endif %}>{{ text_disabled }}</option>
+              </select>
+            </div>
+          </div>
+
+          <hr/>
+          <h3>Collections</h3>
+          <div class="table-responsive">
+            <table id="collections" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td class="text-start">{{ entry_collection_title }}</td>
+                  <td class="text-start">{{ entry_image }}</td>
+                  <td class="text-start">{{ entry_link }}</td>
+                  <td class="text-start">{{ entry_product }}</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {% set collection_row = 0 %}
+                {% for collection in collections %}
+                  <tr id="collection-row-{{ collection_row }}">
+                    <td class="text-start">
+                      {% for language in languages %}
+                        <div class="input-group">
+                          <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}"/></span>
+                          <input type="text" name="collections[{{ collection_row }}][title][{{ language.code }}]" value="{{ collection.title[language.code] }}" placeholder="{{ entry_collection_title }}" class="form-control"/>
+                        </div>
+                      {% endfor %}
+                    </td>
+                    <td class="text-start">
+                      <div class="card image">
+                        <img src="{{ collection.thumb }}" alt="" title="" id="thumb-image-{{ collection_row }}" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/>
+                        <input type="hidden" name="collections[{{ collection_row }}][image]" value="{{ collection.image }}" id="input-image-{{ collection_row }}"/>
+                        <div class="card-body p-2">
+                          <button type="button" data-oc-toggle="image" data-oc-target="#input-image-{{ collection_row }}" data-oc-thumb="#thumb-image-{{ collection_row }}" class="btn btn-primary btn-sm w-100 mb-1"><i class="fa-solid fa-pencil"></i></button>
+                          <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-{{ collection_row }}" data-oc-thumb="#thumb-image-{{ collection_row }}" class="btn btn-warning btn-sm w-100"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-start">
+                      <input type="text" name="collections[{{ collection_row }}][link]" value="{{ collection.link }}" placeholder="{{ entry_link }}" class="form-control"/>
+                    </td>
+                    <td class="text-start">
+                      <input type="text" name="collections-product-{{ collection_row }}" value="" placeholder="{{ entry_product }}" id="input-product-{{ collection_row }}" data-oc-target="product-{{ collection_row }}" class="form-control mb-1" autocomplete="off"/>
+                      <div id="product-{{ collection_row }}" class="form-control p-0 overflow-auto" style="height: 150px;">
+                        {% for product in collection.product %}
+                          <div id="product-{{ collection_row }}-{{ product.product_id }}" class="d-flex align-items-center px-2 py-1 border-bottom">
+                            <i class="fa-solid fa-circle-minus text-danger me-2 cursor-pointer" onclick="$(this).parent().remove();"></i>
+                            <div>{{ product.name }}</div>
+                            <input type="hidden" name="collections[{{ collection_row }}][product][]" value="{{ product.product_id }}"/>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </td>
+                    <td class="text-end">
+                      <button type="button" onclick="$('#collection-row-{{ collection_row }}').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button>
+                    </td>
+                  </tr>
+                  {% set collection_row = collection_row + 1 %}
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3"></td>
+                  <td class="text-end"><button type="button" onclick="addCollection();" data-bs-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa-solid fa-plus-circle"></i></button></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+var collection_row = {{ collection_row }};
+
+function addCollection() {
+    html  = '<tr id="collection-row-' + collection_row + '">';
+    html += '  <td class="text-start">';
+    {% for language in languages %}
+    html += '    <div class="input-group">';
+    html += '      <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}"/></span>';
+    html += '      <input type="text" name="collections[' + collection_row + '][title][{{ language.code }}]" value="" placeholder="{{ entry_collection_title }}" class="form-control"/>';
+    html += '    </div>';
+    {% endfor %}
+    html += '  </td>';
+    html += '  <td class="text-start">';
+    html += '    <div class="card image">';
+    html += '      <img src="{{ placeholder }}" alt="" title="" id="thumb-image-' + collection_row + '" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/>';
+    html += '      <input type="hidden" name="collections[' + collection_row + '][image]" value="" id="input-image-' + collection_row + '"/>';
+    html += '      <div class="card-body p-2">';
+    html += '        <button type="button" data-oc-toggle="image" data-oc-target="#input-image-' + collection_row + '" data-oc-thumb="#thumb-image-' + collection_row + '" class="btn btn-primary btn-sm w-100 mb-1"><i class="fa-solid fa-pencil"></i></button>';
+    html += '        <button type="button" data-oc-toggle="clear" data-oc-target="#input-image-' + collection_row + '" data-oc-thumb="#thumb-image-' + collection_row + '" class="btn btn-warning btn-sm w-100"><i class="fa-solid fa-trash-can"></i></button>';
+    html += '      </div>';
+    html += '    </div>';
+    html += '  </td>';
+    html += '  <td class="text-start"><input type="text" name="collections[' + collection_row + '][link]" value="" placeholder="{{ entry_link }}" class="form-control"/></td>';
+    html += '  <td class="text-start">';
+    html += '    <input type="text" name="collections-product-' + collection_row + '" value="" placeholder="{{ entry_product }}" id="input-product-' + collection_row + '" data-oc-target="product-' + collection_row + '" class="form-control mb-1" autocomplete="off"/>';
+    html += '    <div id="product-' + collection_row + '" class="form-control p-0 overflow-auto" style="height: 150px;"></div>';
+    html += '  </td>';
+    html += '  <td class="text-end"><button type="button" onclick="$(\'#collection-row-' + collection_row + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
+    html += '</tr>';
+
+    $('#collections tbody').append(html);
+
+    initAutocomplete(collection_row);
+
+    collection_row++;
+}
+
+function initAutocomplete(row) {
+    $('#input-product-' + row).autocomplete({
+        'source': function (request, response) {
+            $.ajax({
+                url: 'index.php?route=catalog/product.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+                dataType: 'json',
+                success: function (json) {
+                    response($.map(json, function (item) {
+                        return {
+                            label: item['name'],
+                            value: item['product_id']
+                        }
+                    }));
+                }
+            });
+        },
+        'select': function (item) {
+            $('#input-product-' + row).val('');
+
+            $('#product-' + row + '-' + item['value']).remove();
+
+            html  = '<div id="product-' + row + '-' + item['value'] + '" class="d-flex align-items-center px-2 py-1 border-bottom">';
+            html += '  <i class="fa-solid fa-circle-minus text-danger me-2 cursor-pointer" onclick="$(this).parent().remove();"></i>';
+            html += '  <div>' + item['label'] + '</div>';
+            html += '  <input type="hidden" name="collections[' + row + '][product][]" value="' + item['value'] + '"/>';
+            html += '</div>';
+
+            $('#product-' + row).append(html);
+        }
+    });
+}
+
+// Initialize existing rows
+{% set row = 0 %}
+{% for collection in collections %}
+initAutocomplete({{ row }});
+{% set row = row + 1 %}
+{% endfor %}
+
+//--></script>
+{{ footer }}
