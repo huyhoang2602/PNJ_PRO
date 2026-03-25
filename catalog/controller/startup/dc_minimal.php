@@ -154,6 +154,17 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
                     $data['logo'] = $base_url . 'image/catalog/demo/manufacturer/logo_brand_pnj.png';
                 }
             }
+
+            // DC Top Banner
+            $data['top_banner'] = '';
+            $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "module` WHERE `code` = 'dc_minimal.dc_top_banner'");
+            foreach ($query->rows as $top_banner) {
+                $top_banner_setting = json_decode($top_banner['setting'], true);
+                if (isset($top_banner_setting['status']) && $top_banner_setting['status']) {
+                    $data['top_banner'] = $this->load->controller('extension/dc_minimal/module/dc_top_banner', ['module_id' => $top_banner['module_id']]);
+                    break;
+                }
+            }
 		}
 
 		// Home page specific data
@@ -224,7 +235,28 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
                     $data['manufacturer_image'] = ''; // No image or placeholder if you prefer
                 }
             }
-        } elseif (in_array($route, ['product/manufacturer_list', 'extension/dc_minimal/product/manufacturer_list'])) {
+        } elseif (in_array($route, ['product/search', 'extension/dc_minimal/product/search'])) {
+            $url = '';
+            if (isset($this->request->get['search'])) {
+                $url .= '&search=' . $this->request->get['search'];
+            }
+            if (isset($this->request->get['category_id'])) {
+                $url .= '&category_id=' . $this->request->get['category_id'];
+            }
+            if (isset($this->request->get['sub_category'])) {
+                $url .= '&sub_category=' . $this->request->get['sub_category'];
+            }
+            if (isset($this->request->get['description'])) {
+                $url .= '&description=' . $this->request->get['description'];
+            }
+            
+            $data['action'] = $this->url->link('product/search', 'language=' . $this->config->get('config_language') . $url, true);
+            $this->injectDynamicFilters('search', 0, $data);
+        } elseif (in_array($route, ['product/special', 'extension/dc_minimal/product/special'])) {
+            $data['action'] = $this->url->link('product/special', 'language=' . $this->config->get('config_language'), true);
+            $this->injectDynamicFilters('special', 0, $data);
+        }
+ elseif (in_array($route, ['product/manufacturer_list', 'extension/dc_minimal/product/manufacturer_list'])) {
             // Inject images for brand index
             $this->load->model('tool/image');
             
@@ -278,6 +310,33 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
         $this->load->model('extension/dc_minimal/module/filter');
         $model = $this->model_extension_dc_minimal_module_filter;
 
+        // Extract active filters for dependent filtering
+        $active = [];
+        if (isset($this->request->get['manufacturer_id'])) {
+            $active['manufacturer_ids'] = explode(',', (string)$this->request->get['manufacturer_id']);
+        }
+        if (isset($this->request->get['sub_cat'])) {
+            $active['category_ids'] = explode(',', (string)$this->request->get['sub_cat']);
+        }
+        if (isset($this->request->get['attr']) && is_array($this->request->get['attr'])) {
+            $active['attr'] = $this->request->get['attr'];
+        }
+        if (isset($this->request->get['opt'])) {
+            $active['opt'] = explode(',', (string)$this->request->get['opt']);
+        }
+        if (isset($this->request->get['filter'])) {
+            $active['filter_ids'] = explode(',', (string)$this->request->get['filter']);
+        }
+        if (isset($this->request->get['price_min'])) {
+            $active['price_min'] = $this->request->get['price_min'];
+        }
+        if (isset($this->request->get['price_max'])) {
+            $active['price_max'] = $this->request->get['price_max'];
+        }
+        if (isset($this->request->get['stock'])) {
+            $active['stock'] = $this->request->get['stock'];
+        }
+
         $ctx = ['type' => $type, 'id' => $id];
 
         usort($groups, function ($a, $b) {
@@ -307,30 +366,41 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
                     $range = $model->getPriceRange($ctx);
                     $data['price_min_range'] = (float)($range['min'] ?? 0);
                     $data['price_max_range'] = (float)($range['max'] ?? 0);
-                    // Add dummy value to ensure it's added to dynamic_filters
                     $group_data['values'] = [['min' => $data['price_min_range'], 'max' => $data['price_max_range']]];
                     break;
                 case 'manufacturer':
-                    $group_data['values'] = $model->getManufacturers($ctx, $show_count);
+                    $group_data['values'] = $model->getManufacturers($ctx, $show_count, $active);
                     break;
                 case 'category':
-                    $group_data['values'] = $model->getSubCategories($ctx, $show_count);
+                    $group_data['values'] = $model->getSubCategories($ctx, $show_count, $active);
                     break;
                 case 'attribute':
-                    $group_data['values'] = $model->getAttributeValues($ctx, $group_data['source_id'], $show_count);
+                    $group_data['values'] = $model->getAttributeValues($ctx, $group_data['source_id'], $show_count, $active);
                     break;
                 case 'option':
-                    $group_data['values'] = $model->getOptionValues($ctx, $group_data['source_id'], $show_count);
+                    $group_data['values'] = $model->getOptionValues($ctx, $group_data['source_id'], $show_count, $active);
                     break;
                 case 'filter':
-                    $group_data['values'] = $model->getOcFilterValues($ctx, $group_data['source_id'], $show_count);
+                    $group_data['values'] = $model->getOcFilterValues($ctx, $group_data['source_id'], $show_count, $active);
                     break;
                 case 'stock':
                     $group_data['values'] = [['id' => 'instock', 'name' => 'Còn hàng'], ['id' => 'outofstock', 'name' => 'Hết hàng']];
                     break;
             }
 
-            if (!empty($group_data['values'])) {
+            // Keep group if it has values or active filters
+            $is_active = false;
+            switch ($group_data['type']) {
+                case 'manufacturer': $is_active = !empty($active['manufacturer_ids']); break;
+                case 'category': $is_active = !empty($active['category_ids']); break;
+                case 'attribute': $is_active = !empty($active['attr'][$group_data['source_id']]); break;
+                case 'option': $is_active = !empty($active['opt']); break; 
+                case 'filter': $is_active = !empty($active['filter_ids']); break;
+                case 'price': $is_active = (!empty($active['price_min']) || !empty($active['price_max'])); break;
+                case 'stock': $is_active = !empty($active['stock']); break;
+            }
+
+            if (!empty($group_data['values']) || $is_active) {
                 $dynamic_filters[] = $group_data;
             }
         }
@@ -338,5 +408,12 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
         $data['dynamic_filters'] = $dynamic_filters;
         $data['price_min'] = $this->request->get['price_min'] ?? '';
         $data['price_max'] = $this->request->get['price_max'] ?? '';
+        
+        $data['manufacturer_ids'] = isset($this->request->get['manufacturer_id']) ? explode(',', (string)$this->request->get['manufacturer_id']) : [];
+        $data['category_ids'] = isset($this->request->get['sub_cat']) ? explode(',', (string)$this->request->get['sub_cat']) : [];
+        $data['attr'] = $this->request->get['attr'] ?? [];
+        $data['opt'] = isset($this->request->get['opt']) ? explode(',', (string)$this->request->get['opt']) : [];
+        $data['filter_ids'] = isset($this->request->get['filter']) ? explode(',', (string)$this->request->get['filter']) : [];
+        $data['stock'] = $this->request->get['stock'] ?? '';
     }
 }

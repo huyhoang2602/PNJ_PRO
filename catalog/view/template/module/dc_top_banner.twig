@@ -1,0 +1,87 @@
+<div id="dc-top-banner" class="dc-top-banner" style="background-image: url('{{ image }}');">
+    <div class="container py-3">
+        <div class="row align-items-center">
+            <div class="col-12 text-center text-white banner-content">
+                <span class="banner-text fw-bold me-3">{{ title }}</span>
+                <a href="{{ link }}" class="btn banner-btn px-4 shadow-sm">{{ button }}</a>
+            </div>
+        </div>
+    </div>
+    <button type="button" id="close-top-banner" title="Close" aria-label="Close">&times;</button>
+</div>
+
+<style>
+.dc-top-banner {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1050;
+    transition: all 0.3s ease;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+}
+.banner-text {
+    font-size: 1.4rem;
+    color: #003468; /* Dark blue like PNJ */
+    text-shadow: none;
+    font-family: serif;
+    vertical-align: middle;
+}
+.banner-btn {
+    background-color: #9e1c21; /* PNJ dark red */
+    color: white !important;
+    border-radius: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    padding: 8px 25px;
+    transition: all 0.2s ease;
+    border: none;
+    vertical-align: middle;
+}
+.banner-btn:hover {
+    background-color: #7d161a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+#close-top-banner {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.8);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 1060;
+}
+#close-top-banner:hover {
+    color: white;
+}
+@media (max-width: 768px) {
+    .banner-text {
+        font-size: 1rem;
+        display: block;
+        margin-bottom: 10px;
+    }
+    .banner-content {
+        padding-right: 20px;
+    }
+}
+</style>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    if (localStorage.getItem('dc_top_banner_closed') === 'true') {
+        $('#dc-top-banner').hide();
+    }
+
+    $('#close-top-banner').on('click', function() {
+        $('#dc-top-banner').slideUp(300, function() {
+            localStorage.setItem('dc_top_banner_closed', 'true');
+        });
+    });
+});
+</script>

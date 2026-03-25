@@ -111,60 +111,111 @@
 /* 3. Filter/Sorting Interface (Crystal Look) */
 .listing-interface {
     background: #fff;
-    padding: 15px 30px;
+    padding: 20px 30px;
     border-radius: 16px;
     margin-bottom: 40px;
     border: 1px solid #f2f2f2;
     box-shadow: 0 5px 25px rgba(0,0,0,0.02);
 }
 
-.btn-filter-pnj {
-    background: #003468 !important;
-    border: none !important;
-    color: #fff !important;
+.btn-outline-filter {
+    background: #fff !important;
+    border: 1px solid #eee !important;
+    color: #444 !important;
     border-radius: 50px !important;
-    padding: 12px 30px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    font-size: 12px !important;
-    letter-spacing: 1.5px !important;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    padding: 8px 18px !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    transition: all 0.2s ease !important;
 }
 
-.btn-filter-pnj i {
-    font-size: 14px;
+.btn-outline-filter:hover {
+    border-color: #003468 !important;
+    color: #003468 !important;
+    background-color: #f8f9fa !important;
 }
 
-.listing-interface .text-muted {
-    font-size: 12px;
-    color: #bbb !important;
-    margin-left: 15px;
+.btn-outline-filter.active {
+    background: #003468 !important;
+    color: #fff !important;
+    border-color: #003468 !important;
 }
 
-.listing-interface label.input-group-text {
+.btn-outline-filter::after {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.selected-count {
+    font-weight: 700;
+    font-size: 10px;
+    padding: 3px 6px;
+    background: #c48c46 !important; /* PNJ Gold/Secondary color */
+    color: #fff;
+}
+
+.filter-dropdown .dropdown-menu {
+    border: none;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.12) !important;
+    margin-top: 8px !important;
+    padding: 12px !important;
+}
+
+.filter-dropdown .dropdown-item {
+    border-radius: 8px;
+    margin-bottom: 2px;
+    transition: all 0.2s ease;
+}
+
+.filter-dropdown .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #003468;
+}
+
+.filter-dropdown .dropdown-item.active, 
+.filter-dropdown .dropdown-item:active {
+    background-color: #003468 !important;
+    color: #fff !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #ccc;
+}
+
+.listing-interface .input-group-text {
     background: none !important;
     border: none !important;
     color: #999 !important;
     font-size: 11px !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
-    letter-spacing: 1.2px !important;
-    padding-right: 15px;
+    letter-spacing: 1px !important;
+    padding-right: 10px;
 }
 
 .listing-interface .form-select {
     border-radius: 50px !important;
-    padding: 8px 40px 8px 20px !important;
+    padding: 6px 35px 6px 15px !important;
     border-color: #f2f2f2 !important;
-    font-size: 13px !important;
+    font-size: 12px !important;
     color: #555 !important;
-    background-color: #fff !important;
-    box-shadow: none !important;
+    background-color: #fbfbfb !important;
 }
 
-/* Modal Styling */
+/* Modal Styling - Left here for other modals if needed but can be cleaned up */
 .pnj-modal .modal-content {
     border-radius: 16px;
     border: none;
