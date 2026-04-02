@@ -115,7 +115,126 @@
     </div>
   </div>
 </div>
+
 <script type="text/javascript"><!--
+(function ($) {
+    $.fn.dc_autocomplete = function (option) {
+        return this.each(function () {
+            var element = this;
+            var $dropdown = $('#' + $(element).attr('data-oc-target'));
+
+            this.timer = null;
+            this.items = [];
+            this.page = 1;
+            this.is_loading = false;
+            this.stop_loading = false;
+            this.is_dropdown_clicking = false;
+
+            $.extend(this, option);
+
+            // Ép CSS ngay khi khởi tạo
+            $dropdown.css({
+                'max-height': '240px',
+                'overflow-y': 'auto',
+                'overflow-x': 'hidden',
+                'z-index': '1050'
+            });
+
+            // Ngăn đóng dropdown khi đang click vào thanh cuộn
+            $dropdown.on('mousedown', function() {
+                element.is_dropdown_clicking = true;
+            });
+
+            $(element).on('focusin', function () {
+                if ($dropdown.find('li').length > 1) {
+                    $dropdown.addClass('show');
+                } else {
+                    element.page = 1;
+                    element.stop_loading = false;
+                    element.request();
+                }
+            });
+
+            $(element).on('focusout', function (e) {
+                setTimeout(function () {
+                    if (!element.is_dropdown_clicking) {
+                        $dropdown.removeClass('show');
+                    }
+                    element.is_dropdown_clicking = false;
+                }, 200);
+            });
+
+            $(element).on('input', function (e) {
+                element.page = 1;
+                element.stop_loading = false;
+                element.request();
+            });
+
+            $dropdown.on('click', 'a', function (e) {
+                e.preventDefault();
+                var value = $(this).attr('href');
+                if (element.items[value] !== undefined) {
+                    element.select(element.items[value]);
+                    $dropdown.removeClass('show');
+                }
+            });
+
+            $dropdown.on('scroll', function () {
+                if (element.is_loading || element.stop_loading) return;
+                var scrollTop = $(this).scrollTop();
+                var scrollHeight = $(this)[0].scrollHeight;
+                var height = $(this).height();
+                if (scrollTop + height >= scrollHeight * 0.9) {
+                    element.page++;
+                    element.request(true);
+                }
+            });
+
+            this.request = function (append) {
+                clearTimeout(this.timer);
+                
+                if (!append) {
+                    $dropdown.find('li').remove();
+                    this.items = [];
+                    $dropdown.prepend('<li id="autocomplete-loading"><span class="dropdown-item text-center disabled"><i class="fa-solid fa-circle-notch fa-spin"></i></span></li>');
+                    $dropdown.addClass('show');
+                } else {
+                    $dropdown.append('<li id="autocomplete-loading-more" class="text-center p-2"><i class="fa-solid fa-circle-notch fa-spin"></i></li>');
+                }
+                this.is_loading = true;
+                this.timer = setTimeout(function (object) {
+                    object.source($(object).val(), object.page, $.proxy(object.response, object, append));
+                }, 200, this);
+            }
+
+            this.response = function (append, json) {
+                $('#autocomplete-loading, #autocomplete-loading-more').remove();
+                this.is_loading = false;
+                if (!json || !json.length) {
+                    if (!append) $dropdown.removeClass('show');
+                    this.stop_loading = true;
+                    return;
+                }
+                if (json.length < 10) this.stop_loading = true;
+                var html = '';
+                for (var i = 0; i < json.length; i++) {
+                    this.items[json[i]['product_id']] = {
+                        label: json[i]['name'],
+                        value: json[i]['product_id']
+                    };
+                    html += '<li><a href="' + json[i]['product_id'] + '" class="dropdown-item">' + json[i]['name'] + '</a></li>';
+                }
+                if (append) {
+                    $dropdown.append(html);
+                } else {
+                    $dropdown.html(html);
+                    $dropdown.scrollTop(0);
+                }
+            }
+        });
+    }
+})(jQuery);
+
 var collection_row = {{ collection_row }};
 
 function addCollection() {
@@ -159,18 +278,13 @@ function addCollection() {
 }
 
 function initAutocomplete(row) {
-    $('#input-product-' + row).autocomplete({
-        'source': function (request, response) {
+    $('#input-product-' + row).dc_autocomplete({
+        'source': function (request, page, response) {
             $.ajax({
-                url: 'index.php?route=catalog/product.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+                url: 'index.php?route=extension/dc_minimal/module/dc_featured.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request) + '&page=' + page,
                 dataType: 'json',
                 success: function (json) {
-                    response($.map(json, function (item) {
-                        return {
-                            label: item['name'],
-                            value: item['product_id']
-                        }
-                    }));
+                    response(json);
                 }
             });
         },
@@ -188,8 +302,8 @@ function initAutocomplete(row) {
         }
     });
 
-    $('#product-list-' + row).on('click', '.btn', function () {
-        $(this).parent().parent().remove();
+    $('#product-list-' + row).on('click', '.btn-danger', function () {
+        $(this).closest('tr').remove();
     });
 }
 
