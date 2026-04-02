@@ -19,7 +19,7 @@
 
 <script type="text/javascript">
 $('#featured-carousel-{{ module }}').owlCarousel({
-    loop: true,
+    loop: false,
     margin: 20,
     nav: true,
     dots: false,
@@ -27,9 +27,7 @@ $('#featured-carousel-{{ module }}').owlCarousel({
         '<span class="carousel-nav-btn prev"><i class="fa-solid fa-chevron-left"></i></span>',
         '<span class="carousel-nav-btn next"><i class="fa-solid fa-chevron-right"></i></span>'
     ],
-    autoplay: true,
-    autoplayTimeout: 5000,
-    autoplayHoverPause: true,
+    autoplay: false,
     responsive: {
         0: { items: 2, margin: 10 },
         576: { items: 2 },

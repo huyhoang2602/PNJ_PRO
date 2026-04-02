@@ -16,8 +16,8 @@ class DcFlashSale extends \Opencart\System\Engine\Controller {
             $data['title'] = $this->language->get('heading_title');
         }
 
-		if (!$setting['limit']) {
-			$setting['limit'] = 4;
+		if (!$setting['limit'] || $setting['limit'] <= 4) {
+			$setting['limit'] = 20;
 		}
 
         $data['end_time'] = $setting['end_time'];

@@ -10,8 +10,8 @@ class DcFeatured extends \Opencart\System\Engine\Controller {
 
 		$data['products'] = [];
 
-		if (!$setting['limit']) {
-			$setting['limit'] = 4;
+		if (!$setting['limit'] || $setting['limit'] <= 4) {
+			$setting['limit'] = 20;
 		}
 
 		if (!empty($setting['product'])) {
@@ -71,7 +71,9 @@ class DcFeatured extends \Opencart\System\Engine\Controller {
 		}
 
 		if ($data['products']) {
+            echo "<!-- DC FEATURED LOADED: " . count($data['products']) . " PRODUCTS -->";
 			return $this->load->view('extension/dc_minimal/module/dc_featured', $data);
+
 		} else {
 			return '';
 		}

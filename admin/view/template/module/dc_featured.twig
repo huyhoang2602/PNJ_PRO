@@ -55,14 +55,7 @@
             <label for="input-width" class="col-sm-2 col-form-label">{{ entry_width }}</label>
             <div class="col-sm-10">
               <input type="text" name="width" value="{{ width }}" placeholder="{{ entry_width }}" id="input-width" class="form-control"/>
-              <div id="error-width" class="invalid-feedback"></div>
-            </div>
-          </div>
-          <div class="row mb-3 required">
-            <label for="input-height" class="col-sm-2 col-form-label">{{ entry_height }}</label>
-            <div class="col-sm-10">
-              <input type="text" name="height" value="{{ height }}" placeholder="{{ entry_height }}" id="input-height" class="form-control"/>
-              <div id="error-height" class="invalid-feedback"></div>
+              <div class="form-text">{{ help_product }}</div>
             </div>
           </div>
           <div class="row mb-3">
@@ -81,33 +74,36 @@
 </div>
 <script type="text/javascript"><!--
 $('#input-product').autocomplete({
-	source: function(request, response) {
-		$.ajax({
-			url: 'index.php?route=catalog/product.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
-			dataType: 'json',
-			success: function(json) {
-				response($.map(json, function(item) {
-					return {
-						label: item['name'],
-						value: item['product_id']
-					}
-				}));
-			}
-		});
-	},
-	select: function(item) {
-		$('#input-product').val('');
-		$('#featured-product-' + item['value']).remove();
-		html  = '<tr id="featured-product-' + item['value'] + '">';
-		html += '  <td>' + item['label'] + '<input type="hidden" name="product[]" value="' + item['value'] + '"/></td>';
-		html += '  <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>';
-		html += '</tr>';
-		$('#featured-product tbody').append(html);
-	}
+    'source': function (request, response) {
+        $.ajax({
+            url: 'index.php?route=catalog/product.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function (json) {
+                response($.map(json, function (item) {
+                    return {
+                        label: item['name'],
+                        value: item['product_id']
+                    }
+                }));
+            }
+        });
+    },
+    'select': function (item) {
+        $('#input-product').val('');
+
+        $('#product-' + item['value']).remove();
+
+        html  = '<tr id="product-' + item['value'] + '">';
+        html += '  <td>' + item['label'] + '<input type="hidden" name="product[]" value="' + item['value'] + '"/></td>';
+        html += '  <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-circle-minus"></i></button></td>';
+        html += '</tr>';
+
+        $('#product-list tbody').append(html);
+    }
 });
 
-$('#featured-product').on('click', '.btn', function() {
-	$(this).parent().parent().remove();
+$('#product-list').on('click', '.btn', function () {
+    $(this).parent().parent().remove();
 });
 //--></script>
 {{ footer }}

@@ -1,3 +1,5 @@
+{% set module_id = random(1000000) %}
+
 <section class="dc-flash-sale my-5">
   <div class="container">
     <div class="text-center mb-4">
@@ -16,9 +18,9 @@
     </div>
     
     <div class="dc-featured-wrapper">
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+        <div id="flash-carousel-{{ module_id }}" class="owl-carousel product-carousel">
           {% for product in products %}
-            <div class="col">
+            <div class="item">
               {{ include('extension/dc_minimal/catalog/view/template/component/product_card.twig') }}
             </div>
           {% endfor %}
@@ -53,6 +55,24 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+    $('#flash-carousel-{{ module_id }}').owlCarousel({
+        loop: false,
+        margin: 20,
+        nav: true,
+        dots: false,
+        navText: [
+            '<span class="carousel-nav-btn prev"><i class="fa-solid fa-chevron-left"></i></span>',
+            '<span class="carousel-nav-btn next"><i class="fa-solid fa-chevron-right"></i></span>'
+        ],
+        autoplay: false,
+        responsive: {
+            0: { items: 2, margin: 10 },
+            576: { items: 2 },
+            768: { items: 3 },
+            1200: { items: 4 }
+        }
+    });
+
     var endTime = new Date('{{ end_time }}').getTime();
     
     var x = setInterval(function() {

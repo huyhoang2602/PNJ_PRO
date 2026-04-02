@@ -79,6 +79,14 @@
     margin-right: 20px;
 }
 
+#form-language .dropdown { margin-right: 20px; }
+#form-language .dropdown-toggle { cursor: pointer; transition: opacity 0.3s; padding: 5px 0 !important; }
+#form-language .dropdown-toggle:hover { opacity: 0.8; }
+#form-language .dropdown-menu { border-radius: 8px; border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 8px 0; }
+#form-language .dropdown-item { font-size: 13px; padding: 8px 20px; color: #003468; transition: background 0.3s; }
+#form-language .dropdown-item:hover { background: #f0f7ff; color: #c48c31; }
+#form-language .dropdown-item img { border-radius: 2px; }
+
 .pnj-top-right {
     flex: 1;
     display: flex;

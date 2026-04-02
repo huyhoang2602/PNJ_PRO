@@ -300,10 +300,18 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
         $status = (int)($settings['module_dc_minimal_filter_status'] ?? 0);
         $groups = $settings['module_dc_minimal_filter_groups'] ?? [];
 
+        // Load language file for filters
+        $this->load->language('extension/dc_minimal/dc_minimal');
+
         if (!$status || !is_array($groups) || !$groups) {
             $data['dynamic_filters'] = [];
             $data['price_min'] = $this->request->get['price_min'] ?? '';
             $data['price_max'] = $this->request->get['price_max'] ?? '';
+            
+            // UI Strings 
+            $this->load->language('extension/dc_minimal/dc_minimal');
+            $data['text_sort']  = $this->language->get('text_sort');
+            $data['text_limit'] = $this->language->get('text_limit');
             return;
         }
 
@@ -343,13 +351,30 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
             return (int)($a['sort_order'] ?? 0) <=> (int)($b['sort_order'] ?? 0);
         });
 
+        // Ensure language is loaded for non-header contexts (search, special, etc)
+        $this->load->language('extension/dc_minimal/dc_minimal');
+
         $dynamic_filters = [];
         $data['price_min_range'] = 0;
         $data['price_max_range'] = 0;
 
+        $log = "[" . date('H:i:s') . "] Type: $type, ID: $id, Groups Count: " . count($groups) . "\n";
+
         foreach ($groups as $group) {
-            if (empty($group['enabled'])) continue;
-            if (!in_array($type, $group['routes'] ?? [])) continue;
+            $g_type = $group['type'] ?? 'unknown';
+            $g_label = $group['label'] ?? 'no-label';
+            
+            // Check enabled
+            if (isset($group['enabled']) && !$group['enabled']) {
+                $log .= "  Skipping group $g_type ($g_label): Not enabled\n";
+                continue;
+            }
+            
+            // Check routes
+            if (!in_array($type, $group['routes'] ?? [])) {
+                $log .= "  Skipping group $g_type ($g_label): Route $type not in " . implode(',', $group['routes'] ?? []) . "\n";
+                continue;
+            }
 
             $group_data = [
                 'type'      => $group['type'] ?? '',
@@ -384,9 +409,15 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
                     $group_data['values'] = $model->getOcFilterValues($ctx, $group_data['source_id'], $show_count, $active);
                     break;
                 case 'stock':
-                    $group_data['values'] = [['id' => 'instock', 'name' => 'Còn hàng'], ['id' => 'outofstock', 'name' => 'Hết hàng']];
+                    $group_data['values'] = [
+                        ['id' => 'instock', 'name' => $this->language->get('text_instock')],
+                        ['id' => 'outofstock', 'name' => $this->language->get('text_outofstock')]
+                    ];
                     break;
             }
+
+            // Localize label from setting
+            $group_data['label'] = $this->localizeFilterLabel($group_data['label'], $group_data['type']);
 
             // Keep group if it has values or active filters
             $is_active = false;
@@ -400,14 +431,27 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
                 case 'stock': $is_active = !empty($active['stock']); break;
             }
 
-            if (!empty($group_data['values']) || $is_active) {
+            $is_active = !empty($active[$group_data['type']]) || !empty($active['attribute_' . $group_data['source_id']]);
+            
+            if (!empty($group_data['values']) || $is_active || in_array($group_data['type'], ['price', 'stock'])) {
                 $dynamic_filters[] = $group_data;
+                $log .= "  Added group $g_type ($g_label). Values count: " . count($group_data['values']) . "\n";
+            } else {
+                $log .= "  Skipping group $g_type ($g_label): Empty values and not in forced list\n";
             }
         }
 
         $data['dynamic_filters'] = $dynamic_filters;
+        
+        $log .= "Added filters: " . implode(', ', array_column($dynamic_filters, 'type')) . "\n";
+        file_put_contents(DIR_STORAGE . 'logs/filter_debug.log', $log, FILE_APPEND);
+        
         $data['price_min'] = $this->request->get['price_min'] ?? '';
         $data['price_max'] = $this->request->get['price_max'] ?? '';
+        
+        // Localized UI helper strings
+        $data['text_sort']  = $this->language->get('text_sort');
+        $data['text_limit'] = $this->language->get('text_limit');
         
         $data['manufacturer_ids'] = isset($this->request->get['manufacturer_id']) ? explode(',', (string)$this->request->get['manufacturer_id']) : [];
         $data['category_ids'] = isset($this->request->get['sub_cat']) ? explode(',', (string)$this->request->get['sub_cat']) : [];
@@ -415,5 +459,35 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
         $data['opt'] = isset($this->request->get['opt']) ? explode(',', (string)$this->request->get['opt']) : [];
         $data['filter_ids'] = isset($this->request->get['filter']) ? explode(',', (string)$this->request->get['filter']) : [];
         $data['stock'] = $this->request->get['stock'] ?? '';
+        
+        // Pass UI text for templates
+        $data['text_from']              = $this->language->get('text_from');
+        $data['text_to']                = $this->language->get('text_to');
+        $data['text_currency_hint_pnj'] = $this->language->get('text_currency_hint_pnj');
+        $data['text_apply']             = $this->language->get('text_apply');
+        $data['text_clear']             = $this->language->get('text_clear');
+        $data['text_clear_all']         = $this->language->get('text_clear_all');
     }
-}
+
+
+    private function localizeFilterLabel(string $label, string $type): string {
+        // 1. Try to match by type-specific key
+        $key = 'text_filter_' . $type;
+        $translated = $this->language->get($key);
+        
+        if ($translated != $key) {
+            return $translated;
+        }
+
+        // 2. Map common hardcoded PNJ labels
+        $map = [
+            'Khoảng giá'    => $this->language->get('text_filter_price'),
+            'Thương hiệu'   => $this->language->get('text_filter_manufacturer'),
+            'Loại sản phẩm' => $this->language->get('text_filter_category'),
+            'Chất liệu'     => $this->language->get('text_filter_material'),
+            'Trọng lượng'   => $this->language->get('text_filter_weight')
+        ];
+
+        return $map[$label] ?? $label;
+    }
+}

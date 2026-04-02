@@ -80,15 +80,19 @@
                       <input type="text" name="collections[{{ collection_row }}][link]" value="{{ collection.link }}" placeholder="{{ entry_link }}" class="form-control"/>
                     </td>
                     <td class="text-start">
-                      <input type="text" name="collections-product-{{ collection_row }}" value="" placeholder="{{ entry_product }}" id="input-product-{{ collection_row }}" data-oc-target="product-{{ collection_row }}" class="form-control mb-1" autocomplete="off"/>
-                      <div id="product-{{ collection_row }}" class="form-control p-0 overflow-auto" style="height: 150px;">
-                        {% for product in collection.product %}
-                          <div id="product-{{ collection_row }}-{{ product.product_id }}" class="d-flex align-items-center px-2 py-1 border-bottom">
-                            <i class="fa-solid fa-circle-minus text-danger me-2 cursor-pointer" onclick="$(this).parent().remove();"></i>
-                            <div>{{ product.name }}</div>
-                            <input type="hidden" name="collections[{{ collection_row }}][product][]" value="{{ product.product_id }}"/>
-                          </div>
-                        {% endfor %}
+                      <input type="text" name="collections-product-{{ collection_row }}" value="" placeholder="{{ entry_product }}" id="input-product-{{ collection_row }}" data-oc-target="autocomplete-product-{{ collection_row }}" class="form-control mb-1" autocomplete="off"/>
+                      <ul id="autocomplete-product-{{ collection_row }}" class="dropdown-menu"></ul>
+                      <div class="form-control p-0 overflow-auto" style="height: 150px;">
+                        <table id="product-list-{{ collection_row }}" class="table table-sm m-0">
+                          <tbody>
+                            {% for product in collection.product %}
+                              <tr id="product-{{ collection_row }}-{{ product.product_id }}">
+                                <td>{{ product.name }}<input type="hidden" name="collections[{{ collection_row }}][product][]" value="{{ product.product_id }}"/></td>
+                                <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-circle-minus"></i></button></td>
+                              </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
                       </div>
                     </td>
                     <td class="text-end">
@@ -136,8 +140,13 @@ function addCollection() {
     html += '  </td>';
     html += '  <td class="text-start"><input type="text" name="collections[' + collection_row + '][link]" value="" placeholder="{{ entry_link }}" class="form-control"/></td>';
     html += '  <td class="text-start">';
-    html += '    <input type="text" name="collections-product-' + collection_row + '" value="" placeholder="{{ entry_product }}" id="input-product-' + collection_row + '" data-oc-target="product-' + collection_row + '" class="form-control mb-1" autocomplete="off"/>';
-    html += '    <div id="product-' + collection_row + '" class="form-control p-0 overflow-auto" style="height: 150px;"></div>';
+    html += '    <input type="text" name="collections-product-' + collection_row + '" value="" placeholder="{{ entry_product }}" id="input-product-' + collection_row + '" data-oc-target="autocomplete-product-' + collection_row + '" class="form-control mb-1" autocomplete="off"/>';
+    html += '    <ul id="autocomplete-product-' + collection_row + '" class="dropdown-menu"></ul>';
+    html += '    <div class="form-control p-0 overflow-auto" style="height: 150px;">';
+    html += '      <table id="product-list-' + collection_row + '" class="table table-sm m-0">';
+    html += '        <tbody></tbody>';
+    html += '      </table>';
+    html += '    </div>';
     html += '  </td>';
     html += '  <td class="text-end"><button type="button" onclick="$(\'#collection-row-' + collection_row + '\').remove();" data-bs-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa-solid fa-minus-circle"></i></button></td>';
     html += '</tr>';
@@ -170,14 +179,17 @@ function initAutocomplete(row) {
 
             $('#product-' + row + '-' + item['value']).remove();
 
-            html  = '<div id="product-' + row + '-' + item['value'] + '" class="d-flex align-items-center px-2 py-1 border-bottom">';
-            html += '  <i class="fa-solid fa-circle-minus text-danger me-2 cursor-pointer" onclick="$(this).parent().remove();"></i>';
-            html += '  <div>' + item['label'] + '</div>';
-            html += '  <input type="hidden" name="collections[' + row + '][product][]" value="' + item['value'] + '"/>';
-            html += '</div>';
+            html  = '<tr id="product-' + row + '-' + item['value'] + '">';
+            html += '  <td>' + item['label'] + '<input type="hidden" name="collections[' + row + '][product][]" value="' + item['value'] + '"/></td>';
+            html += '  <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-circle-minus"></i></button></td>';
+            html += '</tr>';
 
-            $('#product-' + row).append(html);
+            $('#product-list-' + row + ' tbody').append(html);
         }
+    });
+
+    $('#product-list-' + row).on('click', '.btn', function () {
+        $(this).parent().parent().remove();
     });
 }
 

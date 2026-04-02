@@ -48,14 +48,14 @@
                                                     <div class="d-flex align-items-center gap-2 mb-2">
                                                         <div class="flex-grow-1">
                                                             <div class="input-group input-group-sm">
-                                                                <span class="input-group-text bg-light border-0">Từ</span>
-                                                                <input type="number" class="form-control border-0 bg-light" name="price_min" placeholder="VNĐ" value="{{ price_min ? price_min : '' }}">
+                                                                <span class="input-group-text bg-light border-0">{{ text_from }}</span>
+                                                                <input type="number" class="form-control border-0 bg-light" name="price_min" placeholder="{{ text_currency_hint_pnj }}" value="{{ price_min ? price_min : '' }}">
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
                                                             <div class="input-group input-group-sm">
-                                                                <span class="input-group-text bg-light border-0">Đến</span>
-                                                                <input type="number" class="form-control border-0 bg-light" name="price_max" placeholder="VNĐ" value="{{ price_max ? price_max : '' }}">
+                                                                <span class="input-group-text bg-light border-0">{{ text_to }}</span>
+                                                                <input type="number" class="form-control border-0 bg-light" name="price_max" placeholder="{{ text_currency_hint_pnj }}" value="{{ price_max ? price_max : '' }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -101,13 +101,13 @@
                                             {% endif %}
                                             <div class="dropdown-divider"></div>
                                             <div class="d-flex justify-content-between align-items-center mt-2 px-1">
-                                                <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 text-muted dropdown-clear" style="font-size: 11px;">Xóa</button>
-                                                <button type="button" class="btn btn-primary btn-sm px-3 dropdown-apply" style="font-size: 12px; border-radius: 50px;">Lọc</button>
+                                                <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 text-muted dropdown-clear" style="font-size: 11px;">{{ text_clear }}</button>
+                                                <button type="button" class="btn btn-primary btn-sm px-3 dropdown-apply" style="font-size: 12px; border-radius: 50px;">{{ text_apply }}</button>
                                             </div>
                                         </div>
                                     </div>
                                 {% endfor %}
-                                <button type="button" id="button-clear-all" class="btn btn-link btn-sm text-muted text-decoration-none d-none" style="font-size: 12px;">Xóa tất cả</button>
+                                <button type="button" id="button-clear-all" class="btn btn-link btn-sm text-muted text-decoration-none d-none" style="font-size: 12px;">{{ text_clear_all }}</button>
                             </div>
                         </div>
                         
@@ -115,7 +115,7 @@
                             <div class="d-flex align-items-center gap-2">
                                 <div class="dropdown filter-dropdown">
                                     <button class="btn btn-outline-filter dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                        <span class="text-muted fw-400" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">{{ text_sort|replace({':': ''}) }}</span> 
+                                        <span class="text-muted fw-400" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">{{ text_sort }}</span> 
                                         <span class="ms-1">
                                             {% for sorts in sorts %}
                                                 {% if sorts.value == '%s-%s'|format(sort, order) %}{{ sorts.text }}{% endif %}
@@ -131,7 +131,7 @@
                                 
                                 <div class="dropdown filter-dropdown">
                                     <button class="btn btn-outline-filter dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                        <span class="text-muted fw-400" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">{{ text_limit|replace({':': ''}) }}</span>
+                                        <span class="text-muted fw-400" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">{{ text_limit }}</span>
                                         <span class="ms-1">
                                             {% for limits in limits %}
                                                 {% if limits.value == limit %}{{ limits.text }}{% endif %}

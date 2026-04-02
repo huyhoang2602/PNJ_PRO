@@ -96,33 +96,36 @@
 </div>
 <script type="text/javascript"><!--
 $('#input-product').autocomplete({
-	source: function(request, response) {
-		$.ajax({
-			url: 'index.php?route=catalog/product.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
-			dataType: 'json',
-			success: function(json) {
-				response($.map(json, function(item) {
-					return {
-						label: item['name'],
-						value: item['product_id']
-					}
-				}));
-			}
-		});
-	},
-	select: function(item) {
-		$('#input-product').val('');
-		$('#flash-product-' + item['value']).remove();
-		html  = '<tr id="flash-product-' + item['value'] + '">';
-		html += '  <td>' + item['label'] + '<input type="hidden" name="product[]" value="' + item['value'] + '"/></td>';
-		html += '  <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-minus-circle"></i></button></td>';
-		html += '</tr>';
-		$('#flash-product tbody').append(html);
-	}
+    'source': function (request, response) {
+        $.ajax({
+            url: 'index.php?route=catalog/product.autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+            dataType: 'json',
+            success: function (json) {
+                response($.map(json, function (item) {
+                    return {
+                        label: item['name'],
+                        value: item['product_id']
+                    }
+                }));
+            }
+        });
+    },
+    'select': function (item) {
+        $('#input-product').val('');
+
+        $('#product-' + item['value']).remove();
+
+        html  = '<tr id="product-' + item['value'] + '">';
+        html += '  <td>' + item['label'] + '<input type="hidden" name="product[]" value="' + item['value'] + '"/></td>';
+        html += '  <td class="text-end"><button type="button" class="btn btn-danger btn-sm"><i class="fa-solid fa-circle-minus"></i></button></td>';
+        html += '</tr>';
+
+        $('#product-list tbody').append(html);
+    }
 });
 
-$('#flash-product').on('click', '.btn', function() {
-	$(this).parent().parent().remove();
+$('#product-list').on('click', '.btn', function () {
+    $(this).parent().parent().remove();
 });
 //--></script>
 {{ footer }}
