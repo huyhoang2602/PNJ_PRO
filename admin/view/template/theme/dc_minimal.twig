@@ -252,7 +252,7 @@
                                     {% for language in languages %}
                                     <div class="input-group mb-2">
                                         <span class="input-group-text">
-                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                            <img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" />
                                         </span>
                                         <input type="text"
                                             name="theme_dc_minimal_phone_label[{{ language.language_id }}]"
@@ -270,7 +270,7 @@
                                     {% for language in languages %}
                                     <div class="input-group mb-2">
                                         <span class="input-group-text">
-                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                            <img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" />
                                         </span>
                                         <input type="text"
                                             name="theme_dc_minimal_email_label[{{ language.language_id }}]"
@@ -288,7 +288,7 @@
                                     {% for language in languages %}
                                     <div class="input-group mb-2">
                                         <span class="input-group-text">
-                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                            <img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" />
                                         </span>
                                         <input type="text"
                                             name="theme_dc_minimal_cart_label[{{ language.language_id }}]"
@@ -306,7 +306,7 @@
                                     {% for language in languages %}
                                     <div class="input-group mb-2">
                                         <span class="input-group-text">
-                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                            <img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" />
                                         </span>
                                         <input type="text"
                                             name="theme_dc_minimal_search_label[{{ language.language_id }}]"
@@ -324,7 +324,7 @@
                                     {% for language in languages %}
                                     <div class="input-group mb-2">
                                         <span class="input-group-text">
-                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                            <img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" />
                                         </span>
                                         <input type="text"
                                             name="theme_dc_minimal_free_shipping[{{ language.language_id }}]"
@@ -342,7 +342,7 @@
                                     {% for language in languages %}
                                     <div class="input-group mb-2">
                                         <span class="input-group-text">
-                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                            <img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" />
                                         </span>
                                         <input type="text"
                                             name="theme_dc_minimal_header_title[{{ language.language_id }}]"
@@ -360,7 +360,7 @@
                                     {% for language in languages %}
                                     <div class="input-group mb-2">
                                         <span class="input-group-text">
-                                            <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+                                            <img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" />
                                         </span>
                                         <input type="text"
                                             name="theme_dc_minimal_header_subtitle[{{ language.language_id }}]"
@@ -386,4 +386,24 @@
 </script>
 
 
-{{ footer }}
+<script type="text/javascript"><!--
+$(document).ready(function() {
+    // Fix broken flags in the admin header language switcher
+    $('.navbar-nav img[src*="language/"], #header-nav img[src*="language/"], .dropdown-toggle img[src*="language/"]').each(function() {
+        var $img = $(this);
+        var src = $img.attr('src');
+        if (src && src.indexOf('language/') !== -1 && src.indexOf('extension/dc_minimal') === -1) {
+            var newSrc = '/' + src.replace(/^.*language\//, 'extension/dc_minimal/admin/language/');
+            $img.attr('src', newSrc);
+            $img.css({
+                'width': '18px',
+                'height': '12px',
+                'object-fit': 'cover',
+                'border-radius': '2px',
+                'margin-right': '5px'
+            });
+        }
+    });
+});
+//--></script>
+{{ footer }}

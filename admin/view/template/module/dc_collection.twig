@@ -61,7 +61,7 @@
                     <td class="text-start">
                       {% for language in languages %}
                         <div class="input-group">
-                          <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}"/></span>
+                          <span class="input-group-text"><img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;"/></span>
                           <input type="text" name="collections[{{ collection_row }}][title][{{ language.code }}]" value="{{ collection.title[language.code] }}" placeholder="{{ entry_collection_title }}" class="form-control"/>
                         </div>
                       {% endfor %}
@@ -242,7 +242,7 @@ function addCollection() {
     html += '  <td class="text-start">';
     {% for language in languages %}
     html += '    <div class="input-group">';
-    html += '      <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}"/></span>';
+    html += '      <span class="input-group-text"><img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;"/></span>';
     html += '      <input type="text" name="collections[' + collection_row + '][title][{{ language.code }}]" value="" placeholder="{{ entry_collection_title }}" class="form-control"/>';
     html += '    </div>';
     {% endfor %}

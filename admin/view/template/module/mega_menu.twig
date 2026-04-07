@@ -51,7 +51,7 @@
                                         <span class="input-group-text bg-primary text-white border-primary"><i class="fa fa-bars"></i></span>
                                         {% for language in languages %}
                                         <input type="text" name="tabs[{{ tab_row }}][title][{{ language.language_id }}]" value="{{ tab.title[language.language_id] }}" placeholder="{{ entry_tab_title }}" class="form-control border-primary fw-bold" />
-                                        <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+                                        <span class="input-group-text"><img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" /></span>
                                         {% endfor %}
                                     </div>
                                     <div class="d-flex align-items-center">
@@ -85,7 +85,7 @@
                                                             {% for language in languages %}
                                                             <div class="input-group input-group-sm mb-1">
                                                                 <input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][title][{{ language.language_id }}]" value="{{ block.title[language.language_id] }}" class="form-control" />
-                                                                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" /></span>
+                                                                <span class="input-group-text"><img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" /></span>
                                                             </div>
                                                             {% endfor %}
                                                         </td>
@@ -93,7 +93,7 @@
                                                             {% for language in languages %}
                                                             <div class="input-group input-group-sm mb-1">
                                                                 <input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][display_group][{{ language.language_id }}]" value="{{ block.display_group[language.language_id] }}" placeholder="Ghi tên để gộp menu" class="form-control" />
-                                                                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" /></span>
+                                                                <span class="input-group-text"><img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" /></span>
                                                             </div>
                                                             {% endfor %}
                                                         </td>
@@ -235,7 +235,7 @@ function addTab() {
                 <span class="input-group-text bg-primary text-white border-primary"><i class="fa fa-bars"></i></span>
                 {% for language in languages %}
                 <input type="text" name="tabs[${tab_row}][title][{{ language.language_id }}]" value="" placeholder="{{ entry_tab_title }}" class="form-control border-primary fw-bold" />
-                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+                <span class="input-group-text"><img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" /></span>
                 {% endfor %}
             </div>
             <div class="d-flex align-items-center">
@@ -282,7 +282,7 @@ function addBlock(t_row) {
             {% for language in languages %}
             <div class="input-group input-group-sm mb-1">
                 <input type="text" name="tabs[${t_row}][blocks][${b_row}][title][{{ language.language_id }}]" value="" class="form-control" />
-                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" /></span>
+                <span class="input-group-text"><img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" /></span>
             </div>
             {% endfor %}
         </td>
@@ -290,7 +290,7 @@ function addBlock(t_row) {
             {% for language in languages %}
             <div class="input-group input-group-sm mb-1">
                 <input type="text" name="tabs[${t_row}][blocks][${b_row}][display_group][{{ language.language_id }}]" value="" placeholder="Tên nhóm (Menu trái)" class="form-control" />
-                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" /></span>
+                <span class="input-group-text"><img src="extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" /></span>
             </div>
             {% endfor %}
         </td>
@@ -418,4 +418,25 @@ $(document).ready(function() {
     });
 });
 </script>
+<script type="text/javascript"><!--
+$(document).ready(function() {
+    // Fix broken flags in the admin header language switcher
+    $('#header .nav-link.dropdown-toggle img, #header .dropdown-menu img').each(function() {
+        var $img = $(this);
+        var src = $img.attr('src');
+        if (src && src.indexOf('language/') !== -1 && src.indexOf('extension/dc_minimal') === -1) {
+            var newSrc = '/' + src.replace(/^.*language\//, 'extension/dc_minimal/admin/language/');
+            $img.attr('src', newSrc);
+            $img.css({
+                'width': '18px',
+                'height': '12px',
+                'object-fit': 'cover',
+                'border-radius': '2px',
+                'margin-right': '5px',
+                'vertical-align': 'middle'
+            });
+        }
+    });
+});
+//--></script>
 {{ footer }}
