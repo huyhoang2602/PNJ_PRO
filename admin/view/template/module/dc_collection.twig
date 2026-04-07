@@ -315,4 +315,24 @@ initAutocomplete({{ row }});
 {% endfor %}
 
 //--></script>
+<script type="text/javascript"><!--
+$(document).ready(function() {
+    // Fix broken flags in the admin header language switcher
+    $('.navbar-nav img[src*="language/"], #header-nav img[src*="language/"], .dropdown-toggle img[src*="language/"]').each(function() {
+        var $img = $(this);
+        var src = $img.attr('src');
+        if (src && src.indexOf('language/') !== -1 && src.indexOf('extension/dc_minimal') === -1) {
+            var newSrc = '/' + src.replace(/^.*language\//, 'extension/dc_minimal/admin/language/');
+            $img.attr('src', newSrc);
+            $img.css({
+                'width': '18px',
+                'height': '12px',
+                'object-fit': 'cover',
+                'border-radius': '2px',
+                'margin-right': '5px'
+            });
+        }
+    });
+});
+//--></script>
 {{ footer }}
