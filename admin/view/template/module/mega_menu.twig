@@ -1,0 +1,230 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="float-end">
+                <button type="submit" form="form-module" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+                <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+            </div>
+            <h1>{{ heading_title }}</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% for breadcrumb in breadcrumbs %}
+                    <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                    {% endfor %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+            <div class="card-body">
+                <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
+                    <div class="row mb-3">
+                        <label for="input-status" class="col-sm-2 col-form-label">{{ entry_status }}</label>
+                        <div class="col-sm-10">
+                            <div class="form-check form-switch form-switch-lg">
+                                <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input" {% if status %}checked{% endif %}>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label for="input-gender-attr" class="col-sm-2 col-form-label">{{ entry_gender_attr }}</label>
+                        <div class="col-sm-10">
+                            <select name="gender_attr_id" id="input-gender-attr" class="form-select">
+                                <option value="0">{{ text_select }}</option>
+                                {% for attr in all_attributes %}
+                                <option value="{{ attr.attribute_id }}" {% if attr.attribute_id == gender_attr_id %}selected{% endif %}>{{ attr.group }} > {{ attr.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label text-primary fw-bold">Tabs Context (Nam / Nữ / Trẻ em)</label>
+                        <div class="col-sm-10">
+                            <div id="tabs-container">
+                                {% set tab_row = 0 %}
+                                {% for tab in tabs %}
+                                <div class="card mb-3 tab-row" id="tab-row-{{ tab_row }}">
+                                    <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                                        <div class="input-group input-group-sm w-50">
+                                            <span class="input-group-text"><i class="fa fa-bars"></i></span>
+                                            {% for language in languages %}
+                                            <input type="text" name="tabs[{{ tab_row }}][title][{{ language.language_id }}]" value="{{ tab.title[language.language_id] }}" placeholder="{{ entry_tab_title }}" class="form-control" />
+                                            <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <input type="text" name="tabs[{{ tab_row }}][gender_val]" value="{{ tab.gender_val }}" placeholder="{{ entry_gender_val }} (e.g. Nam)" class="form-control form-control-sm me-2" style="width: 150px;" />
+                                            <button type="button" onclick="$('#tab-row-{{ tab_row }}').remove();" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-2">
+                                        <table class="table table-sm table-bordered mb-0" id="blocks-{{ tab_row }}">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{ entry_block_title }}</th>
+                                                    <th>{{ entry_data_source }}</th>
+                                                    <th style="width: 80px;">Cols</th>
+                                                    <th style="width: 80px;">Limit</th>
+                                                    <th>Icon (FA)</th>
+                                                    <th style="width: 50px;"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% set block_row = 0 %}
+                                                {% if tab.blocks %}
+                                                    {% for block in tab.blocks %}
+                                                    <tr id="block-row-{{ tab_row }}-{{ block_row }}">
+                                                        <td>
+                                                            {% for language in languages %}
+                                                            <div class="input-group input-group-sm mb-1">
+                                                                <input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][title][{{ language.language_id }}]" value="{{ block.title[language.language_id] }}" class="form-control" />
+                                                                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" /></span>
+                                                            </div>
+                                                            {% endfor %}
+                                                        </td>
+                                                        <td>
+                                                            <select name="tabs[{{ tab_row }}][blocks][{{ block_row }}][type]" class="form-select form-select-sm mb-1" onchange="toggleDataSource(this, {{ tab_row }}, {{ block_row }})">
+                                                                <option value="category" {% if block.type == 'category' %}selected{% endif %}>{{ text_category }}</option>
+                                                                <option value="manufacturer" {% if block.type == 'manufacturer' %}selected{% endif %}>{{ text_manufacturer }}</option>
+                                                                <option value="attribute_group" {% if block.type == 'attribute_group' %}selected{% endif %}>Attribute Group</option>
+                                                                <option value="attribute" {% if block.type == 'attribute' %}selected{% endif %}>{{ text_attribute }}</option>
+                                                                <option value="custom" {% if block.type == 'custom' %}selected{% endif %}>{{ text_custom_link }}</option>
+                                                            </select>
+                                                            <div class="data-source-id-wrapper">
+                                                                <input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][source_id]" value="{{ block.source_id }}" placeholder="ID / Param" class="form-control form-control-sm" />
+                                                            </div>
+                                                        </td>
+                                                        <td><input type="number" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][cols]" value="{{ block.cols|default(1) }}" class="form-control form-control-sm" /></td>
+                                                        <td><input type="number" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][limit]" value="{{ block.limit|default(10) }}" class="form-control form-control-sm" /></td>
+                                                        <td><input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][icon]" value="{{ block.icon }}" class="form-control form-control-sm" /></td>
+                                                        <td><button type="button" onclick="$('#block-row-{{ tab_row }}-{{ block_row }}').remove();" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button></td>
+                                                    </tr>
+                                                    {% set block_row = block_row + 1 %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5"></td>
+                                                    <td><button type="button" onclick="addBlock({{ tab_row }});" class="btn btn-success btn-sm"><i class="fa fa-plus-circle"></i></button></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                {% set tab_row = tab_row + 1 %}
+                                {% endfor %}
+                            </div>
+                            <button type="button" onclick="addTab();" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i> {{ text_add_tab }}</button>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 border-top pt-3 mt-4">
+                        <label for="input-search" class="col-sm-2 col-form-label">{{ entry_search }}</label>
+                        <div class="col-sm-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" name="search_status" value="1" id="input-search" class="form-check-input" {% if search_status %}checked{% endif %}>
+                            </div>
+                        </div>
+                        <label for="input-cache" class="col-sm-2 col-form-label">{{ entry_cache }}</label>
+                        <div class="col-sm-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" name="cache_status" value="1" id="input-cache" class="form-check-input" {% if cache_status %}checked{% endif %}>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+let tab_row = {{ tab_row }};
+
+function addTab() {
+    let html = `
+    <div class="card mb-3 tab-row" id="tab-row-${tab_row}">
+        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+            <div class="input-group input-group-sm w-50">
+                <span class="input-group-text"><i class="fa fa-bars"></i></span>
+                {% for language in languages %}
+                <input type="text" name="tabs[${tab_row}][title][{{ language.language_id }}]" value="" placeholder="{{ entry_tab_title }}" class="form-control" />
+                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+                {% endfor %}
+            </div>
+            <div class="d-flex align-items-center">
+                <input type="text" name="tabs[${tab_row}][gender_val]" value="" placeholder="{{ entry_gender_val }}" class="form-control form-control-sm me-2" style="width: 150px;" />
+                <button type="button" onclick="$('#tab-row-${tab_row}').remove();" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button>
+            </div>
+        </div>
+        <div class="card-body p-2">
+            <table class="table table-sm table-bordered mb-0" id="blocks-${tab_row}">
+                <thead>
+                    <tr>
+                        <th>{{ entry_block_title }}</th>
+                        <th>{{ entry_data_source }}</th>
+                        <th style="width: 80px;">Cols</th>
+                        <th style="width: 80px;">Limit</th>
+                        <th>Icon (FA)</th>
+                        <th style="width: 50px;"></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5"></td>
+                        <td><button type="button" onclick="addBlock(${tab_row});" class="btn btn-success btn-sm"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>`;
+
+    $('#tabs-container').append(html);
+    tab_row++;
+}
+
+function addBlock(t_row) {
+    let b_row = $(`#blocks-${t_row} tbody tr`).length;
+    let html = `
+    <tr id="block-row-${t_row}-${b_row}">
+        <td>
+            {% for language in languages %}
+            <div class="input-group input-group-sm mb-1">
+                <input type="text" name="tabs[${t_row}][blocks][${b_row}][title][{{ language.language_id }}]" value="" class="form-control" />
+                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" /></span>
+            </div>
+            {% endfor %}
+        </td>
+        <td>
+            <select name="tabs[${t_row}][blocks][${b_row}][type]" class="form-select form-select-sm mb-1" onchange="toggleDataSource(this, ${t_row}, ${b_row})">
+                <option value="category">{{ text_category }}</option>
+                <option value="manufacturer">{{ text_manufacturer }}</option>
+                <option value="attribute_group">Attribute Group</option>
+                <option value="attribute">{{ text_attribute }}</option>
+                <option value="custom">{{ text_custom_link }}</option>
+            </select>
+            <div class="data-source-id-wrapper">
+                <input type="text" name="tabs[${t_row}][blocks][${b_row}][source_id]" value="" placeholder="ID / Param" class="form-control form-control-sm" />
+            </div>
+        </td>
+        <td><input type="number" name="tabs[${t_row}][blocks][${b_row}][cols]" value="1" class="form-control form-control-sm" /></td>
+        <td><input type="number" name="tabs[${t_row}][blocks][${b_row}][limit]" value="10" class="form-control form-control-sm" /></td>
+        <td><input type="text" name="tabs[${t_row}][blocks][${b_row}][icon]" value="" class="form-control form-control-sm" /></td>
+        <td><button type="button" onclick="$('#block-row-${t_row}-${b_row}').remove();" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button></td>
+    </tr>`;
+
+    $(`#blocks-${t_row} tbody`).append(html);
+}
+
+function toggleDataSource(el, t_id, b_id) {
+    // Optional: add more logic if needed to show specific dropdowns
+}
+</script>
+{{ footer }}

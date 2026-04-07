@@ -48,6 +48,10 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
             } elseif (strpos($route_get, 'checkout/') !== false) {
                 $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/checkout.css');
             }
+
+            // MEGA MENU ASSETS
+            $this->document->addStyle('extension/dc_minimal/catalog/view/stylesheet/mega_menu.css');
+            $this->document->addScript('extension/dc_minimal/catalog/view/javascript/mega_menu.js');
 		}
 	}
 
@@ -165,6 +169,9 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
                     break;
                 }
             }
+
+            // PNJ MEGA MENU
+            $data['mega_menu'] = $this->load->controller('extension/dc_minimal/module/mega_menu');
 		}
 
 		// Home page specific data
@@ -196,7 +203,7 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
             $data['action'] = $this->url->link('product/category', 'language=' . $this->config->get('config_language') . $url, true);
 
             $this->injectDynamicFilters('category', $category_id, $data);
-        } elseif (in_array($route, ['product/manufacturer_info', 'extension/dc_minimal/product/manufacturer_info'])) {
+        } elseif (in_array($route, ['product/manufacturer.info', 'product/manufacturer_info', 'extension/dc_minimal/product/manufacturer.info', 'extension/dc_minimal/product/manufacturer_info'])) {
             $manufacturer_id = (int)($this->request->get['manufacturer_id'] ?? 0);
             
             // Inject action URL for AJAX

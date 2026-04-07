@@ -1,0 +1,51 @@
+<div class="pnj-nav-header d-lg-none">
+    <span>Danh Mục</span>
+    <i class="fa fa-times pnj-nav-close"></i>
+</div>
+<ul class="pnj-menu">
+    {% for tab in tabs %}
+    <li class="mega-parent" data-tab-id="{{ tab.id }}">
+        <a href="{{ tab.href }}">{{ tab.title }}</a>
+        <div class="mega-modal">
+            <div class="mega-left">
+                {% for block in tab.blocks %}
+                <div class="mega-item {% if loop.first %}active{% endif %}" data-target="{{ tab.id }}-block-{{ loop.index0 }}">
+                    {% if block.icon %}<i class="{{ block.icon }}"></i> {% endif %}{{ block.title }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="mega-right">
+                {% for block in tab.blocks %}
+                <div class="mega-content {% if loop.first %}active{% endif %}" id="{{ tab.id }}-block-{{ loop.index0 }}">
+                    <div class="mega-grid grid-cols-{{ block.cols|default(1) }}">
+                        {% set slice_size = (block.items|length / block.cols|default(1))|round(0, 'ceil') %}
+                        {% if slice_size < 1 %}{% set slice_size = 1 %}{% endif %}
+                        
+                        {% for i in 0..(block.cols|default(1) - 1) %}
+                        <div class="mega-col">
+                            {% if i == 0 %}<h4>{{ block.title }}</h4>{% else %}<h4 style="visibility: hidden;">&nbsp;</h4>{% endif %}
+                            <div class="mega-items-list">
+                                {% for item in block.items|slice(i * slice_size, slice_size) %}
+                                <a href="{{ item.href }}">
+                                    {% if item.thumb %}<img src="{{ item.thumb }}" alt="{{ item.name }}" class="small-icon"> {% endif %}
+                                    {{ item.name }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+{% if search_status %}
+<div class="pnj-search">
+    <i class="fa fa-search"></i>
+    <input type="text" placeholder="Tìm kiếm nhanh">
+</div>
+{% endif %}
