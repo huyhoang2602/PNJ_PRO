@@ -4,7 +4,7 @@
             <button class="btn dropdown-toggle d-flex align-items-center gap-1" type="button" id="dropdownLanguage" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; background: transparent; padding: 0; color: #003468; font-size: 13px; font-weight: 500;">
                 {% for language in languages %}
                     {% if language.code == code %}
-                        <img src="catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" />
+                        <img src="extension/dc_minimal/catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}" style="width: 20px; height: 14px; object-fit: cover; border-radius: 2px;" onerror="this.src='catalog/language/{{ language.code }}/{{ language.code }}.png'; this.onerror=null;" />
                         <span class="ms-1">{{ language.name }}</span>
                     {% endif %}
                 {% endfor %}
@@ -13,7 +13,7 @@
                 {% for language in languages %}
                     <li>
                         <a href="{{ language.code }}" class="dropdown-item language-select d-flex align-items-center gap-2">
-                            <img src="catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}" />
+                            <img src="extension/dc_minimal/catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;" onerror="this.src='catalog/language/{{ language.code }}/{{ language.code }}.png'; this.onerror=null;" />
                             {{ language.name }}
                         </a>
                     </li>
