@@ -27,6 +27,7 @@ class MegaMenu extends \Opencart\System\Engine\Controller {
         // Data for selects
         $this->load->model('extension/dc_minimal/module/filter');
         $data['all_attributes'] = $this->model_extension_dc_minimal_module_filter->getAttributeList();
+        $data['all_attribute_groups'] = $this->model_extension_dc_minimal_module_filter->getAttributeGroupList();
         
         $this->load->model('catalog/category');
         $data['all_categories'] = $this->model_catalog_category->getCategories(['sort' => 'name']);

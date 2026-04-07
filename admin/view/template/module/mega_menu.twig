@@ -18,59 +18,61 @@
     </div>
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+            <div class="card-header bg-dark text-white"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
             <div class="card-body">
                 <form id="form-module" action="{{ save }}" method="post" data-oc-toggle="ajax">
-                    <div class="row mb-3">
-                        <label for="input-status" class="col-sm-2 col-form-label">{{ entry_status }}</label>
-                        <div class="col-sm-10">
-                            <div class="form-check form-switch form-switch-lg">
+                    <div class="row mb-4">
+                        <label for="input-status" class="col-sm-2 col-form-label fw-bold">{{ entry_status }}</label>
+                        <div class="col-sm-4">
+                            <div class="form-check form-switch form-switch-lg mt-1">
                                 <input type="checkbox" name="status" value="1" id="input-status" class="form-check-input" {% if status %}checked{% endif %}>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label for="input-gender-attr" class="col-sm-2 col-form-label">{{ entry_gender_attr }}</label>
-                        <div class="col-sm-10">
-                            <select name="gender_attr_id" id="input-gender-attr" class="form-select">
+                        <label for="input-gender-attr" class="col-sm-2 col-form-label fw-bold">{{ entry_gender_attr }}</label>
+                        <div class="col-sm-4">
+                            <select name="gender_attr_id" id="input-gender-attr" class="form-select border-primary shadow-sm">
                                 <option value="0">{{ text_select }}</option>
                                 {% for attr in all_attributes %}
                                 <option value="{{ attr.attribute_id }}" {% if attr.attribute_id == gender_attr_id %}selected{% endif %}>{{ attr.group }} > {{ attr.name }}</option>
                                 {% endfor %}
                             </select>
+                            <small class="text-muted">Cho phép hệ thống tự lọc sản phẩm Nam/Nữ/Trẻ em</small>
                         </div>
                     </div>
 
-                    <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label text-primary fw-bold">Tabs Context (Nam / Nữ / Trẻ em)</label>
-                        <div class="col-sm-10">
-                            <div id="tabs-container">
-                                {% set tab_row = 0 %}
-                                {% for tab in tabs %}
-                                <div class="card mb-3 tab-row" id="tab-row-{{ tab_row }}">
-                                    <div class="card-header d-flex justify-content-between align-items-center bg-light">
-                                        <div class="input-group input-group-sm w-50">
-                                            <span class="input-group-text"><i class="fa fa-bars"></i></span>
-                                            {% for language in languages %}
-                                            <input type="text" name="tabs[{{ tab_row }}][title][{{ language.language_id }}]" value="{{ tab.title[language.language_id] }}" placeholder="{{ entry_tab_title }}" class="form-control" />
-                                            <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <input type="text" name="tabs[{{ tab_row }}][gender_val]" value="{{ tab.gender_val }}" placeholder="{{ entry_gender_val }} (e.g. Nam)" class="form-control form-control-sm me-2" style="width: 150px;" />
-                                            <button type="button" onclick="$('#tab-row-{{ tab_row }}').remove();" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button>
-                                        </div>
+                    <div class="tabs-wrapper mb-4">
+                        <h5 class="mb-3 p-2 bg-light border-start border-4 border-primary">Cấu hình Tabs (Nam / Nữ / Trẻ em)</h5>
+                        <div id="tabs-container">
+                            {% set tab_row = 0 %}
+                            {% for tab in tabs %}
+                            <div class="card mb-4 tab-row shadow-sm border-2" id="tab-row-{{ tab_row }}">
+                                <div class="card-header d-flex justify-content-between align-items-center bg-white py-3">
+                                    <div class="input-group input-group-sm w-50">
+                                        <span class="input-group-text bg-primary text-white border-primary"><i class="fa fa-bars"></i></span>
+                                        {% for language in languages %}
+                                        <input type="text" name="tabs[{{ tab_row }}][title][{{ language.language_id }}]" value="{{ tab.title[language.language_id] }}" placeholder="{{ entry_tab_title }}" class="form-control border-primary fw-bold" />
+                                        <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
+                                        {% endfor %}
                                     </div>
-                                    <div class="card-body p-2">
-                                        <table class="table table-sm table-bordered mb-0" id="blocks-{{ tab_row }}">
-                                            <thead>
+                                    <div class="d-flex align-items-center">
+                                        <div class="input-group input-group-sm me-3" style="width: 200px;">
+                                            <span class="input-group-text bg-light border-primary"><i class="fa fa-venus-mars"></i></span>
+                                            <input type="text" name="tabs[{{ tab_row }}][gender_val]" value="{{ tab.gender_val }}" placeholder="{{ entry_gender_val }}" class="form-control border-primary" />
+                                        </div>
+                                        <button type="button" onclick="$('#tab-row-{{ tab_row }}').remove();" class="btn btn-outline-danger btn-sm rounded-pill"><i class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3 bg-light">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover align-middle mb-0" id="blocks-{{ tab_row }}">
+                                            <thead class="table-secondary small">
                                                 <tr>
                                                     <th>{{ entry_block_title }}</th>
-                                                    <th>{{ entry_data_source }}</th>
-                                                    <th style="width: 80px;">Cols</th>
+                                                    <th>{{ entry_display_group }}</th>
+                                                    <th style="width: 320px;">{{ entry_data_source }}</th>
+                                                    <th style="width: 80px;">Cột</th>
                                                     <th style="width: 80px;">Limit</th>
-                                                    <th>Icon (FA)</th>
+                                                    <th>Icon</th>
                                                     <th style="width: 50px;"></th>
                                                 </tr>
                                             </thead>
@@ -78,7 +80,7 @@
                                                 {% set block_row = 0 %}
                                                 {% if tab.blocks %}
                                                     {% for block in tab.blocks %}
-                                                    <tr id="block-row-{{ tab_row }}-{{ block_row }}">
+                                                    <tr id="block-row-{{ tab_row }}-{{ block_row }}" class="bg-white">
                                                         <td>
                                                             {% for language in languages %}
                                                             <div class="input-group input-group-sm mb-1">
@@ -88,21 +90,100 @@
                                                             {% endfor %}
                                                         </td>
                                                         <td>
-                                                            <select name="tabs[{{ tab_row }}][blocks][{{ block_row }}][type]" class="form-select form-select-sm mb-1" onchange="toggleDataSource(this, {{ tab_row }}, {{ block_row }})">
-                                                                <option value="category" {% if block.type == 'category' %}selected{% endif %}>{{ text_category }}</option>
-                                                                <option value="manufacturer" {% if block.type == 'manufacturer' %}selected{% endif %}>{{ text_manufacturer }}</option>
-                                                                <option value="attribute_group" {% if block.type == 'attribute_group' %}selected{% endif %}>Attribute Group</option>
-                                                                <option value="attribute" {% if block.type == 'attribute' %}selected{% endif %}>{{ text_attribute }}</option>
-                                                                <option value="custom" {% if block.type == 'custom' %}selected{% endif %}>{{ text_custom_link }}</option>
-                                                            </select>
-                                                            <div class="data-source-id-wrapper">
-                                                                <input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][source_id]" value="{{ block.source_id }}" placeholder="ID / Param" class="form-control form-control-sm" />
+                                                            {% for language in languages %}
+                                                            <div class="input-group input-group-sm mb-1">
+                                                                <input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][display_group][{{ language.language_id }}]" value="{{ block.display_group[language.language_id] }}" placeholder="Ghi tên để gộp menu" class="form-control" />
+                                                                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" /></span>
+                                                            </div>
+                                                            {% endfor %}
+                                                        </td>
+                                                        <td>
+                                                            <div class="mb-2">
+                                                                <select name="tabs[{{ tab_row }}][blocks][{{ block_row }}][type]" class="form-select form-select-sm mb-1 border-primary" onchange="toggleDataSource(this, {{ tab_row }}, {{ block_row }})">
+                                                                    <option value="category" {% if block.type == 'category' %}selected{% endif %}>{{ text_category }}</option>
+                                                                    <option value="manufacturer" {% if block.type == 'manufacturer' %}selected{% endif %}>{{ text_manufacturer }}</option>
+                                                                    <option value="attribute_group" {% if block.type == 'attribute_group' %}selected{% endif %}>{{ text_attribute_group }}</option>
+                                                                    <option value="attribute" {% if block.type == 'attribute' %}selected{% endif %}>{{ text_attribute }}</option>
+                                                                    <option value="custom" {% if block.type == 'custom' %}selected{% endif %}>{{ text_custom_link }}</option>
+                                                                </select>
+                                                                <select name="tabs[{{ tab_row }}][blocks][{{ block_row }}][selection_mode]" class="form-select form-select-sm border-secondary selection-mode-select" onchange="toggleSelectionMode(this, {{ tab_row }}, {{ block_row }})">
+                                                                    <option value="auto" {% if block.selection_mode == 'auto' %}selected{% endif %}>{{ text_selection_auto }}</option>
+                                                                    <option value="manual" {% if block.selection_mode == 'manual' %}selected{% endif %}>{{ text_selection_manual }}</option>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="source-input-field">
+                                                                <input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][source_id]" value="{{ block.source_id }}" placeholder="ID / Param" class="form-control form-control-sm mb-2 source-id-input {% if block.selection_mode == 'auto' and (block.type == 'category' or block.type == 'manufacturer' or block.type == 'attribute' or block.type == 'attribute_group') %}d-none{% endif %}" />
+                                                                
+                                                                <!-- Category Select (Auto/Simple) -->
+                                                                <select name="tabs[{{ tab_row }}][blocks][{{ block_row }}][temp_category]" class="form-select form-select-sm temp-select {% if block.selection_mode != 'auto' or block.type != 'category' %}d-none{% endif %}">
+                                                                    <option value="0">--- Chọn danh mục gốc ---</option>
+                                                                    {% for c in all_categories %}
+                                                                    <option value="{{ c.category_id }}" {% if block.type == 'category' and block.source_id == c.category_id %}selected{% endif %}>{{ c.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+
+                                                                <!-- Manufacturer Select (Auto/Simple) -->
+                                                                <select name="tabs[{{ tab_row }}][blocks][{{ block_row }}][temp_manufacturer]" class="form-select form-select-sm temp-select {% if block.selection_mode != 'auto' or block.type != 'manufacturer' %}d-none{% endif %}">
+                                                                    <option value="0">--- Chọn thương hiệu ---</option>
+                                                                    {% for m in all_manufacturers %}
+                                                                    <option value="{{ m.manufacturer_id }}" {% if block.type == 'manufacturer' and block.source_id == m.manufacturer_id %}selected{% endif %}>{{ m.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+
+                                                                <!-- Manual Pickers -->
+                                                                <div class="position-relative">
+                                                                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 manual-toggle-btn {% if block.selection_mode != 'manual' %}d-none{% endif %}" onclick="$(this).next('.manual-picker').toggleClass('d-none'); event.stopPropagation();">
+                                                                        <i class="fa fa-list"></i> {{ text_select_items|default('Chọn danh sách') }}
+                                                                    </button>
+                                                                    <div class="manual-picker border rounded p-2 bg-light d-none" style="max-height: 200px; overflow-y: auto; position: absolute; z-index: 1000; width: 100%; top: 100%; left: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                                                        <div class="manual-header d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom">
+                                                                            <span class="small fw-bold">Dữ liệu nguồn</span>
+                                                                            <button type="button" class="btn-close" style="font-size: 10px;" onclick="$(this).closest('.manual-picker').addClass('d-none');"></button>
+                                                                        </div>
+                                                                        <div class="category-manual {% if block.type != 'category' %}d-none{% endif %}">
+                                                                            {% for c in all_categories %}
+                                                                            <div class="form-check">
+                                                                                <input type="checkbox" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][selected_ids][]" value="{{ c.category_id }}" class="form-check-input" id="cat-{{ tab_row }}-{{ block_row }}-{{ c.category_id }}" {% if c.category_id in block.selected_ids %}checked{% endif %}>
+                                                                                <label class="form-check-label small" for="cat-{{ tab_row }}-{{ block_row }}-{{ c.category_id }}">{{ c.name }}</label>
+                                                                            </div>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                        <div class="manufacturer-manual {% if block.type != 'manufacturer' %}d-none{% endif %}">
+                                                                            {% for m in all_manufacturers %}
+                                                                            <div class="form-check">
+                                                                                <input type="checkbox" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][selected_ids][]" value="{{ m.manufacturer_id }}" class="form-check-input" id="man-{{ tab_row }}-{{ block_row }}-{{ m.manufacturer_id }}" {% if m.manufacturer_id in block.selected_ids %}checked{% endif %}>
+                                                                                <label class="form-check-label small" for="man-{{ tab_row }}-{{ block_row }}-{{ m.manufacturer_id }}">{{ m.name }}</label>
+                                                                            </div>
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Other Selects -->
+                                                                <select name="tabs[{{ tab_row }}][blocks][{{ block_row }}][temp_attribute]" class="form-select form-select-sm temp-select {% if block.selection_mode != 'auto' or block.type != 'attribute' %}d-none{% endif %}">
+                                                                    {% for a in all_attributes %}
+                                                                    <option value="{{ a.attribute_id }}" {% if block.type == 'attribute' and block.source_id == a.attribute_id %}selected{% endif %}>{{ a.group }} > {{ a.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                                <select name="tabs[{{ tab_row }}][blocks][{{ block_row }}][temp_attribute_group]" class="form-select form-select-sm temp-select {% if block.selection_mode != 'auto' or block.type != 'attribute_group' %}d-none{% endif %}">
+                                                                    {% for ag in all_attribute_groups %}
+                                                                    <option value="{{ ag.attribute_group_id }}" {% if block.type == 'attribute_group' and block.source_id == ag.attribute_group_id %}selected{% endif %}>{{ ag.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
                                                             </div>
                                                         </td>
-                                                        <td><input type="number" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][cols]" value="{{ block.cols|default(1) }}" class="form-control form-control-sm" /></td>
-                                                        <td><input type="number" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][limit]" value="{{ block.limit|default(10) }}" class="form-control form-control-sm" /></td>
-                                                        <td><input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][icon]" value="{{ block.icon }}" class="form-control form-control-sm" /></td>
-                                                        <td><button type="button" onclick="$('#block-row-{{ tab_row }}-{{ block_row }}').remove();" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button></td>
+                                                        <td><input type="number" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][cols]" value="{{ block.cols|default(1) }}" class="form-control form-control-sm text-center" /></td>
+                                                        <td><input type="number" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][limit]" value="{{ block.limit|default(10) }}" class="form-control form-control-sm text-center" /></td>
+                                                        <td>
+                                                            <div class="input-group input-group-sm">
+                                                                <span class="input-group-text"><i class="fa {{ block.icon|default('fa-star') }}"></i></span>
+                                                                <input type="text" name="tabs[{{ tab_row }}][blocks][{{ block_row }}][icon]" value="{{ block.icon }}" placeholder="fa-ring" class="form-control" />
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" onclick="$('#block-row-{{ tab_row }}-{{ block_row }}').remove();" class="btn btn-outline-danger btn-sm border-0"><i class="fa fa-minus-circle"></i></button>
+                                                        </td>
                                                     </tr>
                                                     {% set block_row = block_row + 1 %}
                                                     {% endfor %}
@@ -110,29 +191,29 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <td colspan="5"></td>
-                                                    <td><button type="button" onclick="addBlock({{ tab_row }});" class="btn btn-success btn-sm"><i class="fa fa-plus-circle"></i></button></td>
+                                                    <td colspan="6"></td>
+                                                    <td class="text-center"><button type="button" onclick="addBlock({{ tab_row }});" class="btn btn-outline-success btn-sm p-0 border-0" style="font-size: 1.5rem;"><i class="fa fa-plus-circle"></i></button></td>
                                                 </tr>
                                             </tfoot>
                                         </table>
                                     </div>
                                 </div>
-                                {% set tab_row = tab_row + 1 %}
-                                {% endfor %}
                             </div>
-                            <button type="button" onclick="addTab();" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i> {{ text_add_tab }}</button>
+                            {% set tab_row = tab_row + 1 %}
+                            {% endfor %}
                         </div>
+                        <button type="button" onclick="addTab();" class="btn btn-primary rounded-pill px-4 shadow-sm"><i class="fa fa-plus-circle me-2"></i> {{ text_add_tab }}</button>
                     </div>
 
-                    <div class="row mb-3 border-top pt-3 mt-4">
-                        <label for="input-search" class="col-sm-2 col-form-label">{{ entry_search }}</label>
-                        <div class="col-sm-4">
+                    <div class="row mb-3 border-top pt-3 mt-4 bg-light p-3 rounded">
+                        <div class="col-sm-6 d-flex align-items-center">
+                            <label for="input-search" class="me-3 fw-bold">{{ entry_search }}</label>
                             <div class="form-check form-switch">
                                 <input type="checkbox" name="search_status" value="1" id="input-search" class="form-check-input" {% if search_status %}checked{% endif %}>
                             </div>
                         </div>
-                        <label for="input-cache" class="col-sm-2 col-form-label">{{ entry_cache }}</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6 d-flex align-items-center justify-content-end">
+                            <label for="input-cache" class="me-3 fw-bold">{{ entry_cache }}</label>
                             <div class="form-check form-switch">
                                 <input type="checkbox" name="cache_status" value="1" id="input-cache" class="form-check-input" {% if cache_status %}checked{% endif %}>
                             </div>
@@ -148,52 +229,55 @@
 let tab_row = {{ tab_row }};
 
 function addTab() {
-    let html = `
-    <div class="card mb-3 tab-row" id="tab-row-${tab_row}">
-        <div class="card-header d-flex justify-content-between align-items-center bg-light">
+    let html = `<div class="card mb-4 tab-row shadow-sm border-2" id="tab-row-${tab_row}">
+        <div class="card-header d-flex justify-content-between align-items-center bg-white py-3">
             <div class="input-group input-group-sm w-50">
-                <span class="input-group-text"><i class="fa fa-bars"></i></span>
+                <span class="input-group-text bg-primary text-white border-primary"><i class="fa fa-bars"></i></span>
                 {% for language in languages %}
-                <input type="text" name="tabs[${tab_row}][title][{{ language.language_id }}]" value="" placeholder="{{ entry_tab_title }}" class="form-control" />
+                <input type="text" name="tabs[${tab_row}][title][{{ language.language_id }}]" value="" placeholder="{{ entry_tab_title }}" class="form-control border-primary fw-bold" />
                 <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /></span>
                 {% endfor %}
             </div>
             <div class="d-flex align-items-center">
-                <input type="text" name="tabs[${tab_row}][gender_val]" value="" placeholder="{{ entry_gender_val }}" class="form-control form-control-sm me-2" style="width: 150px;" />
-                <button type="button" onclick="$('#tab-row-${tab_row}').remove();" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button>
+                <div class="input-group input-group-sm me-3" style="width: 200px;">
+                    <span class="input-group-text bg-light border-primary"><i class="fa fa-venus-mars"></i></span>
+                    <input type="text" name="tabs[${tab_row}][gender_val]" value="" placeholder="{{ entry_gender_val }}" class="form-control border-primary" />
+                </div>
+                <button type="button" onclick="$('#tab-row-${tab_row}').remove();" class="btn btn-outline-danger btn-sm rounded-pill"><i class="fa fa-trash"></i></button>
             </div>
         </div>
-        <div class="card-body p-2">
-            <table class="table table-sm table-bordered mb-0" id="blocks-${tab_row}">
-                <thead>
-                    <tr>
-                        <th>{{ entry_block_title }}</th>
-                        <th>{{ entry_data_source }}</th>
-                        <th style="width: 80px;">Cols</th>
-                        <th style="width: 80px;">Limit</th>
-                        <th>Icon (FA)</th>
-                        <th style="width: 50px;"></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="5"></td>
-                        <td><button type="button" onclick="addBlock(${tab_row});" class="btn btn-success btn-sm"><i class="fa fa-plus-circle"></i></button></td>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="card-body p-3 bg-light">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle mb-0" id="blocks-${tab_row}">
+                    <thead class="table-secondary small">
+                        <tr>
+                            <th>{{ entry_block_title }}</th>
+                            <th>{{ entry_display_group }}</th>
+                            <th style="width: 320px;">{{ entry_data_source }}</th>
+                            <th style="width: 80px;">Cột</th>
+                            <th style="width: 80px;">Limit</th>
+                            <th>Icon</th>
+                            <th style="width: 50px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6"></td>
+                            <td class="text-center"><button type="button" onclick="addBlock(${tab_row});" class="btn btn-outline-success btn-sm p-0 border-0" style="font-size: 1.5rem;"><i class="fa fa-plus-circle"></i></button></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>`;
-
     $('#tabs-container').append(html);
     tab_row++;
 }
 
 function addBlock(t_row) {
     let b_row = $(`#blocks-${t_row} tbody tr`).length;
-    let html = `
-    <tr id="block-row-${t_row}-${b_row}">
+    let html = `<tr id="block-row-${t_row}-${b_row}" class="bg-white">
         <td>
             {% for language in languages %}
             <div class="input-group input-group-sm mb-1">
@@ -203,28 +287,135 @@ function addBlock(t_row) {
             {% endfor %}
         </td>
         <td>
-            <select name="tabs[${t_row}][blocks][${b_row}][type]" class="form-select form-select-sm mb-1" onchange="toggleDataSource(this, ${t_row}, ${b_row})">
-                <option value="category">{{ text_category }}</option>
-                <option value="manufacturer">{{ text_manufacturer }}</option>
-                <option value="attribute_group">Attribute Group</option>
-                <option value="attribute">{{ text_attribute }}</option>
-                <option value="custom">{{ text_custom_link }}</option>
-            </select>
-            <div class="data-source-id-wrapper">
-                <input type="text" name="tabs[${t_row}][blocks][${b_row}][source_id]" value="" placeholder="ID / Param" class="form-control form-control-sm" />
+            {% for language in languages %}
+            <div class="input-group input-group-sm mb-1">
+                <input type="text" name="tabs[${t_row}][blocks][${b_row}][display_group][{{ language.language_id }}]" value="" placeholder="Tên nhóm (Menu trái)" class="form-control" />
+                <span class="input-group-text"><img src="language/{{ language.code }}/{{ language.code }}.png" /></span>
+            </div>
+            {% endfor %}
+        </td>
+        <td>
+            <div class="mb-2">
+                <select name="tabs[${t_row}][blocks][${b_row}][type]" class="form-select form-select-sm mb-1 border-primary" onchange="toggleDataSource(this, ${t_row}, ${b_row})">
+                    <option value="category">{{ text_category }}</option>
+                    <option value="manufacturer">{{ text_manufacturer }}</option>
+                    <option value="attribute_group">{{ text_attribute_group }}</option>
+                    <option value="attribute">{{ text_attribute }}</option>
+                    <option value="custom">{{ text_custom_link }}</option>
+                </select>
+                <select name="tabs[${t_row}][blocks][${b_row}][selection_mode]" class="form-select form-select-sm border-secondary selection-mode-select" onchange="toggleSelectionMode(this, ${t_row}, ${b_row})">
+                    <option value="auto">{{ text_selection_auto }}</option>
+                    <option value="manual">{{ text_selection_manual }}</option>
+                </select>
+            </div>
+            <div class="source-input-field">
+                <input type="text" name="tabs[${t_row}][blocks][${b_row}][source_id]" value="" placeholder="ID / Param" class="form-control form-control-sm mb-2 source-id-input" />
+                <select name="tabs[${t_row}][blocks][${b_row}][temp_category]" class="form-select form-select-sm d-none temp-select">
+                    <option value="0">--- Chọn danh mục gốc ---</option>
+                    {% for c in all_categories %}<option value="{{ c.category_id }}">{{ c.name }}</option>{% endfor %}
+                </select>
+                <select name="tabs[${t_row}][blocks][${b_row}][temp_manufacturer]" class="form-select form-select-sm d-none temp-select">
+                    <option value="0">--- Chọn thương hiệu ---</option>
+                    {% for m in all_manufacturers %}<option value="{{ m.manufacturer_id }}">{{ m.name }}</option>{% endfor %}
+                </select>
+                <div class="position-relative">
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 manual-toggle-btn d-none" onclick="$(this).next('.manual-picker').toggleClass('d-none'); event.stopPropagation();">
+                        <i class="fa fa-list"></i> {{ text_select_items|default('Chọn danh sách') }}
+                    </button>
+                    <div class="manual-picker border rounded p-2 bg-light d-none" style="max-height: 200px; overflow-y: auto; position: absolute; z-index: 1000; width: 100%; top: 100%; left: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="manual-header d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom">
+                            <span class="small fw-bold">Dữ liệu nguồn</span>
+                            <button type="button" class="btn-close" style="font-size: 10px;" onclick="$(this).closest('.manual-picker').addClass('d-none');"></button>
+                        </div>
+                        <div class="category-manual d-none">
+                            {% for c in all_categories %}<div class="form-check"><input type="checkbox" name="tabs[${t_row}][blocks][${b_row}][selected_ids][]" value="{{ c.category_id }}" class="form-check-input" id="cat-${t_row}-${b_row}-{{ c.category_id }}"><label class="form-check-label small" for="cat-${t_row}-${b_row}-{{ c.category_id }}">{{ c.name }}</label></div>{% endfor %}
+                        </div>
+                        <div class="manufacturer-manual d-none">
+                            {% for m in all_manufacturers %}<div class="form-check"><input type="checkbox" name="tabs[${t_row}][blocks][${b_row}][selected_ids][]" value="{{ m.manufacturer_id }}" class="form-check-input" id="man-${t_row}-${b_row}-{{ m.manufacturer_id }}"><label class="form-check-label small" for="man-${t_row}-${b_row}-{{ m.manufacturer_id }}">{{ m.name }}</label></div>{% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <select name="tabs[${t_row}][blocks][${b_row}][temp_attribute]" class="form-select form-select-sm d-none temp-select">
+                    {% for a in all_attributes %}<option value="{{ a.attribute_id }}">{{ a.group }} > {{ a.name }}</option>{% endfor %}
+                </select>
+                <select name="tabs[${t_row}][blocks][${b_row}][temp_attribute_group]" class="form-select form-select-sm d-none temp-select">
+                    {% for ag in all_attribute_groups %}<option value="{{ ag.attribute_group_id }}">{{ ag.name }}</option>{% endfor %}
+                </select>
             </div>
         </td>
-        <td><input type="number" name="tabs[${t_row}][blocks][${b_row}][cols]" value="1" class="form-control form-control-sm" /></td>
-        <td><input type="number" name="tabs[${t_row}][blocks][${b_row}][limit]" value="10" class="form-control form-control-sm" /></td>
-        <td><input type="text" name="tabs[${t_row}][blocks][${b_row}][icon]" value="" class="form-control form-control-sm" /></td>
-        <td><button type="button" onclick="$('#block-row-${t_row}-${b_row}').remove();" class="btn btn-danger btn-sm"><i class="fa fa-minus-circle"></i></button></td>
+        <td><input type="number" name="tabs[${t_row}][blocks][${b_row}][cols]" value="1" class="form-control form-control-sm text-center" /></td>
+        <td><input type="number" name="tabs[${t_row}][blocks][${b_row}][limit]" value="10" class="form-control form-control-sm text-center" /></td>
+        <td><input type="text" name="tabs[${t_row}][blocks][${b_row}][icon]" value="" placeholder="fa-ring" class="form-control" /></td>
+        <td class="text-center"><button type="button" onclick="$('#block-row-${t_row}-${b_row}').remove();" class="btn btn-outline-danger btn-sm border-0"><i class="fa fa-minus-circle"></i></button></td>
     </tr>`;
-
     $(`#blocks-${t_row} tbody`).append(html);
+    toggleDataSource($(`select[name="tabs[${t_row}][blocks][${b_row}][type]"]`)[0], t_row, b_row);
 }
 
 function toggleDataSource(el, t_id, b_id) {
-    // Optional: add more logic if needed to show specific dropdowns
+    const type = $(el).val();
+    const parent = $(el).closest('td');
+    const mode = parent.find('.selection-mode-select').val();
+    const sourceIdInput = parent.find('.source-id-input');
+    
+    parent.find('.temp-select').addClass('d-none').off('change');
+    sourceIdInput.addClass('d-none');
+    parent.find('.manual-toggle-btn').addClass('d-none');
+    parent.find('.manual-picker').addClass('d-none');
+    
+    if (mode === 'auto') {
+        let selectName = '';
+        switch(type) {
+            case 'category': selectName = 'temp_category'; break;
+            case 'manufacturer': selectName = 'temp_manufacturer'; break;
+            case 'attribute': selectName = 'temp_attribute'; break;
+            case 'attribute_group': selectName = 'temp_attribute_group'; break;
+        }
+        if (selectName) {
+            const target = parent.find(`select[name*="${selectName}"]`);
+            target.removeClass('d-none');
+            
+            // Sync dropdown with current saved ID
+            if (sourceIdInput.val()) {
+                target.val(sourceIdInput.val());
+            }
+
+            target.off('change').on('change', function() { 
+                sourceIdInput.val($(this).val()); 
+            });
+        } else {
+            sourceIdInput.removeClass('d-none');
+        }
+    } else {
+        parent.find('.manual-toggle-btn').removeClass('d-none');
+        parent.find('.category-manual, .manufacturer-manual').addClass('d-none');
+        if (type === 'category') parent.find('.category-manual').removeClass('d-none');
+        if (type === 'manufacturer') parent.find('.manufacturer-manual').removeClass('d-none');
+    }
 }
+
+// Global click-outside listener
+$(document).on('click', function(e) {
+    if (!$(e.target).closest('.manual-picker').length && !$(e.target).closest('.manual-toggle-btn').length) {
+        $('.manual-picker').addClass('d-none');
+    }
+});
+
+function toggleSelectionMode(el, t_id, b_id) {
+    const typeSelect = $(el).closest('td').find('select[name*="[type]"]');
+    toggleDataSource(typeSelect[0], t_id, b_id);
+}
+
+$(document).ready(function() {
+    $('select[name$="[type]"]').each(function() {
+        // Correct regex for t_id and b_id
+        const name = $(this).attr('name');
+        const t_match = name.match(/tabs\[(\d+)\]/);
+        const b_match = name.match(/blocks\[(\d+)\]/);
+        if (t_match && b_match) {
+            toggleDataSource(this, t_match[1], b_match[1]);
+        }
+    });
+});
 </script>
 {{ footer }}

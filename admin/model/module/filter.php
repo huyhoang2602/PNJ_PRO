@@ -50,6 +50,17 @@ class Filter extends \Opencart\System\Engine\Model {
         return $query->rows;
     }
 
+    public function getAttributeGroupList(): array {
+        $query = $this->db->query("
+            SELECT ag.attribute_group_id, agd.name
+            FROM `" . DB_PREFIX . "attribute_group` ag
+            LEFT JOIN `" . DB_PREFIX . "attribute_group_description` agd ON (ag.attribute_group_id = agd.attribute_group_id)
+            WHERE agd.language_id = '" . (int)$this->config->get('config_language_id') . "'
+            ORDER BY agd.name ASC
+        ");
+        return $query->rows;
+    }
+
     public function getOptionList(): array {
         $query = $this->db->query("
             SELECT o.option_id, od.name

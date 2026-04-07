@@ -97,4 +97,32 @@ class MegaMenu extends \Opencart\System\Engine\Model {
         $query = $this->db->query($sql);
         return $query->rows;
     }
+
+    /**
+     * Get manufacturers by specific list of IDs.
+     */
+    public function getManufacturersByIds(array $manufacturer_ids): array {
+        if (empty($manufacturer_ids)) return [];
+        $sql = "SELECT DISTINCT m.manufacturer_id, m.name, m.image 
+                FROM `" . DB_PREFIX . "manufacturer` m 
+                WHERE m.manufacturer_id IN (" . implode(',', array_map('intval', $manufacturer_ids)) . ") 
+                ORDER BY FIELD(m.manufacturer_id, " . implode(',', array_map('intval', $manufacturer_ids)) . ")";
+        $query = $this->db->query($sql);
+        return $query->rows;
+    }
+
+    /**
+     * Get categories by specific list of IDs.
+     */
+    public function getCategoriesByIds(array $category_ids): array {
+        if (empty($category_ids)) return [];
+        $lang_id = (int)$this->config->get('config_language_id');
+        $sql = "SELECT DISTINCT c.category_id, cd.name 
+                FROM `" . DB_PREFIX . "category` c 
+                INNER JOIN `" . DB_PREFIX . "category_description` cd ON (c.category_id = cd.category_id AND cd.language_id = '{$lang_id}') 
+                WHERE c.category_id IN (" . implode(',', array_map('intval', $category_ids)) . ") 
+                ORDER BY FIELD(c.category_id, " . implode(',', array_map('intval', $category_ids)) . ")";
+        $query = $this->db->query($sql);
+        return $query->rows;
+    }
 }

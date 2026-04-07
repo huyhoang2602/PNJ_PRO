@@ -8,29 +8,53 @@
         <a href="{{ tab.href }}">{{ tab.title }}</a>
         <div class="mega-modal">
             <div class="mega-left">
-                {% for block in tab.blocks %}
-                <div class="mega-item {% if loop.first %}active{% endif %}" data-target="{{ tab.id }}-block-{{ loop.index0 }}">
-                    {% if block.icon %}<i class="{{ block.icon }}"></i> {% endif %}{{ block.title }}
+                {% for group in tab.menu_items %}
+                <div class="mega-item {% if loop.first %}active{% endif %}" data-target="{{ tab.id }}-group-{{ loop.index0 }}">
+                    {% if group.icon %}<i class="{{ group.icon }}"></i> {% endif %}{{ group.title }}
                 </div>
                 {% endfor %}
             </div>
             <div class="mega-right">
-                {% for block in tab.blocks %}
-                <div class="mega-content {% if loop.first %}active{% endif %}" id="{{ tab.id }}-block-{{ loop.index0 }}">
-                    <div class="mega-grid grid-cols-{{ block.cols|default(1) }}">
-                        {% set slice_size = (block.items|length / block.cols|default(1))|round(0, 'ceil') %}
-                        {% if slice_size < 1 %}{% set slice_size = 1 %}{% endif %}
-                        
-                        {% for i in 0..(block.cols|default(1) - 1) %}
+                {% for group in tab.menu_items %}
+                <div class="mega-content {% if loop.first %}active{% endif %}" id="{{ tab.id }}-group-{{ loop.index0 }}">
+                    <div class="mega-grid grid-cols-{{ group.blocks|length }}">
+                        {% for block in group.blocks %}
                         <div class="mega-col">
-                            {% if i == 0 %}<h4>{{ block.title }}</h4>{% else %}<h4 style="visibility: hidden;">&nbsp;</h4>{% endif %}
-                            <div class="mega-items-list">
-                                {% for item in block.items|slice(i * slice_size, slice_size) %}
-                                <a href="{{ item.href }}">
-                                    {% if item.thumb %}<img src="{{ item.thumb }}" alt="{{ item.name }}" class="small-icon"> {% endif %}
-                                    {{ item.name }}
-                                </a>
-                                {% endfor %}
+                            {% if block.title %}<h4>{{ block.title }}</h4>{% endif %}
+                            <div class="mega-items-list {% if block.type == 'manufacturer' %}brand-logo-container{% endif %}">
+                                {% if block.cols > 1 and block.type != 'manufacturer' %}
+                                    {# Support internal multi-column if needed, or just list #}
+                                    {% set slice_size = (block.items|length / block.cols)|round(0, 'ceil') %}
+                                    <div class="d-flex flex-wrap w-100">
+                                        {% for i in 0..(block.cols - 1) %}
+                                            <div style="flex: 1; min-width: 120px;">
+                                                {% for item in block.items|slice(i * slice_size, slice_size) %}
+                                                <a href="{{ item.href }}">
+                                                    {% if item.thumb %}<img src="{{ item.thumb }}" alt="{{ item.name }}" class="small-icon"> {% endif %}
+                                                    {{ item.name }}
+                                                </a>
+                                                {% endfor %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {% for item in block.items %}
+                                        {% if block.type == 'manufacturer' %}
+                                            <a href="{{ item.href }}" class="brand-logo-card" data-bs-toggle="tooltip" title="{{ item.name }}">
+                                                {% if item.thumb %}
+                                                    <img src="{{ item.thumb }}" alt="{{ item.name }}">
+                                                {% else %}
+                                                    <span class="small font-weight-bold">{{ item.name }}</span>
+                                                {% endif %}
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ item.href }}">
+                                                {% if item.thumb %}<img src="{{ item.thumb }}" alt="{{ item.name }}" class="small-icon"> {% endif %}
+                                                {{ item.name }}
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                         </div>
                         {% endfor %}
