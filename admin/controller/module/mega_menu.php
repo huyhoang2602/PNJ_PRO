@@ -5,6 +5,7 @@ class MegaMenu extends \Opencart\System\Engine\Controller {
     public function index(): void {
         $this->load->language('extension/dc_minimal/module/mega_menu');
         $this->document->setTitle($this->language->get('heading_title'));
+        $this->checkEvents();
 
         $data['breadcrumbs'] = [
             ['text' => $this->language->get('text_home'), 'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])],
@@ -71,5 +72,40 @@ class MegaMenu extends \Opencart\System\Engine\Controller {
 
         $this->response->addHeader('Content-Type: application/json');
         $this->response->setOutput(json_encode($json));
+    }
+
+    protected function checkEvents(): void {
+        $this->load->model('setting/event');
+        
+        $events = [
+            [
+                'code' => 'dc_minimal_mega_menu_clear_cache_category',
+                'trigger' => 'admin/model/catalog/category/editCategory/after',
+                'action' => 'extension/dc_minimal/module/mega_menu|clearCache'
+            ],
+            [
+                'code' => 'dc_minimal_mega_menu_clear_cache_product',
+                'trigger' => 'admin/model/catalog/product/editProduct/after',
+                'action' => 'extension/dc_minimal/module/mega_menu|clearCache'
+            ]
+        ];
+
+        foreach ($events as $e) {
+            $event_info = $this->model_setting_event->getEventByCode($e['code']);
+            if (!$event_info) {
+                $this->model_setting_event->addEvent([
+                    'code'        => $e['code'],
+                    'description' => 'PNJ Mega Menu Cache Clear',
+                    'trigger'     => $e['trigger'],
+                    'action'      => $e['action'],
+                    'status'      => true,
+                    'sort_order'  => 0
+                ]);
+            }
+        }
+    }
+
+    public function clearCache(): void {
+        $this->cache->delete('dc_minimal.mega_menu');
     }
 }
