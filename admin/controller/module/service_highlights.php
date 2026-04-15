@@ -61,6 +61,9 @@ class ServiceHighlights extends \Opencart\System\Engine\Controller {
 			$data['status'] = '';
 		}
 
+        $this->load->model('localisation/language');
+        $data['languages'] = $this->model_localisation_language->getLanguages();
+
 		$this->load->model('tool/image');
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 

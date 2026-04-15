@@ -26,9 +26,24 @@
             </div>
           </div>
           <div class="row mb-3">
-            <label for="input-title" class="col-sm-2 col-form-label">{{ entry_title }} (VD: Bộ sưu tập mới)</label>
+            <label class="col-sm-2 col-form-label">{{ entry_title }} (VD: Bộ sưu tập mới)</label>
             <div class="col-sm-10">
-              <input type="text" name="title" value="{{ title }}" placeholder="{{ entry_title }}" id="input-title" class="form-control"/>
+              <ul class="nav nav-tabs" id="language-section">
+                {% for language in languages %}
+                  <li class="nav-item"><a href="#language-section-{{ language.language_id }}" data-bs-toggle="tab" class="nav-link{% if loop.first %} active{% endif %}"><img src="{{ language.image }}" title="{{ language.name }}"/> {{ language.name }}</a></li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content">
+                {% for language in languages %}
+                  <div class="tab-pane{% if loop.first %} active{% endif %}" id="language-section-{{ language.language_id }}">
+                    <div class="row mb-3">
+                      <div class="col-sm-12">
+                        <input type="text" name="title[{{ language.language_id }}]" value="{{ title[language.language_id] }}" placeholder="{{ entry_title }}" id="input-title-{{ language.language_id }}" class="form-control"/>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
             </div>
           </div>
           <div class="row mb-3">
@@ -61,8 +76,8 @@
                     <td class="text-start">
                       {% for language in languages %}
                         <div class="input-group">
-                          <span class="input-group-text"><img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;"/></span>
-                          <input type="text" name="collections[{{ collection_row }}][title][{{ language.code }}]" value="{{ collection.title[language.code] }}" placeholder="{{ entry_collection_title }}" class="form-control"/>
+                          <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>
+                           <input type="text" name="collections[{{ collection_row }}][title][{{ language.language_id }}]" value="{{ collection.title[language.language_id] }}" placeholder="{{ entry_collection_title }}" class="form-control"/>
                         </div>
                       {% endfor %}
                     </td>
@@ -242,8 +257,8 @@ function addCollection() {
     html += '  <td class="text-start">';
     {% for language in languages %}
     html += '    <div class="input-group">';
-    html += '      <span class="input-group-text"><img src="/extension/dc_minimal/admin/language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="width: 18px; height: 12px; object-fit: cover; border-radius: 2px;"/></span>';
-    html += '      <input type="text" name="collections[' + collection_row + '][title][{{ language.code }}]" value="" placeholder="{{ entry_collection_title }}" class="form-control"/>';
+    html += '      <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>';
+    html += '      <input type="text" name="collections[' + collection_row + '][title][{{ language.language_id }}]" value="" placeholder="{{ entry_collection_title }}" class="form-control"/>';
     html += '    </div>';
     {% endfor %}
     html += '  </td>';

@@ -57,7 +57,12 @@
                       <ul id="autocomplete-category-{{ item_row }}" class="dropdown-menu"></ul>
                     </td>
                     <td class="text-start">
-                      <input type="text" name="category_items[{{ item_row }}][custom_title]" value="{{ category_item.custom_title }}" placeholder="{{ entry_title }}" class="form-control"/>
+                      {% for language in languages %}
+                        <div class="input-group">
+                          <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>
+                          <input type="text" name="category_items[{{ item_row }}][custom_title][{{ language.language_id }}]" value="{{ category_item.custom_title[language.language_id] }}" placeholder="{{ entry_title }}" class="form-control"/>
+                        </div>
+                      {% endfor %}
                     </td>
                     <td class="text-center">
                       <div class="card image">
@@ -100,7 +105,14 @@ function addItem() {
     html += '    <input type="hidden" name="category_items[' + item_row + '][category_id]" value="" id="input-category-id-' + item_row + '"/>';
     html += '    <ul id="autocomplete-category-' + item_row + '" class="dropdown-menu"></ul>';
     html += '  </td>';
-	html += '  <td class="text-start"><input type="text" name="category_items[' + item_row + '][custom_title]" value="" placeholder="{{ entry_title|escape('js') }}" class="form-control"/></td>';
+	html += '  <td class="text-start">';
+    {% for language in languages %}
+    html += '    <div class="input-group">';
+    html += '      <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>';
+    html += '      <input type="text" name="category_items[' + item_row + '][custom_title][{{ language.language_id }}]" value="" placeholder="{{ entry_title|escape('js') }}" class="form-control"/>';
+    html += '    </div>';
+    {% endfor %}
+    html += '  </td>';
 	html += '  <td class="text-center">';
     html += '    <div class="card image">';
     html += '      <img src="{{ placeholder }}" alt="" title="" id="thumb-image-' + item_row + '" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/>';

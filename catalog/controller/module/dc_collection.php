@@ -8,7 +8,9 @@ class DcCollection extends \Opencart\System\Engine\Controller {
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 
-		$data['title'] = $setting['title'] ?? 'Bộ sưu tập mới';
+        $language_id = (int)$this->config->get('config_language_id');
+		$data['title'] = !empty($setting['title'][$language_id]) ? $setting['title'][$language_id] : ($setting['title'] ?? 'Bộ sưu tập mới');
+        
         $data['uid'] = rand(1000, 99999);
         $data['collections'] = [];
 
@@ -57,8 +59,8 @@ class DcCollection extends \Opencart\System\Engine\Controller {
                     }
                 }
 
-                $lang_code = $this->config->get('config_language');
-                $collection_title = $collection['title'][$lang_code] ?? ($collection['title']['en-gb'] ?? 'Collection');
+                $language_id = (int)$this->config->get('config_language_id');
+                $collection_title = !empty($collection['title'][$language_id]) ? $collection['title'][$language_id] : (is_array($collection['title']) ? reset($collection['title']) : $collection['title']);
 
                 $data['collections'][] = [
                     'id'       => $key,

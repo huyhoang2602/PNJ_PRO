@@ -88,6 +88,9 @@ class CategoryEntry extends \Opencart\System\Engine\Controller {
 
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
+		$this->load->model('localisation/language');
+		$data['languages'] = $this->model_localisation_language->getLanguages();
+
 		// Thêm một số biến helper cho form builder JS
 		$data['user_token'] = $this->session->data['user_token'];
 

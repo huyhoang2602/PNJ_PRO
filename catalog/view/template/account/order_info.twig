@@ -92,7 +92,7 @@
                     <a href="{{ product.view }}" class="fw-bold text-decoration-none text-dark fs-6 hover-gold">{{ product.name }}</a>
                     <div id="error-{{ product_row }}-product" class="invalid-feedback mt-0"></div>
                     <ul class="list-unstyled mb-0 mt-2 text-muted" style="font-size: 0.9rem;">
-                      <li><small>Mã SP: <span class="text-dark fw-medium">{{ product.model }}</span></small></li>
+                      <li><small>{{ text_model }}: <span class="text-dark fw-medium">{{ product.model }}</span></small></li>
                       {% for option in product.option %}
                         <li>
                           <small>{{ option.name }}: <span class="text-dark fw-medium">{{ option.value }}</span></small>

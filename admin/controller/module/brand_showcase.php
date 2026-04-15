@@ -49,6 +49,12 @@ class BrandShowcase extends \Opencart\System\Engine\Controller {
 			$data['name'] = '';
 		}
         
+        if (isset($module_info['title'])) {
+			$data['title'] = $module_info['title'];
+		} else {
+			$data['title'] = [];
+		}
+
         // Cấu hình mảng banners
         if (isset($module_info['brands'])) {
 			$data['brands'] = $module_info['brands'];
@@ -61,6 +67,9 @@ class BrandShowcase extends \Opencart\System\Engine\Controller {
 		} else {
 			$data['status'] = '';
 		}
+
+        $this->load->model('localisation/language');
+        $data['languages'] = $this->model_localisation_language->getLanguages();
 
         $this->load->model('tool/image');
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);

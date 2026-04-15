@@ -44,8 +44,8 @@
               </td>
               <td class="text-end px-4 py-4">
                 <div class="d-flex flex-column gap-2 align-items-end">
-                  <button type="submit" form="form-product-{{ product_row }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold shadow-sm" style="transition: all 0.2s; min-width: 130px;"><i class="fa-solid fa-cart-plus me-1"></i> Mua ngay</button>
-                  <a href="{{ product.remove }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold shadow-sm btn-remove-wishlist" style="transition: all 0.2s; min-width: 130px;"><i class="fa-solid fa-trash-can me-1"></i> Xóa</a>
+                  <button type="submit" form="form-product-{{ product_row }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold shadow-sm" style="transition: all 0.2s; min-width: 130px;"><i class="fa-solid fa-cart-plus me-1"></i> {{ text_buy_now }}</button>
+                  <a href="{{ product.remove }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold shadow-sm btn-remove-wishlist" style="transition: all 0.2s; min-width: 130px;"><i class="fa-solid fa-trash-can me-1"></i> {{ button_remove }}</a>
                 </div>
               </td>
             </tr>
@@ -67,9 +67,9 @@
     <div class="card-body py-5">
         <div class="mb-4 text-muted" style="opacity: 0.3;"><i class="fa-solid fa-heart-crack fa-5x"></i></div>
         <h4 class="fw-bold mb-3 text-dark">{{ text_no_results }}</h4>
-        <p class="text-muted mb-4">Danh sách sản phẩm yêu thích của bạn đang trống. Hãy quay lại cửa hàng để khám phá nhé!</p>
+        <p class="text-muted mb-4">{{ text_empty_wishlist_hint }}</p>
         <a href="{{ continue }}" class="btn rounded-pill px-5 py-3 fw-bold shadow-sm" style="background-color: #c49a45; color: white; transition: all 0.3s;">
-            Tiếp tục mua sắm <i class="fa-solid fa-arrow-right ms-2"></i>
+            {{ button_shopping }} <i class="fa-solid fa-arrow-right ms-2"></i>
         </a>
     </div>
   </div>

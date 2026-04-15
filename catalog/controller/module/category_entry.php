@@ -32,7 +32,8 @@ class CategoryEntry extends \Opencart\System\Engine\Controller {
 						$thumb = $this->model_tool_image->resize('placeholder.png', 300, 300);
 					}
 
-					$title = !empty($item['custom_title']) ? $item['custom_title'] : $category_info['name'];
+					$language_id = $this->config->get('config_language_id');
+					$title = !empty($item['custom_title'][$language_id]) ? $item['custom_title'][$language_id] : $category_info['name'];
 
 					$data['categories'][] = [
 						'category_id' => $category_info['category_id'],

@@ -1,3 +1,3 @@
 <?php
 // Heading
-$_['heading_title'] = 'Thương Hiệu Nổi Bật';
+$_['heading_title'] = 'Featured Brands';

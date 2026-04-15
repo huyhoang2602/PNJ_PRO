@@ -87,6 +87,31 @@ class MegaMenu extends \Opencart\System\Engine\Controller {
                 'code' => 'dc_minimal_mega_menu_clear_cache_product',
                 'trigger' => 'admin/model/catalog/product/editProduct/after',
                 'action' => 'extension/dc_minimal/module/mega_menu|clearCache'
+            ],
+            [
+                'code' => 'dc_minimal_header_language',
+                'trigger' => 'catalog/controller/common/header/before',
+                'action' => 'extension/dc_minimal/module/dc_minimal|beforeHeader'
+            ],
+            [
+                'code' => 'dc_minimal_account_language',
+                'trigger' => 'catalog/controller/account/*/before',
+                'action' => 'extension/dc_minimal/module/dc_minimal|beforeAccount'
+            ],
+            [
+                'code' => 'dc_minimal_checkout_language',
+                'trigger' => 'catalog/controller/checkout/*/before',
+                'action' => 'extension/dc_minimal/module/dc_minimal|beforeCheckout'
+            ],
+            [
+                'code' => 'dc_minimal_total_language',
+                'trigger' => 'catalog/model/extension/opencart/total/*/getTotal/before',
+                'action' => 'extension/dc_minimal/module/dc_minimal|beforeTotal'
+            ],
+            [
+                'code' => 'dc_minimal_view_language',
+                'trigger' => 'view/*/before',
+                'action' => 'extension/dc_minimal/module/dc_minimal|beforeView'
             ]
         ];
 

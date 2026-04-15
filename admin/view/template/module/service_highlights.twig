@@ -52,13 +52,28 @@
                 {% for service in services %}
                   <tr id="service-row-{{ service_row }}">
                     <td class="text-start">
-                      <input type="text" name="services[{{ service_row }}][title]" value="{{ service.title }}" placeholder="{{ entry_title }}" class="form-control" />
+                      {% for language in languages %}
+                        <div class="input-group mb-1">
+                          <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>
+                          <input type="text" name="services[{{ service_row }}][title][{{ language.language_id }}]" value="{{ service.title[language.language_id] }}" placeholder="{{ entry_title }}" class="form-control" />
+                        </div>
+                      {% endfor %}
                     </td>
                     <td class="text-start">
-                      <input type="text" name="services[{{ service_row }}][description]" value="{{ service.description }}" placeholder="{{ entry_description }}" class="form-control" />
+                      {% for language in languages %}
+                        <div class="input-group mb-1">
+                          <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>
+                          <input type="text" name="services[{{ service_row }}][description][{{ language.language_id }}]" value="{{ service.description[language.language_id] }}" placeholder="{{ entry_description }}" class="form-control" />
+                        </div>
+                      {% endfor %}
                     </td>
                     <td class="text-start">
-                      <textarea name="services[{{ service_row }}][tooltip]" rows="3" placeholder="{{ entry_tooltip }}" class="form-control">{{ service.tooltip }}</textarea>
+                      {% for language in languages %}
+                        <div class="input-group mb-1">
+                          <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>
+                          <textarea name="services[{{ service_row }}][tooltip][{{ language.language_id }}]" rows="2" placeholder="{{ entry_tooltip }}" class="form-control">{{ service.tooltip[language.language_id] }}</textarea>
+                        </div>
+                      {% endfor %}
                     </td>
                     <td class="text-center">
                     <div class="card image">
@@ -93,10 +108,29 @@ var service_row = {{ service_row }};
 function addservice() {
 	var html  = '<tr id="service-row-' + service_row + '">';
     html += '  <td class="text-start">';
-    html += '    <input type="text" name="services[' + service_row + '][title]" value="" placeholder="{{ entry_title|escape('js') }}" class="form-control" />';
+    {% for language in languages %}
+    html += '    <div class="input-group mb-1">';
+    html += '      <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>';
+    html += '      <input type="text" name="services[' + service_row + '][title][{{ language.language_id }}]" value="" placeholder="{{ entry_title|escape('js') }}" class="form-control" />';
+    html += '    </div>';
+    {% endfor %}
     html += '  </td>';
-	html += '  <td class="text-start"><input type="text" name="services[' + service_row + '][description]" value="" placeholder="{{ entry_description|escape('js') }}" class="form-control" /></td>';
-    html += '  <td class="text-start"><textarea name="services[' + service_row + '][tooltip]" rows="3" placeholder="{{ entry_tooltip|escape('js') }}" class="form-control"></textarea></td>';
+	html += '  <td class="text-start">';
+    {% for language in languages %}
+    html += '    <div class="input-group mb-1">';
+    html += '      <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>';
+    html += '      <input type="text" name="services[' + service_row + '][description][{{ language.language_id }}]" value="" placeholder="{{ entry_description|escape('js') }}" class="form-control" />';
+    html += '    </div>';
+    {% endfor %}
+    html += '  </td>';
+    html += '  <td class="text-start">';
+    {% for language in languages %}
+    html += '    <div class="input-group mb-1">';
+    html += '      <span class="input-group-text"><img src="{{ language.image }}" title="{{ language.name }}"/></span>';
+    html += '      <textarea name="services[' + service_row + '][tooltip][{{ language.language_id }}]" rows="2" placeholder="{{ entry_tooltip|escape('js') }}" class="form-control"></textarea>';
+    html += '    </div>';
+    {% endfor %}
+    html += '  </td>';
 	html += '  <td class="text-center">';
     html += '  <div class="card image">';
     html += '    <img src="{{ placeholder }}" alt="" title="" id="thumb-image-' + service_row + '" data-oc-placeholder="{{ placeholder }}" class="card-img-top"/> <input type="hidden" name="services[' + service_row + '][image]" value="" id="input-image-' + service_row + '"/>';

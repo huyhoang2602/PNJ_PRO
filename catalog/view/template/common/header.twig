@@ -66,10 +66,10 @@
             </div>
 
             <div class="pnj-top-left d-none d-lg-flex">
-                <a href="#"><i class="fa fa-book"></i> Câu Chuyện PNJ</a>
-                <a href="#"><i class="fa fa-users"></i> Quan Hệ Cổ Đông (IR)</a>
-                <a href="#"><i class="fa fa-map-marker"></i> Cửa Hàng</a>
-                <a href="#"><i class="fa fa-briefcase"></i> Tuyển dụng</a>
+                <a href="#"><i class="fa fa-book"></i> {{ text_pnj_story }}</a>
+                <a href="#"><i class="fa fa-users"></i> {{ text_investor_relations }}</a>
+                <a href="#"><i class="fa fa-map-marker"></i> {{ text_store }}</a>
+                <a href="#"><i class="fa fa-briefcase"></i> {{ text_recruitment }}</a>
             </div>
 
             <div class="pnj-logo-center">
@@ -87,13 +87,13 @@
 
                 <div class="pnj-tools">
                     {% if logged %}
-                        <a href="{{ account }}"><i class="fa fa-user"></i> <span class="d-none d-sm-inline">Tài khoản</span></a>
+                        <a href="{{ account }}"><i class="fa fa-user"></i> <span class="d-none d-sm-inline">{{ text_account }}</span></a>
                     {% else %}
-                        <a href="{{ login }}"><i class="fa fa-user"></i> <span class="d-none d-sm-inline">Đăng nhập</span></a>
+                        <a href="{{ login }}"><i class="fa fa-user"></i> <span class="d-none d-sm-inline">{{ text_login }}</span></a>
                     {% endif %}
 
                     <a href="{{ shopping_cart }}" class="cart-link">
-                        <i class="fa fa-shopping-bag"></i> <span class="d-none d-sm-inline">Giỏ hàng</span>
+                        <i class="fa fa-shopping-bag"></i> <span class="d-none d-sm-inline">{{ text_cart }}</span>
                         <span class="cart-badge">{{ cart_count }}</span>
                     </a>
                 </div>
@@ -117,7 +117,7 @@
         <div class="pnj-search-modal-header">
             <div class="pnj-search-modal-input-wrapper">
                 <i class="fa fa-search"></i>
-                <input type="text" placeholder="Tìm kiếm nhanh" id="pnj-search-modal-input">
+                <input type="text" placeholder="{{ text_search_placeholder }}" id="pnj-search-modal-input">
                 <i class="fa fa-times pnj-close-search"></i>
             </div>
         </div>
@@ -126,12 +126,12 @@
             <div class="search-discovery-content">
                 <!-- 1. OFFERS -->
                 <div class="search-section search-promotions">
-                    <div class="section-title"><i class="fa fa-gift"></i> Ưu đãi online tháng 3 <span class="badge-discount">Ưu đãi đến 20%</span></div>
+                    <div class="section-title"><i class="fa fa-gift"></i> {{ text_offer_title }} <span class="badge-discount">{{ text_offer_badge }}</span></div>
                 </div>
 
                 <!-- 2. TRENDS -->
                 <div class="search-section">
-                    <div class="section-title"><i class="fa fa-line-chart"></i> Top tìm kiếm</div>
+                    <div class="section-title"><i class="fa fa-line-chart"></i> {{ text_top_search }}</div>
                     <div class="tag-list">
                         {% if search_categories %}
                             {% for cat in search_categories %}
@@ -146,17 +146,17 @@
                 </div>
 
                 <div class="search-section">
-                    <div class="section-title"><i class="fa fa-bolt"></i> Dịch vụ hot</div>
+                    <div class="section-title"><i class="fa fa-bolt"></i> {{ text_hot_services }}</div>
                     <div class="tag-list">
-                        <span class="search-tag">Trả góp 0%</span>
-                        <span class="search-tag">Giao hàng 3h</span>
-                        <span class="search-tag">Ưu đãi thêm 800k</span>
+                        <span class="search-tag">{{ text_installment }}</span>
+                        <span class="search-tag">{{ text_delivery_3h }}</span>
+                        <span class="search-tag">{{ text_offer_extra }}</span>
                     </div>
                 </div>
 
                 <!-- 3. BRANDS -->
                 <div class="search-section">
-                    <div class="section-title"><i class="fa fa-star"></i> Thương hiệu nổi bật</div>
+                    <div class="section-title"><i class="fa fa-star"></i> {{ text_featured_brands }}</div>
                     <div class="brand-grid">
                         {% for brand in brands %}
                             {% set brand_name_up = brand.name|upper %}
@@ -174,7 +174,7 @@
 
             <!-- 4. POPULAR PRODUCTS / SEARCH RESULTS -->
             <div class="search-section" id="pnj-search-results-section">
-                <div class="section-title" id="pnj-search-results-title"><i class="fa fa-search"></i> Sản phẩm được tìm nhiều</div>
+                <div class="section-title" id="pnj-search-results-title"><i class="fa fa-search"></i> {{ text_popular_products }}</div>
                 <div class="search-product-grid" id="pnj-search-results-grid">
                     {% if search_products %}
                         {% for product in search_products %}
@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 fetch('index.php?route=extension/dc_minimal/module/search.autocomplete&filter_name=' + encodeURIComponent(query))
                     .then(response => response.json())
                     .then(data => {
-                        if (searchSectionTitle) searchSectionTitle.innerHTML = '<i class="fa fa-search"></i> Kết quả tìm kiếm cho "' + query + '"';
+                        if (searchSectionTitle) searchSectionTitle.innerHTML = '<i class="fa fa-search"></i> {{ text_search_results }}'.replace('%s', query);
                         
                         if (data.length > 0) {
                             let html = '';
@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             });
                             searchResultGrid.innerHTML = html;
                         } else {
-                            searchResultGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #999;">Không tìm thấy sản phẩm phù hợp.</div>';
+                            searchResultGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #999;">{{ text_no_results }}</div>';
                         }
                     })
                     .catch(error => {

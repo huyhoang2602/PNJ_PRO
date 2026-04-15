@@ -9,6 +9,7 @@ class BrandShowcase extends \Opencart\System\Engine\Controller {
 
         if (!empty($setting['brands'])) {
             $this->load->model('tool/image');
+            $language_id = (int)$this->config->get('config_language_id');
             foreach ($setting['brands'] as $brand) {
                 if (is_file(DIR_IMAGE . html_entity_decode($brand['image'], ENT_QUOTES, 'UTF-8'))) {
                     $image = $this->model_tool_image->resize(html_entity_decode($brand['image'], ENT_QUOTES, 'UTF-8'), 200, 100);
@@ -17,14 +18,15 @@ class BrandShowcase extends \Opencart\System\Engine\Controller {
                 }
 
                 $data['brands'][] = [
-                    'name'  => $brand['title'],
+                    'name'  => !empty($brand['title'][$language_id]) ? $brand['title'][$language_id] : (is_array($brand['title']) ? reset($brand['title']) : $brand['title']),
                     'link'  => $brand['link'],
                     'thumb' => $image
                 ];
             }
         }
 
-        $data['heading_title'] = $setting['name'] ?? $this->language->get('heading_title');
+        $language_id = (int)$this->config->get('config_language_id');
+        $data['heading_title'] = !empty($setting['title'][$language_id]) ? $setting['title'][$language_id] : $this->language->get('heading_title');
 
 		return $this->load->view('extension/dc_minimal/module/brand_showcase', $data);
 	}

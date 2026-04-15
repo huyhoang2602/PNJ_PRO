@@ -10,10 +10,11 @@ class DcFlashSale extends \Opencart\System\Engine\Controller {
 
 		$data['products'] = [];
 
-        if (!empty($setting['title'])) {
-            $data['title'] = $setting['title'];
+        $language_id = (int)$this->config->get('config_language_id');
+        if (!empty($setting['title'][$language_id])) {
+            $data['title'] = $setting['title'][$language_id];
         } else {
-            $data['title'] = $this->language->get('heading_title');
+            $data['title'] = is_array($setting['title']) ? reset($setting['title']) : ($setting['title'] ?? $this->language->get('heading_title'));
         }
 
 		if (!$setting['limit'] || $setting['limit'] <= 4) {

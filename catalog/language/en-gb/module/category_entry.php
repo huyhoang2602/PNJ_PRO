@@ -1,2 +1,3 @@
 <?php
-// Default Catalog Language for Module (Can be left empty for now)
+// Heading
+$_['heading_title'] = 'What are you looking for today?';

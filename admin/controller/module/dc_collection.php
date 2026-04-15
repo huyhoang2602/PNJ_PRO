@@ -54,7 +54,7 @@ class DcCollection extends \Opencart\System\Engine\Controller {
         if (isset($module_info['title'])) {
 			$data['title'] = $module_info['title'];
 		} else {
-			$data['title'] = '';
+			$data['title'] = [];
 		}
 
 		$this->load->model('tool/image');
@@ -84,7 +84,7 @@ class DcCollection extends \Opencart\System\Engine\Controller {
                 }
 
 				$data['collections'][] = [
-					'title'   => is_array($collection['title']) ? $collection['title'] : ['en-gb' => $collection['title']],
+					'title'   => is_array($collection['title']) ? $collection['title'] : [],
 					'image'   => $collection['image'],
 					'thumb'   => $thumb,
 					'link'    => $collection['link'] ?? '',

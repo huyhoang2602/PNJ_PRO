@@ -45,8 +45,8 @@
           </form>
 
           <div class="auth-toggle text-center">
-            <span>Bạn mới biết đến PNJ? </span>
-            <a href="javascript:void(0);" onclick="toggleAuth('register');" class="toggle-link">Đăng ký ngay</a>
+            <span>{{ text_new_to_store }} </span>
+            <a href="javascript:void(0);" onclick="toggleAuth('register');" class="toggle-link">{{ text_register_now }}</a>
           </div>
         </div>
 
@@ -58,12 +58,12 @@
           <form id="form-register-quick" action="{{ register }}" method="post" data-oc-toggle="ajax">
             <div class="row">
               <div class="col-6 mb-3">
-                <label for="input-firstname" class="form-label">Họ</label>
-                <input type="text" name="firstname" value="" placeholder="Họ" id="input-firstname" class="form-control"/>
+                <label for="input-firstname" class="form-label">{{ entry_firstname }}</label>
+                <input type="text" name="firstname" value="" placeholder="{{ entry_firstname }}" id="input-firstname" class="form-control"/>
               </div>
               <div class="col-6 mb-3">
-                <label for="input-lastname" class="form-label">Tên</label>
-                <input type="text" name="lastname" value="" placeholder="Tên" id="input-lastname" class="form-control"/>
+                <label for="input-lastname" class="form-label">{{ entry_lastname }}</label>
+                <input type="text" name="lastname" value="" placeholder="{{ entry_lastname }}" id="input-lastname" class="form-control"/>
               </div>
             </div>
 
@@ -73,8 +73,8 @@
             </div>
 
             <div class="mb-3">
-              <label for="input-telephone" class="form-label">Số điện thoại</label>
-              <input type="tel" name="telephone" value="" placeholder="Số điện thoại" id="input-telephone" class="form-control"/>
+              <label for="input-telephone" class="form-label">{{ entry_telephone }}</label>
+              <input type="tel" name="telephone" value="" placeholder="{{ entry_telephone }}" id="input-telephone" class="form-control"/>
             </div>
 
             <div class="mb-3">
@@ -83,14 +83,14 @@
             </div>
 
             <div class="mb-4">
-              <label for="input-confirm" class="form-label">Xác nhận mật khẩu</label>
-              <input type="password" name="confirm" value="" placeholder="Xác nhận mật khẩu" id="input-confirm" class="form-control"/>
+              <label for="input-confirm" class="form-label">{{ entry_confirm }}</label>
+              <input type="password" name="confirm" value="" placeholder="{{ entry_confirm }}" id="input-confirm" class="form-control"/>
             </div>
 
             <div class="mb-4 form-check">
               <input type="checkbox" name="agree" value="1" class="form-check-input" id="input-agree">
               <label class="form-check-label" for="input-agree" style="font-size: 13px;">
-                Tôi đã đọc và đồng ý với <a href="#" style="color: #c48c31;">Điều khoản sử dụng</a>
+                {{ text_quick_register_agree }}
               </label>
             </div>
 
@@ -100,8 +100,8 @@
           </form>
 
           <div class="auth-toggle text-center">
-            <span>Đã có tài khoản? </span>
-            <a href="javascript:void(0);" onclick="toggleAuth('login');" class="toggle-link">Đăng nhập</a>
+            <span>{{ text_already_have_account }} </span>
+            <a href="javascript:void(0);" onclick="toggleAuth('login');" class="toggle-link">{{ text_login }}</a>
           </div>
         </div>
       </div>

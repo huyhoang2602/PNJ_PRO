@@ -8,6 +8,9 @@ class DcFeatured extends \Opencart\System\Engine\Controller {
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 
+		$language_id = (int)$this->config->get('config_language_id');
+		$data['heading_title'] = !empty($setting['title'][$language_id]) ? $setting['title'][$language_id] : $this->language->get('heading_title');
+
 		$data['products'] = [];
 
 		if (!$setting['limit'] || $setting['limit'] <= 4) {

@@ -17,13 +17,78 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 			// Register view events for template overrides and data injection
 			$this->event->register('view/*/before', new \Opencart\System\Engine\Action('extension/dc_minimal/startup/dc_minimal.event'));
 
-            // Register model events for dynamic filters (reliable runtime registration)
-            // OC4 triggers: model/{route}.{method}/before
-            // OC4 actions: {extension_route}.{method}
+            // Register language events to catch individual language file loads
+            $this->event->register('language/*/after', new \Opencart\System\Engine\Action('extension/dc_minimal/startup/dc_minimal.eventLanguage'));
+
+            // Register model events for dynamic filters
             $this->event->register('model/catalog/product.getProducts/before', new \Opencart\System\Engine\Action('extension/dc_minimal/module/filter.beforeGetProducts'));
             $this->event->register('model/catalog/product.getTotalProducts/before', new \Opencart\System\Engine\Action('extension/dc_minimal/module/filter.beforeGetProducts'));
 		}
 	}
+
+    /**
+     * Event handler for language loading.
+     * Overrides core strings with theme-specific ones.
+     */
+    public function eventLanguage(string &$route, string &$prefix, string &$code, array &$output): void {
+        $lang_page = $route;
+
+        if (strpos($lang_page, 'extension/dc_minimal/') === 0) {
+            $lang_page = str_replace('extension/dc_minimal/', '', $lang_page);
+        }
+
+        if (strpos($lang_page, 'extension/opencart/') === 0) {
+            $lang_page = str_replace('extension/opencart/', '', $lang_page);
+        }
+
+        $translated = $this->loadThemeLanguageFile($lang_page, $this->getLanguageCode($code));
+
+        if ($prefix && $translated) {
+            foreach ($translated as $key => $value) {
+                $translated[$prefix . '_' . $key] = $value;
+                unset($translated[$key]);
+            }
+        }
+
+        if ($translated) {
+            foreach ($translated as $key => $value) {
+                if (is_string($value)) {
+                    $this->language->set($key, $value);
+                }
+            }
+
+            $output = array_merge($output, $translated);
+        }
+    }
+
+    private function getLanguageCode(string $code = ''): string {
+        if ($code) {
+            return $code;
+        }
+
+        return (string)($this->request->get['language'] ?? $this->config->get('config_language') ?: $this->config->get('language_code'));
+    }
+
+    private function loadThemeLanguageFile(string $route, string $code): array {
+        $route = preg_replace('/[^a-zA-Z0-9_\-\/]/', '', $route);
+        $code = preg_replace('/[^a-zA-Z0-9_\-]/', '', $code);
+
+        if (!$route || !$code) {
+            return [];
+        }
+
+        $file = DIR_EXTENSION . 'dc_minimal/catalog/language/' . $code . '/' . $route . '.php';
+
+        if (!is_file($file)) {
+            return [];
+        }
+
+        $_ = [];
+
+        require($file);
+
+        return $_;
+    }
 
 	public function before(string &$route, array &$args): void {
 		// Inject assets on header load (using controller event to ensure Document is updated correctly)
@@ -55,7 +120,8 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 		}
 	}
 
-	public function event(string &$route, array &$data, string &$code, string &$output = ''): void {
+	public function event(string &$route, array &$data): void {
+        $this->log->write("PNJ DEBUG: event() trigger caught for route: " . $route);
 		// Template Override
 		if (strpos($route, 'extension/') === false) {
 			$view_path = DIR_EXTENSION . 'dc_minimal/catalog/view/template/' . $route . '.twig';
@@ -69,11 +135,67 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
                 $route = 'extension/dc_minimal/' . $stripped_route;
             }
         }
+        
+        // --- Internationalization Injection ---
+        // For any view being rendered, try to load a corresponding language file from our theme extension
+        // This ensures core pages like checkout/cart get our Vietnamese strings even if core lacks them.
+        
+        $lang_page = $route;
+        
+        // Strip theme prefix if present
+        if (strpos($lang_page, 'extension/dc_minimal/') === 0) {
+            $lang_page = str_replace('extension/dc_minimal/', '', $lang_page);
+        }
+        
+        // Strip core extension prefix if present (for totals, etc)
+        if (strpos($lang_page, 'extension/opencart/') === 0) {
+            $lang_page = str_replace('extension/opencart/', '', $lang_page);
+        }
+
+        if ($lang_page) {
+            $language_code = $this->getLanguageCode();
+            $protected_language_keys = preg_match('/^(account|checkout)\//', $lang_page) ? [] : array_fill_keys(array_keys($data), true);
+
+            // Load base theme translations
+            $base_translated = $this->loadThemeLanguageFile('vi-vn', $language_code);
+            if ($base_translated) {
+                $data = $this->mergeThemeTranslations($data, $base_translated, $protected_language_keys);
+            }
+
+            // Load the page-specific language file
+            $translated = $this->loadThemeLanguageFile($lang_page, $language_code);
+            if ($translated) {
+                $data = $this->mergeThemeTranslations($data, $translated, $protected_language_keys);
+            }
+            
+            // Special handling for sub-views like 'checkout/cart_list' -> load 'checkout/cart'
+            if (strpos($lang_page, '_') !== false) {
+                $lang_base = explode('_', $lang_page)[0];
+                $translated_base = $this->loadThemeLanguageFile($lang_base, $language_code);
+                if ($translated_base) {
+                    $data = $this->mergeThemeTranslations($data, $translated_base, $protected_language_keys);
+                }
+            }
+
+            // FINAL DEBUG LOGGING
+            if (strpos($lang_page, 'checkout') !== false) {
+                $this->log->write("PNJ DEBUG FINAL: Page: " . $lang_page . " | Entry: " . ($data['column_image'] ?? 'N/A'));
+            }
+        }
+        // ---------------------------------------
 
 		// Inject data for specific routes
 		if ($route == 'extension/dc_minimal/common/header' || $route == 'common/header') {
 			$this->load->language('extension/dc_minimal/dc_minimal');
             $this->load->model('catalog/manufacturer');
+
+            $language_code = $this->getLanguageCode();
+            $locale_translated = $this->loadThemeLanguageFile('vi-vn', $language_code);
+
+            $data['lang'] = $language_code;
+            if (!empty($locale_translated['direction'])) {
+                $data['direction'] = $locale_translated['direction'];
+            }
 			
 			$hotline = $this->config->get('theme_dc_minimal_phone');
 			if (is_array($hotline)) {
@@ -300,6 +422,16 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
         }
 	}
 
+    private function mergeThemeTranslations(array $data, array $translations, array $protected_keys): array {
+        foreach ($translations as $key => $value) {
+            if (!isset($protected_keys[$key])) {
+                $data[$key] = $value;
+            }
+        }
+
+        return $data;
+    }
+
     private function injectDynamicFilters(string $type, int $id, array &$data): void {
         $this->load->model('setting/setting');
         $settings = $this->model_setting_setting->getSetting('module_dc_minimal_filter');
@@ -497,4 +629,4 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 
         return $map[$label] ?? $label;
     }
-}
+}

@@ -7,15 +7,27 @@ class Brand extends \Opencart\System\Engine\Controller {
             return '';
         }
 
-        $this->load->language('extension/dc_minimal/module/brand');
+        $language = $this->getCurrentLanguage();
+        $language_data = $this->load->language('extension/dc_minimal/module/brand', '', $language['code']);
         $this->load->model('tool/image');
         $this->load->model('catalog/manufacturer');
 
-        $data['heading_title'] = $this->language->get('heading_title');
+        $titles = $setting['title'] ?? $setting['module_brand_title'] ?? $this->config->get('module_brand_title');
+        $heading_title = $this->getLocalizedValue($titles, $language['id'], $language['code'], false);
+
+        if ($heading_title === '') {
+            $heading_title = $language_data['heading_title'] ?? $this->language->get('heading_title');
+        }
+
+        if ($heading_title === '' || $heading_title === 'heading_title') {
+            $heading_title = $this->getLocalizedValue($titles, $language['id'], $language['code'], true);
+        }
+
+        $data['heading_title'] = $heading_title;
 
         $data['manufacturers'] = [];
 
-        $brands = $this->config->get('module_brand_brands');
+        $brands = $setting['module_brand_brands'] ?? $this->config->get('module_brand_brands');
 
         if (!empty($brands)) {
             // Sort brands by sort_order
@@ -54,5 +66,47 @@ class Brand extends \Opencart\System\Engine\Controller {
         }
 
         return $this->load->view('extension/dc_minimal/module/brand', $data);
+    }
+
+    private function getCurrentLanguage(): array {
+        $code = (string)($this->request->get['language'] ?? $this->config->get('config_language'));
+        $language_id = (int)$this->config->get('config_language_id');
+
+        if ($code) {
+            $this->load->model('localisation/language');
+            $language_info = $this->model_localisation_language->getLanguageByCode($code);
+
+            if ($language_info) {
+                $code = (string)$language_info['code'];
+                $language_id = (int)$language_info['language_id'];
+            }
+        }
+
+        return [
+            'id'   => $language_id,
+            'code' => $code
+        ];
+    }
+
+    private function getLocalizedValue($values, int $language_id, string $language_code, bool $fallback_any = true): string {
+        if (is_array($values)) {
+            foreach ([$language_id, (string)$language_id, $language_code] as $key) {
+                if (isset($values[$key]) && trim((string)$values[$key]) !== '') {
+                    return (string)$values[$key];
+                }
+            }
+
+            if ($fallback_any) {
+                foreach ($values as $value) {
+                    if (!is_array($value) && trim((string)$value) !== '') {
+                        return (string)$value;
+                    }
+                }
+            }
+        } elseif (trim((string)$values) !== '') {
+            return (string)$values;
+        }
+
+        return '';
     }
 }

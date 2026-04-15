@@ -29,11 +29,20 @@ class Brand extends \Opencart\System\Engine\Controller {
 
 		$data['module_brand_status'] = $this->config->get('module_brand_status');
 		
+		if ($this->config->get('module_brand_title')) {
+			$data['module_brand_title'] = $this->config->get('module_brand_title');
+		} else {
+			$data['module_brand_title'] = [];
+		}
+
 		if ($this->config->get('module_brand_brands')) {
 			$data['brands'] = $this->config->get('module_brand_brands');
 		} else {
 			$data['brands'] = [];
 		}
+
+        $this->load->model('localisation/language');
+        $data['languages'] = $this->model_localisation_language->getLanguages();
 
 		$this->load->model('tool/image');
 		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
