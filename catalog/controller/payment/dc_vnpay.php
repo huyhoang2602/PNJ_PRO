@@ -17,7 +17,7 @@ class DcVnpay extends \Opencart\System\Engine\Controller {
 			$vnp_ReturnUrl = str_replace('&amp;', '&', $this->url->link('extension/dc_minimal/payment/dc_vnpay.callback', 'language=' . $this->config->get('config_language')));
 
 			$vnp_TxnRef = $this->session->data['order_id'];
-			$vnp_OrderInfo = "Thanh toan don hang #" . $this->session->data['order_id'];
+			$vnp_OrderInfo = sprintf($this->language->get('text_vnpay_order_info'), $this->session->data['order_id']);
             
             // Get Absolute Latest Total from Cart (most reliable during checkout)
             $totals = [];
@@ -135,24 +135,26 @@ class DcVnpay extends \Opencart\System\Engine\Controller {
                     $this->load->model('checkout/order');
                     $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
                     if ($order_info && $order_info['order_status_id'] != $this->config->get('payment_dc_vnpay_order_status_id')) {
-                        $this->model_checkout_order->addHistory($this->session->data['order_id'], $this->config->get('payment_dc_vnpay_order_status_id'), 'VNPAY Callback Success Return (Localhost Fallback)', true);
+                        $this->model_checkout_order->addHistory($this->session->data['order_id'], $this->config->get('payment_dc_vnpay_order_status_id'), $this->language->get('text_vnpay_callback_success'), true);
                     }
                 }
 				// Payment Success -> Go to Success
 				$this->response->redirect($this->url->link('checkout/success', 'language=' . $this->config->get('config_language'), true));
 			} else {
 				// Payment Failed or Canceled -> Go to Checkout
-				$this->session->data['error'] = "Giao dịch thanh toán VNPAY đã bị hủy hoặc không thành công.";
+				$this->session->data['error'] = $this->language->get('error_payment_failed');
 				$this->response->redirect($this->url->link('checkout/checkout', 'language=' . $this->config->get('config_language'), true));
 			}
 		} else {
 			// Invalid signature or missing data
-			$this->session->data['error'] = "Phản hồi từ VNPAY không hợp lệ.";
+			$this->session->data['error'] = $this->language->get('error_invalid_response');
 			$this->response->redirect($this->url->link('checkout/checkout', 'language=' . $this->config->get('config_language'), true));
 		}
 	}
 
 	public function ipn(): void {
+		$this->load->language('extension/dc_minimal/payment/dc_vnpay');
+
 		$inputData = array();
 		foreach ($this->request->get as $key => $val) {
 			if (substr($key, 0, 4) == "vnp_") {
@@ -183,16 +185,16 @@ class DcVnpay extends \Opencart\System\Engine\Controller {
 
 			if ($order_info) {
 				if ($inputData['vnp_ResponseCode'] == '00' && $inputData['vnp_TransactionStatus'] == '00') {
-					$this->model_checkout_order->addHistory($order_id, $this->config->get('payment_dc_vnpay_order_status_id'), 'VNPAY Payment Successful', true);
-					echo json_encode(['RspCode' => '00', 'Message' => 'Confirm Success']);
+					$this->model_checkout_order->addHistory($order_id, $this->config->get('payment_dc_vnpay_order_status_id'), $this->language->get('text_vnpay_payment_successful'), true);
+					echo json_encode(['RspCode' => '00', 'Message' => $this->language->get('text_vnpay_confirm_success')]);
 				} else {
-					echo json_encode(['RspCode' => '00', 'Message' => 'Confirm Success (Failed Payment)']);
+					echo json_encode(['RspCode' => '00', 'Message' => $this->language->get('text_vnpay_confirm_failed')]);
 				}
 			} else {
-				echo json_encode(['RspCode' => '01', 'Message' => 'Order not found']);
+				echo json_encode(['RspCode' => '01', 'Message' => $this->language->get('error_order_not_found')]);
 			}
 		} else {
-			echo json_encode(['RspCode' => '97', 'Message' => 'Invalid signature']);
+			echo json_encode(['RspCode' => '97', 'Message' => $this->language->get('error_invalid_signature')]);
 		}
 	}
 

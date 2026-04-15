@@ -257,7 +257,7 @@ function applyFilters() {
             $('#product-list').css('opacity', 1);
         },
         complete: function() {
-            $('.dropdown-apply').prop('disabled', false).text('Lọc');
+            $('.dropdown-apply').prop('disabled', false).text('{{ text_apply|escape('js') }}');
         }
     });
 }

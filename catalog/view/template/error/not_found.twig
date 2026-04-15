@@ -11,19 +11,18 @@
                 <i class="fa fa-gem"></i>
             </div>
             
-            <h1 class="error-title">Oops! Trang không tìm thấy</h1>
+            <h1 class="error-title">{{ text_error_not_found_title }}</h1>
             
             <p class="error-message">
-                Rất tiếc, tuyệt phẩm bạn đang tìm kiếm hiện không có sẵn hoặc đường dẫn đã thay đổi. 
-                Hãy để chúng tôi dẫn lối bạn quay lại thế giới rực rỡ của PNJ.
+                {{ text_error_not_found_message }}
             </p>
             
             <div class="error-actions">
                 <a href="{{ continue }}" class="btn-premium btn-premium-primary">
-                    <i class="fa fa-home"></i> {{ button_continue ?: 'Quay lại Trang chủ' }}
+                    <i class="fa fa-home"></i> {{ button_continue ?: text_return_home }}
                 </a>
                 <a href="{{ home ?: 'index.php?route=common/home' }}" class="btn-premium btn-premium-outline">
-                    <i class="fa fa-search"></i> Khám phá sản phẩm
+                    <i class="fa fa-search"></i> {{ text_discover_products }}
                 </a>
             </div>
         </div>

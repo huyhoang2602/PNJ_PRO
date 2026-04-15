@@ -37,7 +37,7 @@ class DcBankTransfer extends \Opencart\System\Engine\Controller {
 		$json = [];
 
 		if (!isset($this->session->data['order_id'])) {
-			$json['error'] = 'Order ID missing!';
+			$json['error'] = $this->language->get('error_order');
 		}
 
 		if (!$json) {
@@ -48,9 +48,9 @@ class DcBankTransfer extends \Opencart\System\Engine\Controller {
 			$transfer_content = $prefix . $this->session->data['order_id'];
 
 			$comment  = $this->language->get('text_instruction') . "\n\n";
-			$comment .= "Bank: " . $this->config->get('payment_dc_bank_transfer_bank_name') . "\n";
-			$comment .= "Account: " . $this->config->get('payment_dc_bank_transfer_account_number') . " (" . $this->config->get('payment_dc_bank_transfer_account_name') . ")\n";
-			$comment .= "Content: " . $transfer_content . "\n\n";
+			$comment .= $this->language->get('text_comment_bank') . ': ' . $this->config->get('payment_dc_bank_transfer_bank_name') . "\n";
+			$comment .= $this->language->get('text_comment_account') . ': ' . $this->config->get('payment_dc_bank_transfer_account_number') . ' (' . $this->config->get('payment_dc_bank_transfer_account_name') . ")\n";
+			$comment .= $this->language->get('text_comment_content') . ': ' . $transfer_content . "\n\n";
 			$comment .= $this->config->get('payment_dc_bank_transfer_bank_' . $this->config->get('config_language_id')) . "\n\n";
 			$comment .= $this->language->get('text_payment');
 

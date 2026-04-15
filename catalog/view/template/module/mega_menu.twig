@@ -1,5 +1,5 @@
 <div class="pnj-nav-header d-lg-none">
-    <span>Danh Mục</span>
+    <span>{{ text_menu }}</span>
     <i class="fa fa-times pnj-nav-close"></i>
 </div>
 <ul class="pnj-menu">
@@ -70,6 +70,6 @@
 {% if search_status %}
 <div class="pnj-search">
     <i class="fa fa-search"></i>
-    <input type="text" placeholder="Tìm kiếm nhanh">
+    <input type="text" placeholder="{{ text_search_placeholder }}">
 </div>
 {% endif %}

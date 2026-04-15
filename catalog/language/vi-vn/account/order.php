@@ -43,5 +43,8 @@ $_['column_price']               = 'Giá';
 $_['column_comment']             = 'Bình luận';
 $_['column_action']              = 'Thao tác';
 
+// Button
+$_['button_return']              = 'Đổi trả';
+
 // Error
 $_['error_reorder']              = 'Sản phẩm bạn muốn mua lại có vấn đề. Vui lòng kiểm tra thông báo lỗi bên dưới.';

@@ -13,3 +13,11 @@ $_['text_branch']      = 'Branch';
 $_['text_content']     = 'Content';
 $_['text_copy']        = 'Copy';
 $_['text_copied']      = 'Copied!';
+$_['text_scan_bank_app'] = 'Open your banking app to scan';
+$_['text_fast_accurate_payment'] = 'Fast and accurate payment';
+$_['text_comment_bank'] = 'Bank';
+$_['text_comment_account'] = 'Account';
+$_['text_comment_content'] = 'Content';
+
+// Error
+$_['error_order']       = 'Order ID missing!';

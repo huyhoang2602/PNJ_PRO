@@ -5,12 +5,12 @@
     </a>
     
     {% if special %}
-      <div class="dc-badge dc-badge-sale">Sale</div>
+      <div class="dc-badge dc-badge-sale">{{ text_sale }}</div>
     {% endif %}
     
     <div class="dc-badge-installment">
         <span class="ins-num">0%</span>
-        <span class="ins-txt">Trả góp</span>
+        <span class="ins-txt">{{ text_installment_short }}</span>
     </div>
 
     <div class="dc-product-actions">
@@ -55,7 +55,7 @@
             <span class="rating-count">({{ rating }})</span>
         </div>
         <div class="dc-sold-count">
-            {{ (product_id * 7 + 100) }} đã bán
+            {{ (product_id * 7 + 100) }} {{ text_sold_suffix }}
         </div>
     </div>
   </div>

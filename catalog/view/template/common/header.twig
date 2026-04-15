@@ -138,9 +138,9 @@
                                 <a href="{{ cat.href }}" class="search-tag">{{ cat.name }}</a>
                             {% endfor %}
                         {% else %}
-                            <a href="#" class="search-tag">Nhẫn cưới</a>
-                            <a href="#" class="search-tag">Hàng mới</a>
-                            <a href="#" class="search-tag">Trang sức Kim cương</a>
+                            <a href="#" class="search-tag">{{ text_fallback_tag_wedding_ring }}</a>
+                            <a href="#" class="search-tag">{{ text_fallback_tag_new_arrivals }}</a>
+                            <a href="#" class="search-tag">{{ text_fallback_tag_diamond_jewelry }}</a>
                         {% endif %}
                     </div>
                 </div>
@@ -187,15 +187,15 @@
                         <!-- Fallback if no products found -->
                         <a href="#" class="search-product-item">
                             <div class="product-thumb"></div>
-                            <div class="product-info">Nhẫn cưới Kim cương</div>
+                            <div class="product-info">{{ text_fallback_product_wedding_ring }}</div>
                         </a>
                         <a href="#" class="search-product-item">
                             <div class="product-thumb"></div>
-                            <div class="product-info">Dây chuyền vàng 10K</div>
+                            <div class="product-info">{{ text_fallback_product_gold_necklace }}</div>
                         </a>
                         <a href="#" class="search-product-item">
                             <div class="product-thumb"></div>
-                            <div class="product-info">Bông tai vàng 18K</div>
+                            <div class="product-info">{{ text_fallback_product_gold_earrings }}</div>
                         </a>
                     {% endif %}
                 </div>
@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (query.length < 2) {
                 // Restore original list if query too short
                 searchResultGrid.innerHTML = originalProductsHTML;
-                if (searchSectionTitle) searchSectionTitle.innerHTML = '<i class="fa fa-search"></i> Sản phẩm được tìm nhiều';
+                if (searchSectionTitle) searchSectionTitle.innerHTML = '<i class="fa fa-search"></i> {{ text_popular_products|escape('js') }}';
                 if (searchModalBody) searchModalBody.classList.remove("is-searching");
                 return;
             }
@@ -297,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Setting loading state or just wait
             searchTimeout = setTimeout(function() {
                 if (searchModalBody) searchModalBody.classList.add("is-searching");
-                fetch('index.php?route=extension/dc_minimal/module/search.autocomplete&filter_name=' + encodeURIComponent(query))
+                fetch('index.php?route=extension/dc_minimal/module/search.autocomplete&language={{ language_code }}&filter_name=' + encodeURIComponent(query))
                     .then(response => response.json())
                     .then(data => {
                         if (searchSectionTitle) searchSectionTitle.innerHTML = '<i class="fa fa-search"></i> {{ text_search_results }}'.replace('%s', query);

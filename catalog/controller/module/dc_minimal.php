@@ -12,7 +12,7 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 
     /**
      * Event handler to redirect core language requests to the theme directory if missing.
-     * Trigger: language/*/before
+     * Trigger: language/{route}/before
      */
     public function beforeLanguage(string &$route, array &$args): void {
         // This is a more complex logic if we want to support any core page.
@@ -21,7 +21,7 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
     
     /**
      * Event handler for Account pages.
-     * Trigger: catalog/controller/account/*/before
+     * Trigger: catalog/controller/account/{route}/before
      */
     public function beforeAccount(string &$route, array &$args): void {
         $parts = explode('/', $route);
@@ -33,7 +33,7 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 
     /**
      * Event handler for Checkout pages.
-     * Trigger: catalog/controller/checkout/*/before
+     * Trigger: catalog/controller/checkout/{route}/before
      */
     public function beforeCheckout(string &$route, array &$args): void {
         $lang_page = str_replace('catalog/controller/', '', $route);
@@ -45,7 +45,7 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 
     /**
      * Event handler for Total modules.
-     * Trigger: catalog/model/extension/opencart/total/*/getTotal/before
+     * Trigger: catalog/model/extension/opencart/total/{route}/getTotal/before
      */
     public function beforeTotal(string &$route, array &$args): void {
         $lang_page = str_replace('catalog/model/extension/opencart/', '', $route);
@@ -57,7 +57,7 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 
     /**
      * Event handler to inject language strings into views globally.
-     * Trigger: view/*/before
+     * Trigger: view/{route}/before
      */
     public function beforeView(string &$route, array &$data): void {
         $lang_page = $route;

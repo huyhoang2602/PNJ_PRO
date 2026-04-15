@@ -81,7 +81,7 @@ $(document).ready(function() {
         
         if (distance < 0) {
             clearInterval(x);
-            $("#flash-countdown").html('<div class="badge rounded-pill px-3 py-2 fw-bold shadow-sm" style="background-color: #6c757d; font-size: 0.8rem; letter-spacing: 1px;">KẾT THÚC</div>');
+            $("#flash-countdown").html('<div class="badge rounded-pill px-3 py-2 fw-bold shadow-sm" style="background-color: #6c757d; font-size: 0.8rem; letter-spacing: 1px;">{{ text_ended|escape('js') }}</div>');
             return;
         }
         

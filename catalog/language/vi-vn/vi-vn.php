@@ -58,6 +58,53 @@ $_['button_list']                   = 'Danh sách';
 $_['button_grid']                   = 'Lưới';
 $_['button_map']                    = 'Xem bản đồ';
 
+// Theme UI
+$_['text_close']                    = 'Đóng';
+$_['text_menu']                     = 'Danh mục';
+$_['text_all']                      = 'Tất cả';
+	$_['text_installment_short']        = 'Trả góp';
+	$_['text_sold_suffix']              = 'đã bán';
+	$_['text_sale']                     = 'Giảm giá';
+	$_['text_no_items']                 = 'Không có sản phẩm';
+	$_['text_view_all']                 = 'Xem tất cả';
+	$_['text_recently_viewed']          = 'Sản phẩm đã xem';
+	$_['text_ended']                    = 'Kết thúc';
+	$_['text_view_all']                 = 'Xem tất cả';
+	$_['text_recently_viewed']          = 'Sản phẩm đã xem';
+	$_['text_ended']                    = 'Kết thúc';
+
+// Theme fallback content
+$_['text_error_not_found_title']    = 'Oops! Trang không tìm thấy';
+$_['text_error_not_found_message']  = 'Rất tiếc, tuyệt phẩm bạn đang tìm kiếm hiện không có sẵn hoặc đường dẫn đã thay đổi. Hãy để chúng tôi dẫn lối bạn quay lại thế giới rực rỡ của PNJ.';
+$_['text_discover_products']        = 'Khám phá sản phẩm';
+$_['text_return_home']              = 'Quay lại Trang chủ';
+$_['text_shipping_free_title']      = 'MIỄN PHÍ';
+$_['text_shipping_free_desc']       = 'Giao hàng 3H';
+$_['text_shipping_support_title']   = 'PHỤC VỤ 24/7';
+$_['text_shipping_support_desc']    = 'Hỗ trợ mọi lúc';
+$_['text_shipping_return_title']    = 'THU ĐỔI 48H';
+$_['text_shipping_return_desc']     = 'Đổi trả dễ dàng';
+$_['text_hero_egift_title']         = 'Phiếu quà tặng điện tử PNJ E-Gift';
+$_['text_hero_egift_subtitle']      = 'Món quà thiết thực';
+$_['text_hero_egift_button']        = 'Khám phá ngay';
+$_['text_brand_index_subtitle']     = 'Khám phá thế giới trang sức từ các thương hiệu hàng đầu';
+	$_['text_brand_collection_subtitle'] = 'Bộ sưu tập trang sức từ thương hiệu';
+
+// Payment UI
+$_['text_vnpay_qr_hint']            = 'Vui lòng mở ứng dụng Ngân hàng hoặc Ví VNPAY để quét mã QR bên phải.';
+$_['text_payment_provider']         = 'Thanh toán';
+$_['text_beneficiary']              = 'Thụ hưởng';
+$_['text_order_code']               = 'Mã đơn hàng';
+$_['text_order_total']              = 'Tổng tiền';
+$_['text_payment_auto_finalize']    = 'Hệ thống chốt đơn tự động ngay khi thanh toán thành công.';
+$_['text_scan_bank_app']            = 'Mở ứng dụng Ngân hàng để quét';
+$_['text_auto_payment']             = 'Thanh toán tự động';
+$_['text_vnpay_open_link']          = 'Mở trang VNPAY (nếu không quét được)';
+$_['text_payment_complete_hint']    = 'Vui lòng thanh toán để hoàn tất';
+$_['text_payment_timeout']          = 'Hết thời gian chờ. Vui lòng làm mới trang.';
+$_['text_processing']               = 'Đang xử lý...';
+$_['text_fast_accurate_payment']    = 'Thanh toán nhanh & chính xác';
+
 // Error
 $_['error_exception']               = 'Mã lỗi(%s): %s trong %s dòng %s';
 $_['error_upload_1']                = 'Cảnh báo: Tệp tin được tải lên vượt quá quy định trong file php.ini!';

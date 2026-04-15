@@ -10,7 +10,7 @@
     
     <div class="dc-badge-installment">
         <span class="ins-num">0%</span>
-        <span class="ins-txt">Trả góp</span>
+        <span class="ins-txt">{{ text_installment_short }}</span>
     </div>
 
     <div class="dc-product-actions">
@@ -56,7 +56,7 @@
             <span class="rating-count">({{ product.rating }})</span>
         </div>
         <div class="dc-sold-count">
-            {{ (product.product_id * 7 + 100) }} đã bán
+            {{ (product.product_id * 7 + 100) }} {{ text_sold_suffix }}
         </div>
     </div>
 

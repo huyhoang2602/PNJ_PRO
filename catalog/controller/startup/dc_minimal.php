@@ -154,10 +154,16 @@ class DcMinimal extends \Opencart\System\Engine\Controller {
 
         if ($lang_page) {
             $language_code = $this->getLanguageCode();
+            $data['language_code'] = $language_code;
+
+            if ($lang_page !== 'common/header') {
+                $data['language'] = $language_code;
+            }
+
             $protected_language_keys = preg_match('/^(account|checkout)\//', $lang_page) ? [] : array_fill_keys(array_keys($data), true);
 
             // Load base theme translations
-            $base_translated = $this->loadThemeLanguageFile('vi-vn', $language_code);
+            $base_translated = $this->loadThemeLanguageFile($language_code, $language_code);
             if ($base_translated) {
                 $data = $this->mergeThemeTranslations($data, $base_translated, $protected_language_keys);
             }

@@ -16,14 +16,14 @@
                 <div class="decorative-circles"></div>
                 <div class="banner-content text-center">
                     <h1 class="pnj-title">{{ heading_title }}</h1>
-                    <p class="pnj-subtitle">Khám phá thế giới trang sức từ các thương hiệu hàng đầu</p>
+                    <p class="pnj-subtitle">{{ text_brand_index_subtitle }}</p>
                 </div>
             </div>
 
             {% if categories %}
                 <div class="brand-navigation">
                     <div id="brand-filters" class="brand-index-pills d-flex flex-wrap justify-content-center gap-2">
-                        <a href="#" class="pill-item active" data-filter="all">Tất cả</a>
+                        <a href="#" class="pill-item active" data-filter="all">{{ text_all }}</a>
                         {% for category in categories %}
                             <a href="#brand-group-{{ category.name }}" class="pill-item" data-filter="{{ category.name }}">{{ category.name }}</a>
                         {% endfor %}

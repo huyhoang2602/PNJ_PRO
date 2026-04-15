@@ -64,7 +64,7 @@ $(document).ready(function() {
         productsHtml += '  <div class="text-end fw-bold small text-primary">' + {{ product.total|json_encode }} + '</div>';
         productsHtml += '</div>';
     {% endfor %}
-    $('#checkout-sidebar-products').html(productsHtml || '<div class="text-center py-3 text-muted">No items</div>');
+    $('#checkout-sidebar-products').html(productsHtml || '<div class="text-center py-3 text-muted">{{ text_no_items|escape('js') }}</div>');
 
     // Sync Totals to Sidebar
     var totalsHtml = '';
